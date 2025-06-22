@@ -28,8 +28,8 @@
           <mat-icon svgIcon="assetViewer:title"></mat-icon>
         </div>
         <mat-card-title>
-          <span class="clickable-title" [matTooltip]="asset.properties.optionalValue('dcterms', 'title') || ''" (click)="openAssetDialog(asset)">
-            {{ (asset.properties.optionalValue('dcterms', 'title') || '') | truncate: 24 }}
+          <span class="clickable-title" [matTooltip]="asset.properties.optionalValue('edc', 'name') || ''" (click)="openAssetDialog(asset)">
+            {{ (asset.properties.optionalValue('edc', 'name') || '') | truncate: 24 }}
           </span>
         </mat-card-title>
         <mat-card-subtitle [matTooltip]="asset.id">{{ asset.id | truncate: 24 }}</mat-card-subtitle>
