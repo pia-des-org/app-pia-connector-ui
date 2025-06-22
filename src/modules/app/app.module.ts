@@ -1,5 +1,5 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -10,7 +10,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {MatIconModule} from '@angular/material/icon';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {NavigationComponent} from './components/navigation/navigation.component';
 import {EdcDemoModule} from '../edc-demo/edc-demo.module';
@@ -96,4 +96,57 @@ import { initializeKeycloak } from './keycloak-init.factory';
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    const iconsOfNavigation = ['assets', 'contracts', 'offers', 'policies', 'transfers'];
+    iconsOfNavigation.forEach(name => {
+      iconRegistry.addSvgIconInNamespace(
+        'navigation',
+        name,
+        sanitizer.bypassSecurityTrustResourceUrl(`assets/navigation_bar_${name}.svg`)
+      );
+    });
+
+    const iconsOfContracts = ['asset', 'provider', 'signing_date', 'title', 'transfers'];
+    iconsOfContracts.forEach(name => {
+      iconRegistry.addSvgIconInNamespace(
+        'contracts',
+        name,
+        sanitizer.bypassSecurityTrustResourceUrl(`assets/contracts_viewer_${name}.svg`)
+      );
+    });
+
+    const iconsOfNegotiate = ['properties', 'title'];
+    iconsOfNegotiate.forEach(name => {
+      iconRegistry.addSvgIconInNamespace(
+        'negotiate',
+        name,
+        sanitizer.bypassSecurityTrustResourceUrl(`assets/negotiate_${name}.svg`)
+      );
+    });
+
+    iconRegistry.addSvgIconInNamespace(
+      'dataOffer',
+      "title",
+      sanitizer.bypassSecurityTrustResourceUrl(`assets/data_offer_viewer.svg`)
+    );
+
+    iconRegistry.addSvgIconInNamespace(
+      'policy',
+      "title",
+      sanitizer.bypassSecurityTrustResourceUrl(`assets/policy_viewer.svg`)
+    );
+
+    iconRegistry.addSvgIconInNamespace(
+      'assetDetails',
+      "property",
+      sanitizer.bypassSecurityTrustResourceUrl(`assets/asset_details_icon.svg`)
+    );
+
+    iconRegistry.addSvgIconInNamespace(
+      'assetViewer',
+      "title",
+      sanitizer.bypassSecurityTrustResourceUrl(`assets/asset_viewer_icon.svg`)
+    );
+
+  }
 }
