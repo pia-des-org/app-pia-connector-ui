@@ -20,6 +20,7 @@ export class NavigationComponent {
     );
 
   routes = routes;
+  username: string | undefined;
 
   constructor(
     public titleService: Title,
@@ -27,6 +28,8 @@ export class NavigationComponent {
     private keycloak: KeycloakService) {
     document.body.classList.remove('theme-1', 'theme-2');
     document.body.classList.add('theme-1');
+    const tokenParsed = this.keycloak.getKeycloakInstance().tokenParsed;
+    this.username = tokenParsed?.name || 'User';
   }
 
   logout(): void {
