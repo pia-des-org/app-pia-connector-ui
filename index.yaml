@@ -1,0 +1,61 @@
+apiVersion: v1
+entries:
+  app-pia-connector-ui:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-06-23T08:25:59.837537871Z"
+    description: A Helm chart for Kubernetes
+    digest: 0da8bd4f2007a6b9acc3050fe63579af75b4217e65d050cd341c2568bc3d8fa6
+    name: app-pia-connector-ui
+    type: application
+    urls:
+    - https://github.com/pia-des-org/app-pia-connector-ui/releases/download/app-pia-connector-ui-0.1.0/app-pia-connector-ui-0.1.0.tgz
+    version: 0.1.0
+  edc-ui-umbrella:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-06-23T08:25:59.982217079Z"
+    dependencies:
+    - name: tractusx-connector
+      repository: file://../tractusx-connector
+      version: 0.5.4
+    - name: app-pia-connector-ui
+      repository: file://../app-pia-connector-ui
+      version: 0.1.0
+    description: A Helm chart for EDC and EDC UI.
+    digest: 0965999abf1cd45ad15b23fdbaba5f945ea8b74ac0b0703899bfef6defa7af3d
+    name: edc-ui-umbrella
+    type: application
+    urls:
+    - https://github.com/pia-des-org/app-pia-connector-ui/releases/download/edc-ui-umbrella-0.1.0/edc-ui-umbrella-0.1.0.tgz
+    version: 0.1.0
+  tractusx-connector:
+  - apiVersion: v2
+    appVersion: 0.5.4
+    created: "2025-06-23T08:26:00.143137889Z"
+    dependencies:
+    - alias: vault
+      condition: install.vault
+      name: vault
+      repository: https://helm.releases.hashicorp.com
+      version: 0.20.0
+    - alias: postgresql
+      condition: install.postgresql
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.1.6
+    description: 'A Helm chart for Tractus-X Eclipse Data Space Connector. The connector
+      deployment consists of two runtime consists of a Control Plane and a Data Plane.
+      Note that _no_ external dependencies such as a PostgreSQL database and HashiCorp
+      Vault are included.  This chart is intended for use with an _existing_ PostgreSQL
+      database and an _existing_ HashiCorp Vault. '
+    digest: 24c7eb40e40510b368dfbbab7c1741546d462d6441419bf7eee69163f480eacf
+    home: https://github.com/eclipse-tractusx/tractusx-edc/tree/main/charts/tractusx-connector
+    name: tractusx-connector
+    sources:
+    - https://github.com/eclipse-tractusx/tractusx-edc/tree/main/charts/tractusx-connector
+    type: application
+    urls:
+    - https://github.com/pia-des-org/app-pia-connector-ui/releases/download/tractusx-connector-0.5.4/tractusx-connector-0.5.4.tgz
+    version: 0.5.4
+generated: "2025-06-23T08:26:00.143146224Z"
