@@ -13,6 +13,23 @@ entries:
     version: 0.1.0
   edc-ui-umbrella:
   - apiVersion: v2
+    appVersion: 0.5.4-alpha
+    created: "2025-06-25T07:28:35.982794848Z"
+    dependencies:
+    - name: tractusx-connector
+      repository: file://../tractusx-connector
+      version: 0.5.4
+    - name: app-pia-connector-ui
+      repository: file://../app-pia-connector-ui
+      version: 0.1.0
+    description: A Helm chart for EDC and EDC UI.
+    digest: 6d3590e45c2da7a1aac04fe424840d126aecb1106f43276da3a66bbe286dea67
+    name: edc-ui-umbrella
+    type: application
+    urls:
+    - https://github.com/pia-des-org/app-pia-connector-ui/releases/download/edc-ui-umbrella-0.1.2/edc-ui-umbrella-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     appVersion: 1.0.0
     created: "2025-06-23T08:25:59.982217079Z"
     dependencies:
@@ -58,4 +75,4 @@ entries:
     urls:
     - https://github.com/pia-des-org/app-pia-connector-ui/releases/download/tractusx-connector-0.5.4/tractusx-connector-0.5.4.tgz
     version: 0.5.4
-generated: "2025-06-23T08:26:00.143146224Z"
+generated: "2025-06-25T07:28:35.982808123Z"
