@@ -235,7 +235,7 @@ export class AssetEditorDialog implements OnInit {
       dataAddress = {
         "@type": "DataAddress",
         type: 'AzureStorage',
-        accountName: this.azureConfig.account,
+        account: this.azureConfig.account,
         container: this.azureConfig.container,
         blobname: this.azureConfig.blobName,
         sasToken: this.azureConfig.sasToken

@@ -92,9 +92,6 @@ export class ContractViewerComponent implements OnInit {
 
   refreshContracts(): void {
     this.contractAgreementService.queryAllAgreements().pipe(
-      tap((rawResponse) => {
-        console.log('Raw API response (allContracts):', rawResponse);
-      }),
       map((allContracts: ContractAgreement[]) => {
         const negotiationData = this.contractNegotiationData || [];
 
