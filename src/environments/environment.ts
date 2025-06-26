@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  apiKey: "{{ env.VITE_API_KEY }}"
 };
 
 /*
