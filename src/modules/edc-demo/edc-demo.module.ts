@@ -59,6 +59,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getCustomPaginatorIntl } from './components/transfer-history/custom-paginator-intl';
 import {MatChipsModule} from "@angular/material/chips";
 import {TranslateModule} from "@ngx-translate/core";
+import {LanguageSelectComponent} from "./components/asset/language-select/language-select.component";
 
 @NgModule({
   imports: [
@@ -117,7 +118,8 @@ import {TranslateModule} from "@ngx-translate/core";
     ConfirmationDialogComponent,
     AssetDetailsDialogComponent,
     PolicyDetailsDialogComponent,
-    NegotiateTransferComponent
+    NegotiateTransferComponent,
+    LanguageSelectComponent,
   ],
   exports: [
     CatalogBrowserComponent,

@@ -11,11 +11,16 @@
       </mat-icon>
     </div>
 
-    <div *ngIf="section.general" class="section-content">
+    <div [hidden]="!section.general" class="section-content">
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{ 'assetEditor.name' | translate }}</mat-label>
-          <input matInput [(ngModel)]="assetMetadata.name" (ngModelChange)="assetMetadata.id = $event" placeholder="{{ 'assetEditor.namePlaceholder' | translate }}" required />
+          <input
+            matInput
+            [(ngModel)]="assetMetadata.name"
+            (ngModelChange)="onNameChange($event)"
+            placeholder="{{ 'assetEditor.namePlaceholder' | translate }}"
+            required />
         </mat-form-field>
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{ 'assetEditor.id' | translate }}<span class="required-star">*</span></mat-label>
@@ -58,13 +63,11 @@
         <input matInput [(ngModel)]="assetMetadata.qualityNote" placeholder="{{ 'assetEditor.freeText' | translate }}" required />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="form-field full-width">
-        <mat-label>{{ 'assetEditor.language' | translate }}</mat-label>
-        <mat-select [(ngModel)]="assetMetadata.language">
-          <mat-option value="">{{ 'assetEditor.select' | translate }}</mat-option>
-          <mat-option value="en">{{ 'assetEditor.languageEn' | translate }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <language-select
+        [label]="'assetEditor.language' | translate"
+        [control]="languageControl"
+      ></language-select>
+
     </div>
   </div>
 

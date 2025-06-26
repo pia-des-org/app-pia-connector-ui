@@ -6,22 +6,87 @@
 @import "node_modules/@angular/material/theming";
 @include mat-core();
 
-// === MAGENTA PALETTE (Theme 1) ===
-$magenta-palette: mat.define-palette((
-  50: #fce4ec,
-  100: #f8bbd0,
-  200: #f48fb1,
-  300: #f06292,
-  400: #ec407a,
-  500: #e91e63,
-  600: #d81b60,
-  700: #c2185b,
-  800: #ad1457,
-  900: #880e4f,
-  A100: #ff80ab,
-  A200: #ff4081,
-  A400: #f50057,
-  A700: #c51162,
+$segittur-palette: mat.define-palette((
+  50:  #FFF3F8,
+  100: #FFEBF0,
+  200: #FFD8E5,
+  300: #FFBCD4,
+  400: #FFA0C4,
+  500: #FF81B3,
+  600: #CE0E71,
+  700: #AB005C,
+  800: #7A0841,
+  900: #4C0928,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: black,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+));
+
+$asturias-palette: mat.define-palette((
+  50: #e0f3fc,
+  100: #b3def6,
+  200: #80c8f0,
+  300: #4db2ea,
+  400: #26a1e5,
+  500: #0069b4,
+  600: #005fa2,
+  700: #00528c,
+  800: #004676,
+  900: #00315c,
+  contrast: (
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+));
+
+$accent-palette: mat.define-palette((
+  50:  #FFFECA,
+  100: #FFFEDD9,
+  200: #FFE0BE,
+  300: #FFCA8F,
+  400: #FFB463,
+  500: #FC9F33,
+  600: #C77600,
+  700: #995D00,
+  800: #633500,
+  900: #3F2000,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: black,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+));
+
+$warn-palette: mat.define-palette((
+  50:  #FFF3F1,
+  100: #FFE8E5,
+  200: #FFCCC8,
+  300: #FFB7B7,
+  400: #FF534C,
+  500: #B10413,
+  600: #80030C,
+  700: #500909,
+  800: #260504,
+  900: #060000,
   contrast: (
     50: black,
     100: black,
@@ -33,26 +98,19 @@ $magenta-palette: mat.define-palette((
     700: white,
     800: white,
     900: white,
-    A100: black,
-    A200: white,
-    A400: white,
-    A700: white,
   )
 ));
 
-// === ORANGE PALETTE (Theme 2) ===
-$orange-palette: mat.define-palette(mat.$blue-palette);
-
-$theming-material-components-primary: $magenta-palette;
-$theming-material-components-accent: $magenta-palette;
-$theming-material-components-warn: mat-palette($mat-red);
+$theming-material-components-primary: $segittur-palette;
+$theming-material-components-accent: $asturias-palette;
+$theming-material-components-warn: $warn-palette;
 $theming-material-components-typography: mat.define-typography-config($font-family: 'Nunito Sans');
 
 $theme1: mat.define-light-theme((
   color: (
-    primary: $magenta-palette,
-    accent: $magenta-palette,
-    warn: mat.define-palette(mat.$red-palette),
+    primary: $segittur-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
   ),
   typography: $theming-material-components-typography,
   density: 0,
@@ -61,9 +119,9 @@ $theme1: mat.define-light-theme((
 // === THEME 2 ===
 $theme2: mat.define-light-theme((
   color: (
-    primary: $orange-palette,
-    accent: $orange-palette,
-    warn: mat.define-palette(mat.$red-palette),
+    primary: $asturias-palette,
+    accent: $asturias-palette,
+    warn: $warn-palette,
   ),
   typography: $theming-material-components-typography,
   density: 0,
@@ -71,14 +129,14 @@ $theme2: mat.define-light-theme((
 
 body.theme-1 {
   @include mat.all-component-themes($theme1);
-  --primary-color: #{mat.get-color-from-palette($magenta-palette, 500)};
-  --primary-color-contrast: #{mat.get-contrast-color-from-palette($magenta-palette, 500)};
+  --primary-color: #{mat.get-color-from-palette($segittur-palette, 500)};
+  --primary-color-contrast: #{mat.get-contrast-color-from-palette($segittur-palette, 500)};
 }
 
 body.theme-2 {
   @include mat.all-component-themes($theme2);
-  --primary-color: #{mat.get-color-from-palette($orange-palette, 500)};
-  --primary-color-contrast: #{mat.get-contrast-color-from-palette($orange-palette, 500)};
+  --primary-color: #{mat.get-color-from-palette($asturias-palette, 500)};
+  --primary-color-contrast: #{mat.get-contrast-color-from-palette($asturias-palette, 500)};
 }
 
 :root {

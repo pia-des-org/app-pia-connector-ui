@@ -6,6 +6,9 @@ import { AssetInput } from '@think-it-labs/edc-connector-client';
 import { StorageType } from '../../../models/storage-type';
 import { NS, CONTEXT_MAP } from '../../namespaces';
 import {EcosystemService} from "../../../../app/components/services/ecosystem.service";
+import {LanguageSelectItem} from "../language-select/language-select-item";
+import {FormControl} from "@angular/forms";
+import {LanguageSelectItemService} from "../language-select/language-select-item.service";
 
 @Component({
   selector: 'edc-demo-asset-editor-dialog',
@@ -63,13 +66,37 @@ export class AssetEditorDialog implements OnInit {
     datasource: false
   };
 
+  languageControl = new FormControl<LanguageSelectItem | null>(null);
+
   constructor(
     private dialogRef: MatDialogRef<AssetEditorDialog>,
     @Inject('STORAGE_TYPES') public storageTypes: StorageType[],
-    private ecosystemService: EcosystemService
+    private ecosystemService: EcosystemService,
+    private languageService: LanguageSelectItemService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.assetMetadata.language) {
+      this.languageControl.setValue(
+        this.languageService.findById(this.assetMetadata.language)
+      );
+    }
+  }
+
+  onNameChange(value: string): void {
+    this.assetMetadata.name = value;
+    this.assetMetadata.id = this.slugify(value);
+  }
+
+  private slugify(value: string): string {
+    return value
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_')           // Replace spaces with underscores
+      .replace(/[^\w\-]+/g, '')       // Remove non-word characters
+      .replace(/__+/g, '_')           // Collapse multiple underscores
+      .replace(/^_+|_+$/g, '');       // Trim underscores from start/end
+  }
 
   addKeyword(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -211,7 +238,7 @@ export class AssetEditorDialog implements OnInit {
         accountName: this.azureConfig.account,
         container: this.azureConfig.container,
         blobname: this.azureConfig.blobName,
-        accountKey: this.azureConfig.sasToken
+        sasToken: this.azureConfig.sasToken
       };
     }
 
@@ -226,7 +253,7 @@ export class AssetEditorDialog implements OnInit {
         [`${NS.DCAT}keywords`]: this.assetMetadata.keywords?.join(', '),
         [`${NS.DCAT}mediaType`]: this.assetMetadata.mediaType,
         [`${NS.DQV}hasQualityAnnotation`]: this.assetMetadata.qualityNote,
-        [`${NS.DCTERMS}language`]: this.assetMetadata.language,
+        [`${NS.DCTERMS}language`]: this.languageControl.value?.id || '',
       },
       dataAddress
     };

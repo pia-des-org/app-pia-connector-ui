@@ -28,7 +28,7 @@ export class NewPolicyDialogComponent {
 
   addBpn(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value && !this.businessPartnerNumbers.includes(value)) {
+    if (value) {
       this.businessPartnerNumbers.push(value);
     }
     event.chipInput?.clear();
@@ -60,16 +60,12 @@ export class NewPolicyDialogComponent {
     if (isRestricted) {
       permission.constraint = [
         {
-          "@type": "Constraint",
-          leftOperand: "BusinessPartnerNumber",
-          operator: {
-            "@id": this.businessPartnerNumbers.length > 1
-              ? "odrl:in"
-              : "odrl:eq"
-          },
-          rightOperand: this.businessPartnerNumbers.length > 1
-            ? this.businessPartnerNumbers
-            : this.businessPartnerNumbers[0]
+          "odrl:or": this.businessPartnerNumbers.map(bpn => ({
+            "@type": "Constraint",
+            "odrl:leftOperand": "BusinessPartnerNumber",
+            "odrl:operator": {"@id": "odrl:eq"},
+            "odrl:rightOperand": bpn
+          }))
         }
       ];
     }
