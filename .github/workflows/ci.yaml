@@ -2,7 +2,7 @@ name: DEV/INT Continuous Integration and Deployment Pipeline for Marketplace Man
 on:
   push:
     branches:
-      - '**'
+      - '**' # Match all branches
       - '**'
   pull_request:
     branches:
