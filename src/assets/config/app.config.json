@@ -1,4 +1,5 @@
 {
+  "apiKey": "ApiKeyDefaultValue",
   "managementApiUrl": "https://lilaus-7b61d3fd-de.lila.cx.dev.dih-cloud.com/data",
   "catalogUrl": "http://localhost:4200/management",
   "storageAccount": "company2assets",

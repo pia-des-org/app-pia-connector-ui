@@ -30,7 +30,7 @@ export class EdcApiKeyInterceptor implements HttpInterceptor {
     //     Authorization: `Bearer ${token}`
     //   }
     // }));
-    this._apiKey = environment.apiKey;
+    this._apiKey = this.configService.getConfig()?.apiKey ?? '';
     return next.handle(httpRequest.clone({
         setHeaders: {
           "X-Api-Key": this._apiKey
