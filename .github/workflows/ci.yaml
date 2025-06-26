@@ -25,7 +25,6 @@ jobs:
     environment: ${{ github.event.inputs.environment || github.ref_name  }}
     runs-on:
       group: ${{ github.event.inputs.environment || github.ref_name == 'dev' && 'PIA-Runners-AzureVNet' || 'PIA' }}
-    needs: build
     steps:
       - uses: actions/checkout@v4
       - name: Get commit id
