@@ -130,15 +130,15 @@ export class PolicyViewComponent implements OnInit {
     if (!permission) return null;
     const constraint = permission['odrl:constraint'];
     if (!constraint) return null;
+    const orConstraints = constraint['odrl:or'];
+    if (!orConstraints) return null;
 
-    const leftOperandValue = constraint['odrl:leftOperand'];
-    if (!leftOperandValue) return null;
-    const rightOperandValue = constraint['odrl:rightOperand'];
-    if (!rightOperandValue) return null;
+    const bpns: string[] = (orConstraints as any[])
+      .filter((c: any) => c['odrl:leftOperand']?.includes('BusinessPartnerNumber'))
+      .map((c: any) => c['odrl:rightOperand'])
+      .filter((bpn: any) => typeof bpn === 'string');
 
-    const isBpn = leftOperandValue?.toString().includes('BusinessPartnerNumber');
-
-    return isBpn && rightOperandValue ? `BPN: ${rightOperandValue}` : null;
+    return bpns.length > 0 ? `BPN: ${bpns.join(', ')}` : null;
   }
 
 

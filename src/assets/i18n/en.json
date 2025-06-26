@@ -185,6 +185,8 @@
     "ontologyType": "ONTOLOGY TYPE",
     "organization": "ORGANIZATION",
     "cancel": "Cancel",
-    "negotiate": "Negotiate"
+    "negotiate": "Negotiate",
+    "negotiating": "Negotiating...",
+    "mediaType": "Media type"
   }
 }

@@ -38,6 +38,8 @@ export class ContractViewerComponent implements OnInit {
   private runningTransfers: RunningTransferProcess[] = [];
   private pollingHandleTransfer?: any;
   private contractNegotiationData?: ContractNegotiation[]
+  private pollingStartTime?: number;
+  private POLLING_TIMEOUT_MS = 10_000;
 
   constructor(private contractAgreementService: ContractAgreementService,
               private assetService: AssetService,
@@ -90,6 +92,9 @@ export class ContractViewerComponent implements OnInit {
 
   refreshContracts(): void {
     this.contractAgreementService.queryAllAgreements().pipe(
+      tap((rawResponse) => {
+        console.log('Raw API response (allContracts):', rawResponse);
+      }),
       map((allContracts: ContractAgreement[]) => {
         const negotiationData = this.contractNegotiationData || [];
 
@@ -178,6 +183,7 @@ export class ContractViewerComponent implements OnInit {
     });
 
     if (!this.pollingHandleTransfer) {
+      this.pollingStartTime = Date.now();
       this.pollingHandleTransfer = setInterval(this.pollRunningTransfers(), 1000);
     }
 
@@ -185,6 +191,16 @@ export class ContractViewerComponent implements OnInit {
 
   private pollRunningTransfers() {
     return () => {
+      const now = Date.now();
+
+      if (this.pollingStartTime && now - this.pollingStartTime > this.POLLING_TIMEOUT_MS) {
+        clearInterval(this.pollingHandleTransfer);
+        this.pollingHandleTransfer = undefined;
+        this.runningTransfers = [];
+        this.notificationService.showError("Transfer polling timed out.");
+        return;
+      }
+
       from(this.runningTransfers) //create from array
         .pipe(switchMap(runningTransferProcess => this.catalogService.getTransferProcessesById(runningTransferProcess.processId)), // fetch from API
           filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess.state!)), // only use finished ones

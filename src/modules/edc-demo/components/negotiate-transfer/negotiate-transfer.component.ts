@@ -30,6 +30,10 @@ export class NegotiateTransferComponent implements OnInit {
   description?: string;
   ontologyType?: string;
   datasetId?: string;
+  mediaType?: string;
+
+  isNegotiating: boolean = false;
+  loading: boolean = true;
 
   runningNegotiations: Map<string, NegotiationResult> = new Map<
     string,
@@ -93,9 +97,14 @@ export class NegotiateTransferComponent implements OnInit {
           this.extractDatasetProperties(this.matchedDataset);
         }
         this.isNegotiationReady = !!this.matchedDataset && !!this.participantId;
+        this.loading = false;
       },
       error: (err) => {
-        console.error('Failed to fetch catalog:', err);
+        this.notificationService.showError('Catalog could not be retrieved.');
+        this.dialogRef.close({ refreshList: true });
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
 
@@ -135,7 +144,12 @@ export class NegotiateTransferComponent implements OnInit {
     };
 
     this.title = getValue(dataset, 'https://purl.org/dc/terms/title');
-    this.description = getValue(dataset, 'https://purl.org/dc/terms/description');
+    const fullDescription = getValue(dataset, 'https://purl.org/dc/terms/description') || '';
+    this.description = fullDescription.length > 400
+      ? fullDescription.slice(0, 400) + '...'
+      : fullDescription;
+
+    this.mediaType = getValue(dataset, 'https://www.w3.org/ns/dcat/mediaType');
     const rawOntology = getValue(dataset, 'https://ontologia.segittur.es/turismo/def/core/concept');
     this.ontologyType = rawOntology?.split(':')[1] ?? rawOntology;
     this.datasetId = dataset['@id'];
@@ -172,7 +186,7 @@ export class NegotiateTransferComponent implements OnInit {
     };
 
     const finishedStates = ['CONFIRMED', 'DECLINED', 'ERROR', 'TERMINATED', 'VERIFIED', 'FINALIZED'];
-
+    this.isNegotiating = true;
     this.contractNegotiationService.initiateContractNegotiation(initiateRequest).subscribe({
       next: (response: any) => {
         const negotiationId = response['@id'];
@@ -186,7 +200,7 @@ export class NegotiateTransferComponent implements OnInit {
             for (const negotiation of this.runningNegotiations.values()) {
               this.contractNegotiationService.getNegotiationState(negotiation.id).subscribe(
                 (updatedNegotiation: any) => {
-                  const state = updatedNegotiation['https://w3id.org/edc/v0.0.1/ns/state']?.[0]?.['@value']
+                  const state = updatedNegotiation['https://w3id.org/edc/v0.0.1/ns/state']?.[0]?.['@value'];
                   if (finishedStates.includes(state)) {
                     this.runningNegotiations.delete(negotiation.offerId);
 
@@ -195,9 +209,7 @@ export class NegotiateTransferComponent implements OnInit {
                       updatedNegotiation.contractAgreementId = updatedNegotiation['https://w3id.org/edc/v0.0.1/ns/contractAgreementId']?.[0]?.['@value'];
                       this.finishedNegotiations.set(negotiation.offerId, updatedNegotiation);
 
-                      this.notificationService.showInfo(
-                        'Contract Negotiation complete!'
-                      );
+                      this.notificationService.showInfo('Contract Negotiation complete!');
                       this.dialogRef.close({ refreshList: true });
                       this.router.navigate(['/contracts']);
                     } else if (state === 'TERMINATED') {
@@ -207,11 +219,13 @@ export class NegotiateTransferComponent implements OnInit {
                     if (this.runningNegotiations.size === 0) {
                       clearInterval(this.pollingHandleNegotiation);
                       this.pollingHandleNegotiation = undefined;
+                      this.isNegotiating = false;
                     }
                   }
                 },
                 error => {
                   console.error("Error polling negotiation:", error);
+                  this.isNegotiating = false;
                 }
               );
             }
@@ -221,6 +235,7 @@ export class NegotiateTransferComponent implements OnInit {
       error: err => {
         console.error("Negotiation initiation failed:", err);
         this.notificationService.showError("Failed to initiate negotiation.");
+        this.isNegotiating = false;
       }
     });
   }
