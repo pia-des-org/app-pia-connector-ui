@@ -22,6 +22,18 @@ tractusx-connector:
       # -- Overrides the image tag whose default is the chart appVersion
       tag: "0.5.4-alpha"
 
+    oauth2Proxy:
+      enabled: false
+      issuerUrl: ""
+      clientId: ""
+      clientSecret: ""
+      # -- The cookie used by the oauth2 proxy
+      cookieSecret: ""
+      # -- Default 3000
+      port: ""
+      # -- Default /management/oauth2/callback
+      redirectUrlPath: ""
+
     endpoints:
       # -- default api for health checks, should not be added to any ingress
       default:
