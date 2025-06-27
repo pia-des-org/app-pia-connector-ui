@@ -17,7 +17,7 @@ import {EcosystemService} from "../services/ecosystem.service";
 export class NavigationComponent {
   isHandset$!: Observable<boolean>;
   pageTitle$!: Observable<string>;
-  currentLang = 'English';
+  currentLang = 'Spanish';
   languages = [
     { code: 'en', label: 'English' },
     { code: 'es', label: 'Spanish' },
@@ -37,7 +37,7 @@ export class NavigationComponent {
     document.body.classList.remove('theme-1', 'theme-2');
     this.pageTitle$ = this.titleService.pageTitle$;
     this.loadEcosystemClaim();
-    this.currentLang = translate.currentLang || 'English';
+    this.currentLang = translate.currentLang || 'Spanish';
 
     this.ecosystemService.applyEcosystemSettings();
 
