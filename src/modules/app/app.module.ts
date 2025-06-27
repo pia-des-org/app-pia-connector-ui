@@ -50,7 +50,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     KeycloakAngularModule,
     HttpClientModule,
     TranslateModule.forRoot({
-      defaultLanguage: 'en',
+      defaultLanguage: 'es',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
