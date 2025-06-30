@@ -41,6 +41,7 @@
 
 .section-content {
   padding: 16px 20px 20px;
+  font-family: var(--font-nunito), sans-serif;
 }
 
 /* === Form Fields === */
@@ -85,6 +86,60 @@ mat-form-field {
 .required-star {
   color: var(--primary-color);
   margin-left: 2px;
+}
+
+.description-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+
+  .label {
+    font-weight: 500;
+  }
+}
+
+/* === Additional Attributes Section === */
+.additional-attribute-row {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  margin-bottom: 8px;
+
+  .section-label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: none;
+    color: #444;
+  }
+
+  .action-link,
+  .action-remove-link,
+  .remove-link {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--primary-color);
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 4px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .available-prefixes {
+    font-size: 12px;
+    color: #888;
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+
+  .prefix-chip {
+    cursor: help;
+    border-bottom: 1px dotted #ccc;
+  }
 }
 
 /* === Section Labels and Links === */

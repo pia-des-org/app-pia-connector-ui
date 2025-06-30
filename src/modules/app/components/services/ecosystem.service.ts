@@ -4,6 +4,8 @@ import {Ecosystem} from "../navigation/ecosystem.enum";
 @Injectable({ providedIn: 'root' })
 export class EcosystemService {
   ecosystem: Ecosystem = Ecosystem.SEGITTUR;
+  bpn: string = '';
+
 
   applyEcosystemSettings(): void {
     const favicon = document.querySelector("link[rel*='icon']") as HTMLLinkElement;

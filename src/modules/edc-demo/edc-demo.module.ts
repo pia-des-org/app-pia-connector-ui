@@ -60,6 +60,8 @@ import { getCustomPaginatorIntl } from './components/transfer-history/custom-pag
 import {MatChipsModule} from "@angular/material/chips";
 import {TranslateModule} from "@ngx-translate/core";
 import {LanguageSelectComponent} from "./components/asset/language-select/language-select.component";
+import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownPreviewDialogComponent } from './components/asset/markdown-preview-dialog/markdown-preview-dialog.component';
 
 @NgModule({
   imports: [
@@ -92,7 +94,8 @@ import {LanguageSelectComponent} from "./components/asset/language-select/langua
     MatCheckboxModule,
     MatTooltipModule,
     MatChipsModule,
-    TranslateModule
+    TranslateModule,
+    MarkdownModule
   ],
   declarations: [
     CatalogBrowserComponent,
@@ -120,6 +123,7 @@ import {LanguageSelectComponent} from "./components/asset/language-select/langua
     PolicyDetailsDialogComponent,
     NegotiateTransferComponent,
     LanguageSelectComponent,
+    MarkdownPreviewDialogComponent,
   ],
   exports: [
     CatalogBrowserComponent,
