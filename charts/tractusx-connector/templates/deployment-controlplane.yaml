@@ -97,7 +97,7 @@ spec:
             # Where to redirect authenticated requests
             - --upstream=http://127.0.0.1:{{ include "txdc.oauth2Proxy.edcContainerPort" . }}
             # Listen on port 3000
-            - --redirect-url={{ include "txdc.controlplane.url.protocol" . }}{{ .Values.controlplane.oauth2Proxy.redirectUrlPath | default "/management/oauth2/callback" }}
+            - --redirect-url={{ include "txdc.controlplane.url.protocol" . }}{{ .Values.controlplane.oauth2Proxy.redirectUrlPath | default "/data/oauth2/callback" }}
             - --http-address=0.0.0.0:{{ .Values.controlplane.endpoints.management.port }}
             # Provide KeyCloak realm URL
             - --oidc-issuer-url={{ .Values.controlplane.oauth2Proxy.issuerUrl | required ".Values.controlplane.oauth2Proxy.issuerUrl is required" }}

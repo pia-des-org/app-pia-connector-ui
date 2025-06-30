@@ -107,7 +107,7 @@ controlplane:
       # -- port for incoming api calls
       port: 8081
       # -- path for incoming api calls
-      path: /management
+      path: /data
       # -- authentication key, must be attached to each 'X-Api-Key' request header
       authKey: ""
     # -- control api, used for internal control calls. can be added to the internal ingress, but should probably not
