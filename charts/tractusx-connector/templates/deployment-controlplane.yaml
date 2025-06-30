@@ -107,6 +107,8 @@ spec:
             - --scope=openid
             - --skip-jwt-bearer-tokens
             - --code-challenge-method=S256
+            - --bearer-token-login-fallback=false
+            - --api-route=^/
           # Read Client and Cookie secret from Kubernetes Secrets
           env:
             - name: OAUTH2_PROXY_CLIENT_ID
