@@ -65,7 +65,7 @@ export class NavigationComponent {
     const bpn = tokenParsed?.['bpn'] as string;
 
     this.username = tokenParsed?.name || 'User';
-    this.ecosystemService.bpn = bpn || 'test'; // TODO fix
+    this.ecosystemService.bpn = bpn;
 
     if (groups?.includes(Ecosystem.ASTURIAS)) {
       this.ecosystemService.ecosystem = Ecosystem.ASTURIAS;
