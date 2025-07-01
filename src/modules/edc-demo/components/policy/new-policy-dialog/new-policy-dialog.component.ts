@@ -3,6 +3,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { PolicyDefinitionInput, PolicyInput } from '../../../../mgmt-api-client/model';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { EcosystemService } from '../../../../app/components/services/ecosystem.service';
+
 
 @Component({
   selector: 'app-new-policy-dialog',
@@ -24,7 +26,9 @@ export class NewPolicyDialogComponent {
     }
   };
 
-  constructor(private dialogRef: MatDialogRef<NewPolicyDialogComponent>) {}
+  constructor(private dialogRef: MatDialogRef<NewPolicyDialogComponent>,
+              private ecosystemService: EcosystemService
+  ) {}
 
   addBpn(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -58,6 +62,9 @@ export class NewPolicyDialogComponent {
     };
 
     if (isRestricted) {
+      if (this.ecosystemService.bpn.length > 0) {
+        this.businessPartnerNumbers.push(this.ecosystemService.bpn);
+      }
       permission.constraint = [
         {
           "odrl:or": this.businessPartnerNumbers.map(bpn => ({

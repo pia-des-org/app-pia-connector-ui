@@ -12,9 +12,10 @@ export class LanguageSelectItemService {
    * Usability: See important options first and close to each other.
    */
   highlightItemIds = [
-    'https://w3id.org/idsa/code/MULTI_LINGUAL',
-    'https://w3id.org/idsa/code/DE',
-    'https://w3id.org/idsa/code/EN',
+    'MULTI_LINGUAL',
+    'DE',
+    'DE',
+    'EN',
   ];
   highlightItems: LanguageSelectItem[];
   otherItems: LanguageSelectItem[];

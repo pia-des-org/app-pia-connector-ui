@@ -27,6 +27,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializeKeycloak } from './keycloak-init.factory';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import { MarkdownModule } from 'ngx-markdown';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -49,8 +50,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatMenuModule,
     KeycloakAngularModule,
     HttpClientModule,
+    MarkdownModule.forRoot({ loader: HttpClient }),
     TranslateModule.forRoot({
-      defaultLanguage: 'es',
+      defaultLanguage: 'es-ES',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,

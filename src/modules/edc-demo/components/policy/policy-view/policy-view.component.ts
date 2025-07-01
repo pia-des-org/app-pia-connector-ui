@@ -73,11 +73,14 @@ export class PolicyViewComponent implements OnInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(NewPolicyDialogComponent);
-    dialogRef.afterClosed().pipe(first()).subscribe({ next: (newPolicyDefinition: PolicyDefinitionInput) => {
+    dialogRef.afterClosed().pipe(first()).subscribe({
+      next: (newPolicyDefinition: PolicyDefinitionInput) => {
         if (newPolicyDefinition) {
-          this.policyService.createPolicy(newPolicyDefinition).subscribe(
-            {
-              next: (response: IdResponse) => this.errorOrUpdateSubscriber.next(response),
+          this.policyService.createPolicy(newPolicyDefinition).subscribe({
+            next: (response: IdResponse) => {
+              this.errorOrUpdateSubscriber.next(response);
+              this.notificationService.showInfo("Successfully created");
+            },
               error: (error: Error) => this.showError(error, "An error occurred while creating the policy.")
             }
           );

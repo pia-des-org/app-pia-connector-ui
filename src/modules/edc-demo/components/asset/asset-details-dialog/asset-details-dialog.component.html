@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <p class="asset-description">{{ data.asset.properties.optionalValue('dcterms', 'description') }}</p>
+  <markdown class="asset-description" [data]="data.asset.properties.optionalValue('dcterms', 'description')"></markdown>
 
   <div class="details-grid">
     <div class="detail-item">

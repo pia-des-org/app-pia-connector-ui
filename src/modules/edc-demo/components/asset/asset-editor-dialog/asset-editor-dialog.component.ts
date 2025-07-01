@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { AssetInput } from '@think-it-labs/edc-connector-client';
@@ -9,6 +9,7 @@ import {EcosystemService} from "../../../../app/components/services/ecosystem.se
 import {LanguageSelectItem} from "../language-select/language-select-item";
 import {FormControl} from "@angular/forms";
 import {LanguageSelectItemService} from "../language-select/language-select-item.service";
+import {MarkdownPreviewDialogComponent} from "../markdown-preview-dialog/markdown-preview-dialog.component";
 
 @Component({
   selector: 'edc-demo-asset-editor-dialog',
@@ -26,8 +27,11 @@ export class AssetEditorDialog implements OnInit {
     keywords: [] as string[],
     mediaType: '',
     qualityNote: '',
-    language: ''
+    language: '',
+    customProperties: [] as { name: string; value: string }[]
   };
+
+  namespaces = Object.entries(CONTEXT_MAP).map(([prefix, iri]) => ({ prefix, iri }));
 
   selectedStorageType: string = 'rest';
   showPlaceholder = false;
@@ -70,6 +74,7 @@ export class AssetEditorDialog implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AssetEditorDialog>,
+    private dialog: MatDialog,
     @Inject('STORAGE_TYPES') public storageTypes: StorageType[],
     private ecosystemService: EcosystemService,
     private languageService: LanguageSelectItemService
@@ -81,6 +86,16 @@ export class AssetEditorDialog implements OnInit {
         this.languageService.findById(this.assetMetadata.language)
       );
     }
+  }
+
+  openPreviewDialog(): void {
+    this.dialog.open(MarkdownPreviewDialogComponent, {
+      data: {
+        markdownText: this.assetMetadata.description
+      },
+      width: '600px',
+      maxHeight: '80vh'
+    });
   }
 
   onNameChange(value: string): void {
@@ -127,8 +142,6 @@ export class AssetEditorDialog implements OnInit {
       && !!this.assetMetadata.id?.trim()
       && !!this.assetMetadata.description?.trim()
       && this.assetMetadata.keywords.length > 0
-      && !!this.assetMetadata.mediaType?.trim()
-      && !!this.assetMetadata.qualityNote?.trim()
       && !!this.assetMetadata.ontologyType?.trim();
   }
 
@@ -166,6 +179,14 @@ export class AssetEditorDialog implements OnInit {
 
   removeHeader(index: number): void {
     this.restConfig.additionalHeaders.splice(index, 1);
+  }
+
+  addCustomProperty(): void {
+    this.assetMetadata.customProperties.push({ name: '', value: '' });
+  }
+
+  removeCustomProperty(index: number): void {
+    this.assetMetadata.customProperties.splice(index, 1);
   }
 
   get isFormValid(): boolean {
@@ -242,22 +263,56 @@ export class AssetEditorDialog implements OnInit {
       };
     }
 
+    const properties: any = {
+      [`${NS.DCTERMS}title`]: this.assetMetadata.name,
+      [`${NS.DCTERMS}description`]: this.assetMetadata.description,
+      [`${NS.SEGITTURONT}concept`]: `segitturont:${this.assetMetadata.ontologyType}`,
+      [`${NS.DCAT}keyword`]: this.assetMetadata.keywords,
+      ...Object.fromEntries(
+        this.assetMetadata.customProperties
+          .filter(p => p.name && p.value)
+          .map(p => [p.name, p.value])
+      )
+    };
+
+    if (this.assetMetadata.mediaType?.trim()) {
+      properties[`${NS.DCAT}mediaType`] = this.assetMetadata.mediaType;
+    }
+
+    if (this.assetMetadata.qualityNote?.trim()) {
+      properties[`${NS.DQV}hasQualityAnnotation`] = {
+        [`${NS.RDFS}comment`]: this.assetMetadata.qualityNote
+      };
+    }
+
+    if (this.languageControl.value?.id?.trim()) {
+      properties[`${NS.DCTERMS}language`] = this.languageControl.value.id;
+    }
+
     const assetInput: AssetInput = {
       "@id": this.assetMetadata.id,
       "@context": CONTEXT_MAP,
       [`${NS.SEGITTUR}ecosystem`]: this.ecosystemService.ecosystem?.toLowerCase(),
-      properties: {
-        [`${NS.DCTERMS}title`]: this.assetMetadata.name,
-        [`${NS.DCTERMS}description`]: this.assetMetadata.description,
-        [`${NS.SEGITTURONT}concept`]: `segitturont:${this.assetMetadata.ontologyType}`,
-        [`${NS.DCAT}keywords`]: this.assetMetadata.keywords?.join(', '),
-        [`${NS.DCAT}mediaType`]: this.assetMetadata.mediaType,
-        [`${NS.DQV}hasQualityAnnotation`]: this.assetMetadata.qualityNote,
-        [`${NS.DCTERMS}language`]: this.languageControl.value?.id || '',
-      },
+      properties,
       dataAddress
     };
 
     this.dialogRef.close({ assetInput });
   }
 }
+
+// title, desc, ontology type, keyword rest are not REQUIRED.
+// available namespaces, show prefix, hover over them would show namespace
+// desc should be live in asset creation [ or preview button to show it ]
+// navigation bar icons lower bar is cut off
+// segittur design, new policy required shown as orange somehow, fix it
+// transfer history, overview font, refresh is orange??
+// negotiation desc should support markdown
+// language should have fallback to spanish as default
+// create new policy should indicate the user that policy were created or not in a popup as in other pages
+// create asset, if field is empty, do not add it to the json body !!!!!
+
+//        [`${NS.DQV}hasQualityAnnotation`]: {
+//           "@type": 'dqv:QualityAnnotation',
+//           [`${NS.RDFS}comment`]: this.assetMetadata.qualityNote
+//         },
