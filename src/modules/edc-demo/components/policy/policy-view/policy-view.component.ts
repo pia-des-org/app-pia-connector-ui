@@ -136,7 +136,9 @@ export class PolicyViewComponent implements OnInit {
     const orConstraints = constraint['odrl:or'];
     if (!orConstraints) return null;
 
-    const bpns: string[] = (orConstraints as any[])
+    const normalizedOrConstraints = Array.isArray(orConstraints) ? orConstraints : [orConstraints];
+
+    const bpns: string[] = normalizedOrConstraints
       .filter((c: any) => c['odrl:leftOperand']?.includes('BusinessPartnerNumber'))
       .map((c: any) => c['odrl:rightOperand'])
       .filter((bpn: any) => typeof bpn === 'string');

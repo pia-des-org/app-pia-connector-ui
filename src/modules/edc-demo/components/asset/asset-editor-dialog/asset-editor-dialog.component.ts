@@ -300,18 +300,6 @@ export class AssetEditorDialog implements OnInit {
     this.dialogRef.close({ assetInput });
   }
 }
-
-// title, desc, ontology type, keyword rest are not REQUIRED.
-// available namespaces, show prefix, hover over them would show namespace
-// desc should be live in asset creation [ or preview button to show it ]
-// navigation bar icons lower bar is cut off
-// segittur design, new policy required shown as orange somehow, fix it
-// transfer history, overview font, refresh is orange??
-// negotiation desc should support markdown
-// language should have fallback to spanish as default
-// create new policy should indicate the user that policy were created or not in a popup as in other pages
-// create asset, if field is empty, do not add it to the json body !!!!!
-
 //        [`${NS.DQV}hasQualityAnnotation`]: {
 //           "@type": 'dqv:QualityAnnotation',
 //           [`${NS.RDFS}comment`]: this.assetMetadata.qualityNote
