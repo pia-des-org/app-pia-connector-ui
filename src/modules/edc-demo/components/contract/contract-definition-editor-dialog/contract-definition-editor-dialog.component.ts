@@ -49,6 +49,13 @@ export class ContractDefinitionEditorDialog implements OnInit {
     })
   }
 
+  blockInvalidChars(event: KeyboardEvent): void {
+    const allowed = /^[a-zA-Z0-9\-]$/;
+    if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   get isFormValid(): boolean {
     const hasAsset = Array.isArray(this.assets)
       ? this.assets.length > 0

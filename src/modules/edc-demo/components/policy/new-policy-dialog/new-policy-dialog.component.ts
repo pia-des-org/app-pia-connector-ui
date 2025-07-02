@@ -30,6 +30,13 @@ export class NewPolicyDialogComponent {
               private ecosystemService: EcosystemService
   ) {}
 
+  blockInvalidChars(event: KeyboardEvent): void {
+    const allowed = /^[a-zA-Z0-9\-]$/;
+    if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   addBpn(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (value) {

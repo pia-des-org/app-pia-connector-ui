@@ -103,6 +103,13 @@ export class AssetEditorDialog implements OnInit {
     this.assetMetadata.id = this.slugify(value);
   }
 
+  blockInvalidChars(event: KeyboardEvent): void {
+    const allowed = /^[a-zA-Z0-9 \-]$/;
+    if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   private slugify(value: string): string {
     return value
       .trim()
