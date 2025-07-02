@@ -11,6 +11,7 @@
         <input
           matInput
           [(ngModel)]="policyName"
+          (keydown)="blockInvalidChars($event)"
           placeholder="{{ 'policyEditor.namePlaceholder' | translate }}"
           required
         />

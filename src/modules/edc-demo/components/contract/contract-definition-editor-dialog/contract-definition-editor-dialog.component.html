@@ -12,6 +12,7 @@
         <input
           matInput
           [(ngModel)]="contractDefinition['@id']"
+          (keydown)="blockInvalidChars($event)"
           [placeholder]="'contractDialog.idPlaceholder' | translate"
           required
         />

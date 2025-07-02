@@ -19,6 +19,7 @@
             matInput
             [(ngModel)]="assetMetadata.name"
             (ngModelChange)="onNameChange($event)"
+            (keydown)="blockInvalidChars($event)"
             placeholder="{{ 'assetEditor.namePlaceholder' | translate }}"
             required />
         </mat-form-field>
