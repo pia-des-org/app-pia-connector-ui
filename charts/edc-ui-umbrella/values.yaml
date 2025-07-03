@@ -33,6 +33,10 @@ tractusx-connector:
       port: ""
       # -- Default /data/oauth2/callback
       redirectUrlPath: ""
+      # -- Optional, required realm role <realm role name> or <client id>:<client role name>
+      allowedRoleName: ""
+      # -- Optional, requires group client scope </group name>
+      allowedGroupName: ""
 
     endpoints:
       # -- default api for health checks, should not be added to any ingress

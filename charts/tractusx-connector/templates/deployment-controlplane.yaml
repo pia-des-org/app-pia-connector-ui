@@ -108,6 +108,12 @@ spec:
             - --skip-jwt-bearer-tokens
             - --code-challenge-method=S256
             - --bearer-token-login-fallback=false
+            {{- if .Values.controlplane.oauth2Proxy.allowedRoleName }}
+            - --allowed-role={{ .Values.controlplane.oauth2Proxy.allowedRoleName }}
+            {{- end }}
+            {{- if .Values.controlplane.oauth2Proxy.allowedGroupName }}
+            - --allowed-group={{ .Values.controlplane.oauth2Proxy.allowedGroupName }}
+            {{- end }}
             - --api-route=^/
           # Read Client and Cookie secret from Kubernetes Secrets
           env:
