@@ -38,6 +38,11 @@ tractusx-connector:
       # -- Optional, requires group client scope </group name>
       allowedGroupName: ""
 
+    # -- The source types used by the data plane selector (defaults to HttpData, AmazonS3, AzureStorage)
+    dataplanceSourceTypes: ""
+    # -- The destination types used by the data plane selector (defaults to HttpProxy, AmazonS3, AzureStorage, HttpData)
+    dataplaneDestinationTypes: ""
+
     endpoints:
       # -- default api for health checks, should not be added to any ingress
       default:
@@ -259,7 +264,7 @@ app-pia-connector-ui:
     # This sets the pull policy for images.
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "9e8f1355c0e63202981a712b5515677f9390b4b0"
+    tag: "e14da0b"
   imagePullSecrets:
     - name: "acr-cred"
   

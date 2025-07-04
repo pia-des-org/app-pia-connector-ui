@@ -68,6 +68,11 @@ controlplane:
     # -- Optional, requires group client scope </group name>
     allowedGroupName: ""
 
+  # -- The source types used by the data plane selector (defaults to HttpData, AmazonS3, AzureStorage)
+  dataplanceSourceTypes: ""
+  # -- The destination types used by the data plane selector (defaults to HttpProxy, AmazonS3, AzureStorage, HttpData)
+  dataplaneDestinationTypes: ""
+
   debug:
     enabled: false
     port: 1044
