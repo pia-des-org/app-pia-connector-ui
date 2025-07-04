@@ -58,7 +58,9 @@ export class Inner {
       method,
       headers: {
         ...innerRequest.headers,
-        "X-Api-Key": innerRequest.apiToken ?? "",
+        ...(innerRequest.apiToken && {
+          Authorization: `Bearer ${innerRequest.apiToken}`,
+        }),
       },
       body: innerRequest.body ? JSON.stringify(innerRequest.body) : undefined,
     });
