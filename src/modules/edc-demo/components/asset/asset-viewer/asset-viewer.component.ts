@@ -102,7 +102,7 @@ export class AssetViewerComponent implements OnInit {
       if (newAsset) {
         this.assetService.createAsset(newAsset).subscribe({
           next: ()=> this.fetch$.next(null),
-          error: err => this.showError(err, "This asset cannot be created"),
+          error: err => this.showError(err, 'Asset creation failed. The input may contain restricted characters, especially in icon-related fields. Please verify and correct the input before retrying.'),
           complete: () => this.notificationService.showInfo("Successfully created"),
         })
       }

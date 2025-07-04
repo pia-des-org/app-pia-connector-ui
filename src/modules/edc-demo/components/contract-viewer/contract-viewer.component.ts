@@ -20,6 +20,7 @@ import {TransferProcessStates} from "../../models/transfer-process-states";
 import {NegotiateTransferComponent} from "../negotiate-transfer/negotiate-transfer.component";
 import {ContractNegotiation} from "@think-it-labs/edc-connector-client"
 import {TransferRequest} from "./transferRequest";
+import { AppConfigService } from '../../../app/app-config.service';
 
 interface RunningTransferProcess {
   processId: string;
@@ -39,7 +40,6 @@ export class ContractViewerComponent implements OnInit {
   private pollingHandleTransfer?: any;
   private contractNegotiationData?: ContractNegotiation[]
   private pollingStartTime?: number;
-  private POLLING_TIMEOUT_MS = 10_000;
 
   constructor(private contractAgreementService: ContractAgreementService,
               private assetService: AssetService,
@@ -49,7 +49,8 @@ export class ContractViewerComponent implements OnInit {
               private catalogService: CatalogBrowserService,
               private router: Router,
               private notificationService: NotificationService,
-              private contractNegotiationService : ContractNegotiationService) {
+              private contractNegotiationService : ContractNegotiationService,
+              private appConfig: AppConfigService) {
   }
 
   private static isFinishedState(state: string): boolean {
@@ -150,6 +151,11 @@ export class ContractViewerComponent implements OnInit {
 
   isTransferInProgress(contractId: string): boolean {
     return !!this.runningTransfers.find(rt => rt.contractId === contractId);
+  }
+
+  private get POLLING_TIMEOUT_MS(): number {
+    const config = this.appConfig.getConfig();
+    return config?.transferPollingTimeoutMs || 60000;
   }
 
   private createTransferRequest(contract: ContractAgreement, dataDestination: any): TransferRequest {

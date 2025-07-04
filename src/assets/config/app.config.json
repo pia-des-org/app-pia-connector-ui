@@ -6,5 +6,6 @@
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
   "keycloakUrl": "https://centralidp-dev-espd.spaincentral.cloudapp.azure.com/auth",
   "keycloakRealm": "CX-Central",
-  "keycloakClientId": "connector-ui"
+  "keycloakClientId": "connector-ui",
+  "transferPollingTimeoutMs": 60000
 }

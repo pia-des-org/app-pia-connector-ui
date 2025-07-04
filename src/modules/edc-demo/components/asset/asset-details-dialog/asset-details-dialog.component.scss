@@ -3,14 +3,21 @@
   flex-direction: column;
   width: 45vw;
   height: 100%; // full height of the dialog
+  max-height: 90vh;
+}
+
+.dialog-content-scrollable {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0 32px;
+  margin-bottom: 24px;
 }
 
 .details-wrapper {
-  padding: 40px;
-  max-width: 640px;
   display: flex;
   flex-direction: column;
   gap: 32px;
+  max-width: 640px;
 }
 
 .details-header {
@@ -117,3 +124,9 @@ mat-dialog-actions {
   gap: 12px;
 }
 
+::ng-deep markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+}

@@ -53,7 +53,6 @@ export class NavigationComponent {
   }
 
   switchLanguage(langCode: string): void {
-    console.log(langCode);
     this.translate.use(langCode);
     const lang = this.languages.find(l => l.code === langCode);
     this.currentLang = lang?.label || langCode;

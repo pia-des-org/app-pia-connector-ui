@@ -5,3 +5,10 @@
 .mat-mdc-card-content {
   padding-left: 10px !important;
 }
+
+::ng-deep markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+}
