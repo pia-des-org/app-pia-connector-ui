@@ -19,15 +19,13 @@ import {AppConfigService} from "./app-config.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API} from "./variables";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
-import {EdcApiKeyInterceptor} from "./edc.apikey.interceptor";
-import {environment} from "../../environments/environment";
-import { EdcConnectorClient } from "@think-it-labs/edc-connector-client";
 import {MatMenuModule} from "@angular/material/menu";
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { initializeKeycloak } from './keycloak-init.factory';
+import { KeycloakAngularModule, KeycloakService, KeycloakBearerInterceptor } from 'keycloak-angular';
+import {initializeApp} from './keycloak-init.factory';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import { MarkdownModule } from 'ngx-markdown';
+import {EdcConnectorProviderService} from "./edc.connector.client.provider";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -67,9 +65,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
+      useFactory: initializeApp,
+      deps: [KeycloakService, AppConfigService, EdcConnectorProviderService],
       multi: true,
-      deps: [KeycloakService, AppConfigService]
     },
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
     {
@@ -93,18 +91,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: EdcApiKeyInterceptor,
+      useClass: KeycloakBearerInterceptor,
       multi: true
-    },
-    {
-      provide: EdcConnectorClient,
-      useFactory: (s: AppConfigService) => {
-        return new EdcConnectorClient.Builder()
-          .apiToken(s.getConfig()?.apiKey as string)
-          .managementUrl(s.getConfig()?.managementApiUrl as string)
-          .build();
-      },
-      deps: [AppConfigService]
     }
   ],
   bootstrap: [AppComponent]

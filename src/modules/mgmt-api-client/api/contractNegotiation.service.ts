@@ -16,6 +16,7 @@ import { HttpResponse, HttpEvent, HttpContext}       from '@angular/common/http'
 import {from, Observable} from 'rxjs';
 import {EdcConnectorClient, IdResponse, QuerySpec} from "@think-it-labs/edc-connector-client";
 import {ContractNegotiation, ContractNegotiationState, ContractNegotiationRequest} from "../model"
+import {EdcConnectorProviderService} from "../../app/edc.connector.client.provider";
 
 
 @Injectable({
@@ -25,8 +26,9 @@ export class ContractNegotiationService {
 
     private contractNegotiation;
 
-    constructor(private edcConnectorClient: EdcConnectorClient) {
-      this.contractNegotiation = this.edcConnectorClient.management.contractNegotiations;
+    constructor(private connectorProvider: EdcConnectorProviderService) {
+      const client = this.connectorProvider.getClient();
+      this.contractNegotiation = client.management.contractNegotiations;
     }
 
     /**

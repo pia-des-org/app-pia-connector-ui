@@ -14,8 +14,8 @@
 import {Injectable} from '@angular/core';
 import {HttpResponse, HttpEvent, HttpContext} from '@angular/common/http';
 import {Observable, from} from 'rxjs';
-import {EdcConnectorClient} from "@think-it-labs/edc-connector-client";
 import { PolicyDefinition, PolicyDefinitionInput, IdResponse, QuerySpec } from "../model"
+import {EdcConnectorProviderService} from "../../app/edc.connector.client.provider";
 
 
 @Injectable({
@@ -26,8 +26,9 @@ export class PolicyService {
   private policyDefinition;
 
 
-  constructor(private edcConnectorClient: EdcConnectorClient) {
-    this.policyDefinition = this.edcConnectorClient.management.policyDefinitions;
+  constructor(private connectorProvider: EdcConnectorProviderService) {
+    const client = this.connectorProvider.getClient();
+    this.policyDefinition = client.management.policyDefinitions;
   }
 
   /**
