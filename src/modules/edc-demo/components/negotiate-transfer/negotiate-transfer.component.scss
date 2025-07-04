@@ -146,3 +146,17 @@ mat-dialog-actions {
   opacity: 0; // You can use 0 to fully hide
   filter: blur(0.5px); // optional: adds a subtle "inactive" blur
 }
+
+.asset-description.truncated {
+  max-height: 150px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+::ng-deep markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+}

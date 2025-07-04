@@ -12,8 +12,8 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import { Injectable } from '@angular/core';
-import { HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
-import { Observable, from }                                        from 'rxjs';
+import { HttpResponse, HttpErrorResponse, HttpEvent, HttpContext } from '@angular/common/http';
+import { Observable, throwError, from }                                        from 'rxjs';
 
 import { EdcConnectorClient } from '@think-it-labs/edc-connector-client';
 import { AssetInput, Asset, IdResponse, QuerySpec } from "../model"

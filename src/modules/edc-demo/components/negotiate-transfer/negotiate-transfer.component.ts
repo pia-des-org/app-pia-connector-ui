@@ -144,10 +144,7 @@ export class NegotiateTransferComponent implements OnInit {
     };
 
     this.title = getValue(dataset, 'https://purl.org/dc/terms/title');
-    const fullDescription = getValue(dataset, 'https://purl.org/dc/terms/description') || '';
-    this.description = fullDescription.length > 400
-      ? fullDescription.slice(0, 400) + '...'
-      : fullDescription;
+    this.description = getValue(dataset, 'https://purl.org/dc/terms/description') || '';
 
     this.mediaType = getValue(dataset, 'https://www.w3.org/ns/dcat/mediaType');
     const rawOntology = getValue(dataset, 'https://ontologia.segittur.es/turismo/def/core/concept');
