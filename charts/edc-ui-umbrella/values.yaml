@@ -22,6 +22,27 @@ tractusx-connector:
       # -- Overrides the image tag whose default is the chart appVersion
       tag: "0.5.4-alpha"
 
+    oauth2Proxy:
+      enabled: false
+      issuerUrl: ""
+      clientId: ""
+      clientSecret: ""
+      # -- The cookie used by the oauth2 proxy
+      cookieSecret: ""
+      # -- Default 3000
+      port: ""
+      # -- Default /data/oauth2/callback
+      redirectUrlPath: ""
+      # -- Optional, required realm role <realm role name> or <client id>:<client role name>
+      allowedRoleName: ""
+      # -- Optional, requires group client scope </group name>
+      allowedGroupName: ""
+
+    # -- The source types used by the data plane selector (defaults to HttpData, AmazonS3, AzureStorage)
+    dataplanceSourceTypes: ""
+    # -- The destination types used by the data plane selector (defaults to HttpProxy, AmazonS3, AzureStorage, HttpData)
+    dataplaneDestinationTypes: ""
+
     endpoints:
       # -- default api for health checks, should not be added to any ingress
       default:
@@ -34,7 +55,7 @@ tractusx-connector:
         # -- port for incoming api calls
         port: 8081
         # -- path for incoming api calls
-        path: /management
+        path: /data
         # -- authentication key, must be attached to each 'X-Api-Key' request header
         authKey: "changeme"
       # -- control api, used for internal control calls. can be added to the internal ingress, but should probably not
@@ -243,7 +264,7 @@ app-pia-connector-ui:
     # This sets the pull policy for images.
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "9e8f1355c0e63202981a712b5515677f9390b4b0"
+    tag: "e14da0b"
   imagePullSecrets:
     - name: "acr-cred"
   
