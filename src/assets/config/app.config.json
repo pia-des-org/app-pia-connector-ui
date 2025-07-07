@@ -1,9 +1,11 @@
 {
+  "apiKey": "ApiKeyDefaultValue",
   "managementApiUrl": "https://lilaus-7b61d3fd-de.lila.cx.dev.dih-cloud.com/data",
   "catalogUrl": "http://localhost:4200/management",
   "storageAccount": "company2assets",
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
   "keycloakUrl": "https://centralidp-dev-espd.spaincentral.cloudapp.azure.com/auth",
   "keycloakRealm": "CX-Central",
-  "keycloakClientId": "connector-ui"
+  "keycloakClientId": "connector-ui",
+  "transferPollingTimeoutMs": 60000
 }

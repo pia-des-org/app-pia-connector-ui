@@ -11,16 +11,32 @@
       </mat-icon>
     </div>
 
-    <div *ngIf="section.general" class="section-content">
+    <div [hidden]="!section.general" class="section-content">
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{ 'assetEditor.name' | translate }}</mat-label>
-          <input matInput [(ngModel)]="assetMetadata.name" (ngModelChange)="assetMetadata.id = $event" placeholder="{{ 'assetEditor.namePlaceholder' | translate }}" required />
+          <input
+            matInput
+            [(ngModel)]="assetMetadata.name"
+            (ngModelChange)="onNameChange($event)"
+            (keydown)="blockInvalidChars($event)"
+            placeholder="{{ 'assetEditor.namePlaceholder' | translate }}"
+            required />
         </mat-form-field>
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{ 'assetEditor.id' | translate }}<span class="required-star">*</span></mat-label>
           <input matInput [(ngModel)]="assetMetadata.id" readonly [disabled]="true" />
         </mat-form-field>
+      </div>
+
+      <div class="description-header">
+        <span class="label">{{ 'assetEditor.description' | translate }}</span>
+        <button mat-button
+                color="primary"
+                (click)="openPreviewDialog()"
+                [disabled]="!assetMetadata.description">
+          {{ 'assetEditor.descriptionPreview' | translate }}
+        </button>
       </div>
 
       <mat-form-field appearance="outline" class="form-field full-width">
@@ -39,7 +55,7 @@
 
       <mat-form-field appearance="outline" class="form-field full-width">
         <mat-label>{{ 'assetEditor.keywords' | translate }}</mat-label>
-        <mat-chip-grid #chipGrid aria-label="Keyword input">
+        <mat-chip-grid #chipGrid aria-label="Keyword input" required>
           <mat-chip *ngFor="let keyword of assetMetadata.keywords" [removable]="true" (removed)="removeKeyword(keyword)">
             {{ keyword }}
             <button matChipRemove><mat-icon>cancel</mat-icon></button>
@@ -50,21 +66,44 @@
 
       <mat-form-field appearance="outline" class="form-field full-width">
         <mat-label>{{ 'assetEditor.mediaType' | translate }}</mat-label>
-        <input matInput [(ngModel)]="assetMetadata.mediaType" placeholder="{{ 'assetEditor.freeText' | translate }}" required />
+        <input matInput [(ngModel)]="assetMetadata.mediaType" placeholder="{{ 'assetEditor.freeText' | translate }}" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="form-field full-width">
         <mat-label>{{ 'assetEditor.qualityNote' | translate }}</mat-label>
-        <input matInput [(ngModel)]="assetMetadata.qualityNote" placeholder="{{ 'assetEditor.freeText' | translate }}" required />
+        <input matInput [(ngModel)]="assetMetadata.qualityNote" placeholder="{{ 'assetEditor.freeText' | translate }}" />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="form-field full-width">
-        <mat-label>{{ 'assetEditor.language' | translate }}</mat-label>
-        <mat-select [(ngModel)]="assetMetadata.language">
-          <mat-option value="">{{ 'assetEditor.select' | translate }}</mat-option>
-          <mat-option value="en">{{ 'assetEditor.languageEn' | translate }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <language-select
+        [label]="'assetEditor.language' | translate"
+        [control]="languageControl"
+      ></language-select>
+
+      <div class="additional-attribute-row">
+        <span class="section-label">
+          {{ 'assetEditor.additionalAttributes' | translate }}
+        </span>
+        <span class="available-prefixes">
+          Allow metadata namespaces :
+          <ng-container *ngFor="let ns of namespaces; let last = last">
+            <span matTooltip="{{ ns.iri }}" class="prefix-chip"> {{ ns.prefix }}</span><span *ngIf="!last">, </span>
+          </ng-container>
+        </span>
+
+        <a class="action-link" (click)="addCustomProperty()">{{ 'assetEditor.addAdditionalAttribute' | translate }}</a>
+      </div>
+
+      <div *ngFor="let prop of assetMetadata.customProperties; let i = index" class="form-row align-center">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.attributeName' | translate }}</mat-label>
+          <input matInput [(ngModel)]="prop.name" placeholder="{{ 'assetEditor.attributeNamePlaceholder' | translate }}" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.attributeValue' | translate }}</mat-label>
+          <input matInput [(ngModel)]="prop.value" placeholder="{{ 'assetEditor.attributeValuePlaceholder' | translate }}" required>
+        </mat-form-field>
+        <a class="remove-link" (click)="removeCustomProperty(i)">{{ 'assetEditor.remove' | translate }}</a>
+      </div>
     </div>
   </div>
 

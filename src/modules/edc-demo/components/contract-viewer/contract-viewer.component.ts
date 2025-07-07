@@ -20,6 +20,7 @@ import {TransferProcessStates} from "../../models/transfer-process-states";
 import {NegotiateTransferComponent} from "../negotiate-transfer/negotiate-transfer.component";
 import {ContractNegotiation} from "@think-it-labs/edc-connector-client"
 import {TransferRequest} from "./transferRequest";
+import { AppConfigService } from '../../../app/app-config.service';
 
 interface RunningTransferProcess {
   processId: string;
@@ -38,6 +39,7 @@ export class ContractViewerComponent implements OnInit {
   private runningTransfers: RunningTransferProcess[] = [];
   private pollingHandleTransfer?: any;
   private contractNegotiationData?: ContractNegotiation[]
+  private pollingStartTime?: number;
 
   constructor(private contractAgreementService: ContractAgreementService,
               private assetService: AssetService,
@@ -47,7 +49,8 @@ export class ContractViewerComponent implements OnInit {
               private catalogService: CatalogBrowserService,
               private router: Router,
               private notificationService: NotificationService,
-              private contractNegotiationService : ContractNegotiationService) {
+              private contractNegotiationService : ContractNegotiationService,
+              private appConfig: AppConfigService) {
   }
 
   private static isFinishedState(state: string): boolean {
@@ -150,6 +153,11 @@ export class ContractViewerComponent implements OnInit {
     return !!this.runningTransfers.find(rt => rt.contractId === contractId);
   }
 
+  private get POLLING_TIMEOUT_MS(): number {
+    const config = this.appConfig.getConfig();
+    return config?.transferPollingTimeoutMs || 60000;
+  }
+
   private createTransferRequest(contract: ContractAgreement, dataDestination: any): TransferRequest {
     return {
       '@context': {
@@ -178,6 +186,7 @@ export class ContractViewerComponent implements OnInit {
     });
 
     if (!this.pollingHandleTransfer) {
+      this.pollingStartTime = Date.now();
       this.pollingHandleTransfer = setInterval(this.pollRunningTransfers(), 1000);
     }
 
@@ -185,6 +194,16 @@ export class ContractViewerComponent implements OnInit {
 
   private pollRunningTransfers() {
     return () => {
+      const now = Date.now();
+
+      if (this.pollingStartTime && now - this.pollingStartTime > this.POLLING_TIMEOUT_MS) {
+        clearInterval(this.pollingHandleTransfer);
+        this.pollingHandleTransfer = undefined;
+        this.runningTransfers = [];
+        this.notificationService.showError("Transfer polling timed out.");
+        return;
+      }
+
       from(this.runningTransfers) //create from array
         .pipe(switchMap(runningTransferProcess => this.catalogService.getTransferProcessesById(runningTransferProcess.processId)), // fetch from API
           filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess.state!)), // only use finished ones

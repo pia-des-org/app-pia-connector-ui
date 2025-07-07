@@ -36,7 +36,7 @@
       </mat-card-header>
 
       <mat-card-content>
-        {{ asset.properties.optionalValue('dcterms', 'description') }}
+        <markdown class="asset-description" [data]="getShortDescription(asset)"></markdown>
       </mat-card-content>
 
       <mat-progress-bar *ngIf="isBusy()" color="accent" mode="indeterminate"></mat-progress-bar>

@@ -14,9 +14,9 @@
 import { Injectable }                      from '@angular/core';
 import { HttpResponse, HttpEvent, HttpContext }              from '@angular/common/http';
 import { Observable, from }                                        from 'rxjs';
-import {EdcConnectorClient} from "@think-it-labs/edc-connector-client";
 import { TransferProcessState, TransferProcess, TransferProcessInput, QuerySpec, IdResponse } from "../model";
 import {TransferRequest} from "../../edc-demo/components/contract-viewer/transferRequest";
+import {EdcConnectorProviderService} from "../../app/edc.connector.client.provider";
 
 
 
@@ -26,8 +26,9 @@ import {TransferRequest} from "../../edc-demo/components/contract-viewer/transfe
 export class TransferProcessService {
     private transferProcessService;
 
-    constructor(private edcConnectorClient: EdcConnectorClient) {
-      this.transferProcessService = this.edcConnectorClient.management.transferProcesses;
+    constructor(private connectorProvider: EdcConnectorProviderService) {
+      const client = this.connectorProvider.getClient();
+      this.transferProcessService = client.management.transferProcesses;
     }
 
     /**

@@ -39,9 +39,7 @@ export class PolicyViewComponent implements OnInit {
   ngOnInit(): void {
     this.filteredPolicies$ = this.fetch$.pipe(
       switchMap(() => {
-        const policyDefinitions = this.policyService.queryAllPolicies().pipe(
-          tap(policies => console.log('Fetched policy definitions:', policies))
-        );
+        const policyDefinitions = this.policyService.queryAllPolicies();
         return !!this.searchText ?
           policyDefinitions.pipe(map(policies => policies.filter(policy => this.isFiltered(policy, this.searchText))))
           :
@@ -73,11 +71,14 @@ export class PolicyViewComponent implements OnInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(NewPolicyDialogComponent);
-    dialogRef.afterClosed().pipe(first()).subscribe({ next: (newPolicyDefinition: PolicyDefinitionInput) => {
+    dialogRef.afterClosed().pipe(first()).subscribe({
+      next: (newPolicyDefinition: PolicyDefinitionInput) => {
         if (newPolicyDefinition) {
-          this.policyService.createPolicy(newPolicyDefinition).subscribe(
-            {
-              next: (response: IdResponse) => this.errorOrUpdateSubscriber.next(response),
+          this.policyService.createPolicy(newPolicyDefinition).subscribe({
+            next: (response: IdResponse) => {
+              this.errorOrUpdateSubscriber.next(response);
+              this.notificationService.showInfo("Successfully created");
+            },
               error: (error: Error) => this.showError(error, "An error occurred while creating the policy.")
             }
           );
@@ -130,15 +131,17 @@ export class PolicyViewComponent implements OnInit {
     if (!permission) return null;
     const constraint = permission['odrl:constraint'];
     if (!constraint) return null;
+    const orConstraints = constraint['odrl:or'];
+    if (!orConstraints) return null;
 
-    const leftOperandValue = constraint['odrl:leftOperand'];
-    if (!leftOperandValue) return null;
-    const rightOperandValue = constraint['odrl:rightOperand'];
-    if (!rightOperandValue) return null;
+    const normalizedOrConstraints = Array.isArray(orConstraints) ? orConstraints : [orConstraints];
 
-    const isBpn = leftOperandValue?.toString().includes('BusinessPartnerNumber');
+    const bpns: string[] = normalizedOrConstraints
+      .filter((c: any) => c['odrl:leftOperand']?.includes('BusinessPartnerNumber'))
+      .map((c: any) => c['odrl:rightOperand'])
+      .filter((bpn: any) => typeof bpn === 'string');
 
-    return isBpn && rightOperandValue ? `BPN: ${rightOperandValue}` : null;
+    return bpns.length > 0 ? `BPN: ${bpns.join(', ')}` : null;
   }
 
 

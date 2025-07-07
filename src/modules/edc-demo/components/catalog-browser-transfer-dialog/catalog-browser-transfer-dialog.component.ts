@@ -146,7 +146,7 @@ export class CatalogBrowserTransferDialog implements OnInit {
         type: 'AzureStorage',
         account: this.azureConfig.account,
         container: this.azureConfig.container,
-        keyName: this.azureConfig.sasToken
+        sasToken: this.azureConfig.sasToken
       };
     }
 

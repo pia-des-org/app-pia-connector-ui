@@ -4,6 +4,7 @@
 }
 
 .transfer-history-table {
+  font-family: var(--font-nunito), sans-serif;
   width: 100%;
   border-collapse: collapse;
 
@@ -130,6 +131,7 @@
   padding-left: 12px;
   font-size: 13px;
   gap: 24px; // spacing between sections
+  font-family: var(--font-nunito), sans-serif;
   background-color: #f5f5f5;
 
   .pagination-left {

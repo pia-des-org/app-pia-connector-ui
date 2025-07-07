@@ -33,6 +33,8 @@
     "namePlaceholder": "Name of the Asset",
     "id": "Id",
     "description": "Description",
+    "descriptionPreview": "Preview",
+    "descriptionPreviewTitle": "Preview of Description",
     "describe": "Describe",
     "ontologyType": "Ontology type",
     "organization": "Organization",
@@ -44,12 +46,19 @@
     "qualityNote": "Quality Note",
     "language": "Language",
     "languageEn": "English",
+    "additionalAttributes": "Additional metadata attributes",
+    "addAdditionalAttribute": "Add an attribute",
+    "attributeName": "Attribute name",
+    "attributeValue": "Attribute value",
+    "attributeNamePlaceholder": "namespace:property",
+    "attributeValuePlaceholder": "value",
     "select": "Select",
     "type": "Type",
     "rest": "REST-API Endpoint",
     "s3": "S3",
     "azure": "Azure Storage",
     "cancel": "Cancel",
+    "close": "Close",
     "create": "Create",
     "freeText": "Free text field",
 
@@ -149,7 +158,6 @@
     "accessPolicy": "Access Policy",
     "usagePolicy": "Usage Policy",
     "assets": "Assets",
-    "publish": "Publish to Marketplace",
     "cancel": "Cancel",
     "create": "Create"
   },
@@ -185,6 +193,8 @@
     "ontologyType": "ONTOLOGY TYPE",
     "organization": "ORGANIZATION",
     "cancel": "Cancel",
-    "negotiate": "Negotiate"
+    "negotiate": "Negotiate",
+    "negotiating": "Negotiating...",
+    "mediaType": "Media type"
   }
 }

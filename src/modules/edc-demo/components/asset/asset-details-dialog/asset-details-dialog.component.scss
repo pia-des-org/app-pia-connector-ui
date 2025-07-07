@@ -3,14 +3,21 @@
   flex-direction: column;
   width: 45vw;
   height: 100%; // full height of the dialog
+  max-height: 90vh;
+}
+
+.dialog-content-scrollable {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0 32px;
+  margin-bottom: 24px;
 }
 
 .details-wrapper {
-  padding: 40px;
-  max-width: 640px;
   display: flex;
   flex-direction: column;
   gap: 32px;
+  max-width: 640px;
 }
 
 .details-header {
@@ -50,10 +57,11 @@
     margin: 0;
     font-size: 24px;
     font-weight: 600;
-    font-family: var(--font-quicksand), sans-serif !important;;
+    font-family: var(--font-quicksand), sans-serif !important;
   }
 
   .asset-id {
+    font-family: var(--font-nunito), sans-serif !important;
     font-size: 14px;
     font-weight: 400;
     color: #555;
@@ -61,6 +69,7 @@
 }
 
 .asset-description {
+  font-family: var(--font-nunito), sans-serif !important;
   font-size: 14px;
   color: #333;
   margin: 0;
@@ -95,6 +104,7 @@
 
 .detail-label {
   font-weight: 700;
+  font-family: var(--font-nunito), sans-serif !important;
   font-size: 12px;
   text-transform: uppercase;
   color: #333;
@@ -102,6 +112,7 @@
 
 .detail-value {
   font-size: 14px;
+  font-family: var(--font-nunito), sans-serif !important;
   font-weight: 400;
   color: #111;
 }
@@ -113,3 +124,9 @@ mat-dialog-actions {
   gap: 12px;
 }
 
+::ng-deep markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+}

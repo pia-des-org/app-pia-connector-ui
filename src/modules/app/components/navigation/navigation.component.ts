@@ -17,13 +17,13 @@ import {EcosystemService} from "../services/ecosystem.service";
 export class NavigationComponent {
   isHandset$!: Observable<boolean>;
   pageTitle$!: Observable<string>;
-  currentLang = 'English';
+  currentLang = 'Spanish';
   languages = [
-    { code: 'en', label: 'English' },
-    { code: 'es', label: 'Spanish' },
-    { code: 'ca', label: 'Catalan' },
-    { code: 'gl', label: 'Galician' },
-    { code: 'eu', label: 'Basque' }
+    { code: 'en-US', label: 'English' },
+    { code: 'es-ES', label: 'Spanish' },
+    { code: 'ca-ES', label: 'Catalan' },
+    { code: 'gl-ES', label: 'Galician' },
+    { code: 'eu-ES', label: 'Basque' }
   ];
   username: string | undefined;
 
@@ -37,7 +37,12 @@ export class NavigationComponent {
     document.body.classList.remove('theme-1', 'theme-2');
     this.pageTitle$ = this.titleService.pageTitle$;
     this.loadEcosystemClaim();
-    this.currentLang = translate.currentLang || 'English';
+
+    const browserLang = navigator.language || navigator.languages[0];
+    const matched = this.languages.find(lang => lang.code === browserLang) || this.languages[0];
+    this.translate.setDefaultLang('es-ES');
+    this.translate.use(matched?.code || 'es-ES');
+    this.currentLang = matched?.label || 'Spanish';
 
     this.ecosystemService.applyEcosystemSettings();
 
@@ -56,8 +61,10 @@ export class NavigationComponent {
   private loadEcosystemClaim() {
     const tokenParsed = this.keycloak.getKeycloakInstance().tokenParsed;
     const groups = tokenParsed?.['groups'] as string[];
+    const bpn = tokenParsed?.['bpn'] as string;
 
     this.username = tokenParsed?.name || 'User';
+    this.ecosystemService.bpn = bpn || '';
 
     if (groups?.includes(Ecosystem.ASTURIAS)) {
       this.ecosystemService.ecosystem = Ecosystem.ASTURIAS;

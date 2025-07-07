@@ -33,27 +33,6 @@ export class AssetViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // const dialogData = ConfirmDialogModel.forDelete("asset", `testNamespaces1`)
-    // const ref = this.dialog.open(ConfirmationDialogComponent, {
-    //   maxWidth: '90vw',
-    //   maxHeight: '90vh',
-    //   width: 'auto',
-    //   height: 'auto',
-    //   data: dialogData
-    // });
-    //
-    // ref.afterClosed().subscribe({
-    //   next: res => {
-    //     if (res) {
-    //       this.assetService.removeAsset('testNamespaces1').subscribe({
-    //         next: () => this.fetch$.next(null),
-    //         error: err => this.showError(err, "This asset cannot be deleted"),
-    //         complete: () => this.notificationService.showInfo("Successfully deleted")
-    //       });
-    //     }
-    //   }
-    // });
-
     this.filteredAssets$ = this.fetch$
       .pipe(
         switchMap(() => {
@@ -63,6 +42,15 @@ export class AssetViewerComponent implements OnInit {
             : assets$;
         }));
   }
+
+  getShortDescription(asset: Asset): string {
+    const desc = asset.properties.optionalValue('dcterms', 'description');
+    if (typeof desc === 'string') {
+      return desc.length > 50 ? desc.slice(0, 50) + '...' : desc;
+    }
+    return '';
+  }
+
 
   isBusy() {
     return this.isTransferring;
@@ -114,7 +102,7 @@ export class AssetViewerComponent implements OnInit {
       if (newAsset) {
         this.assetService.createAsset(newAsset).subscribe({
           next: ()=> this.fetch$.next(null),
-          error: err => this.showError(err, "This asset cannot be created"),
+          error: err => this.showError(err, 'Asset creation failed. The input may contain restricted characters, especially in icon-related fields. Please verify and correct the input before retrying.'),
           complete: () => this.notificationService.showInfo("Successfully created"),
         })
       }

@@ -3,6 +3,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { PolicyDefinitionInput, PolicyInput } from '../../../../mgmt-api-client/model';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { EcosystemService } from '../../../../app/components/services/ecosystem.service';
+
 
 @Component({
   selector: 'app-new-policy-dialog',
@@ -24,11 +26,20 @@ export class NewPolicyDialogComponent {
     }
   };
 
-  constructor(private dialogRef: MatDialogRef<NewPolicyDialogComponent>) {}
+  constructor(private dialogRef: MatDialogRef<NewPolicyDialogComponent>,
+              private ecosystemService: EcosystemService
+  ) {}
+
+  blockInvalidChars(event: KeyboardEvent): void {
+    const allowed = /^[a-zA-Z0-9\-]$/;
+    if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
 
   addBpn(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value && !this.businessPartnerNumbers.includes(value)) {
+    if (value) {
       this.businessPartnerNumbers.push(value);
     }
     event.chipInput?.clear();
@@ -58,18 +69,17 @@ export class NewPolicyDialogComponent {
     };
 
     if (isRestricted) {
+      if (this.ecosystemService.bpn.length > 0) {
+        this.businessPartnerNumbers.push(this.ecosystemService.bpn);
+      }
       permission.constraint = [
         {
-          "@type": "Constraint",
-          leftOperand: "BusinessPartnerNumber",
-          operator: {
-            "@id": this.businessPartnerNumbers.length > 1
-              ? "odrl:in"
-              : "odrl:eq"
-          },
-          rightOperand: this.businessPartnerNumbers.length > 1
-            ? this.businessPartnerNumbers
-            : this.businessPartnerNumbers[0]
+          "odrl:or": this.businessPartnerNumbers.map(bpn => ({
+            "@type": "Constraint",
+            "odrl:leftOperand": "BusinessPartnerNumber",
+            "odrl:operator": {"@id": "odrl:eq"},
+            "odrl:rightOperand": bpn
+          }))
         }
       ];
     }

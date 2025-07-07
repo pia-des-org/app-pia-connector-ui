@@ -1,11 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { AssetInput } from '@think-it-labs/edc-connector-client';
 import { StorageType } from '../../../models/storage-type';
 import { NS, CONTEXT_MAP } from '../../namespaces';
 import {EcosystemService} from "../../../../app/components/services/ecosystem.service";
+import {LanguageSelectItem} from "../language-select/language-select-item";
+import {FormControl} from "@angular/forms";
+import {LanguageSelectItemService} from "../language-select/language-select-item.service";
+import {MarkdownPreviewDialogComponent} from "../markdown-preview-dialog/markdown-preview-dialog.component";
 
 @Component({
   selector: 'edc-demo-asset-editor-dialog',
@@ -23,8 +27,11 @@ export class AssetEditorDialog implements OnInit {
     keywords: [] as string[],
     mediaType: '',
     qualityNote: '',
-    language: ''
+    language: '',
+    customProperties: [] as { name: string; value: string }[]
   };
+
+  namespaces = Object.entries(CONTEXT_MAP).map(([prefix, iri]) => ({ prefix, iri }));
 
   selectedStorageType: string = 'rest';
   showPlaceholder = false;
@@ -63,13 +70,55 @@ export class AssetEditorDialog implements OnInit {
     datasource: false
   };
 
+  languageControl = new FormControl<LanguageSelectItem | null>(null);
+
   constructor(
     private dialogRef: MatDialogRef<AssetEditorDialog>,
+    private dialog: MatDialog,
     @Inject('STORAGE_TYPES') public storageTypes: StorageType[],
-    private ecosystemService: EcosystemService
+    private ecosystemService: EcosystemService,
+    private languageService: LanguageSelectItemService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.assetMetadata.language) {
+      this.languageControl.setValue(
+        this.languageService.findById(this.assetMetadata.language)
+      );
+    }
+  }
+
+  openPreviewDialog(): void {
+    this.dialog.open(MarkdownPreviewDialogComponent, {
+      data: {
+        markdownText: this.assetMetadata.description
+      },
+      width: '600px',
+      maxHeight: '80vh'
+    });
+  }
+
+  onNameChange(value: string): void {
+    this.assetMetadata.name = value;
+    this.assetMetadata.id = this.slugify(value);
+  }
+
+  blockInvalidChars(event: KeyboardEvent): void {
+    const allowed = /^[a-zA-Z0-9 \-]$/;
+    if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  private slugify(value: string): string {
+    return value
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_')           // Replace spaces with underscores
+      .replace(/[^\w\-]+/g, '')       // Remove non-word characters
+      .replace(/__+/g, '_')           // Collapse multiple underscores
+      .replace(/^_+|_+$/g, '');       // Trim underscores from start/end
+  }
 
   addKeyword(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
@@ -100,8 +149,6 @@ export class AssetEditorDialog implements OnInit {
       && !!this.assetMetadata.id?.trim()
       && !!this.assetMetadata.description?.trim()
       && this.assetMetadata.keywords.length > 0
-      && !!this.assetMetadata.mediaType?.trim()
-      && !!this.assetMetadata.qualityNote?.trim()
       && !!this.assetMetadata.ontologyType?.trim();
   }
 
@@ -139,6 +186,14 @@ export class AssetEditorDialog implements OnInit {
 
   removeHeader(index: number): void {
     this.restConfig.additionalHeaders.splice(index, 1);
+  }
+
+  addCustomProperty(): void {
+    this.assetMetadata.customProperties.push({ name: '', value: '' });
+  }
+
+  removeCustomProperty(index: number): void {
+    this.assetMetadata.customProperties.splice(index, 1);
   }
 
   get isFormValid(): boolean {
@@ -208,29 +263,51 @@ export class AssetEditorDialog implements OnInit {
       dataAddress = {
         "@type": "DataAddress",
         type: 'AzureStorage',
-        accountName: this.azureConfig.account,
+        account: this.azureConfig.account,
         container: this.azureConfig.container,
         blobname: this.azureConfig.blobName,
-        accountKey: this.azureConfig.sasToken
+        sasToken: this.azureConfig.sasToken
       };
+    }
+
+    const properties: any = {
+      [`${NS.DCTERMS}title`]: this.assetMetadata.name,
+      [`${NS.DCTERMS}description`]: this.assetMetadata.description,
+      [`${NS.SEGITTURONT}concept`]: `segitturont:${this.assetMetadata.ontologyType}`,
+      [`${NS.DCAT}keyword`]: this.assetMetadata.keywords,
+      ...Object.fromEntries(
+        this.assetMetadata.customProperties
+          .filter(p => p.name && p.value)
+          .map(p => [p.name, p.value])
+      )
+    };
+
+    if (this.assetMetadata.mediaType?.trim()) {
+      properties[`${NS.DCAT}mediaType`] = this.assetMetadata.mediaType;
+    }
+
+    if (this.assetMetadata.qualityNote?.trim()) {
+      properties[`${NS.DQV}hasQualityAnnotation`] = {
+        [`${NS.RDFS}comment`]: this.assetMetadata.qualityNote
+      };
+    }
+
+    if (this.languageControl.value?.id?.trim()) {
+      properties[`${NS.DCTERMS}language`] = this.languageControl.value.id;
     }
 
     const assetInput: AssetInput = {
       "@id": this.assetMetadata.id,
       "@context": CONTEXT_MAP,
       [`${NS.SEGITTUR}ecosystem`]: this.ecosystemService.ecosystem?.toLowerCase(),
-      properties: {
-        [`${NS.DCTERMS}title`]: this.assetMetadata.name,
-        [`${NS.DCTERMS}description`]: this.assetMetadata.description,
-        [`${NS.SEGITTURONT}concept`]: `segitturont:${this.assetMetadata.ontologyType}`,
-        [`${NS.DCAT}keywords`]: this.assetMetadata.keywords?.join(', '),
-        [`${NS.DCAT}mediaType`]: this.assetMetadata.mediaType,
-        [`${NS.DQV}hasQualityAnnotation`]: this.assetMetadata.qualityNote,
-        [`${NS.DCTERMS}language`]: this.assetMetadata.language,
-      },
+      properties,
       dataAddress
     };
 
     this.dialogRef.close({ assetInput });
   }
 }
+//        [`${NS.DQV}hasQualityAnnotation`]: {
+//           "@type": 'dqv:QualityAnnotation',
+//           [`${NS.RDFS}comment`]: this.assetMetadata.qualityNote
+//         },

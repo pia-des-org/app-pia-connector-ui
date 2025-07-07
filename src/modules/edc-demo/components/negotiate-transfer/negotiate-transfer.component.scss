@@ -45,18 +45,21 @@
   flex-direction: column;
 
   .asset-name {
+    font-family: var(--font-quicksand), sans-serif;
     margin: 0;
     font-size: 24px;
     font-weight: 600;
   }
 
   .asset-id {
+    font-family: var(--font-nunito), sans-serif;
     font-size: 14px;
     color: #555;
   }
 }
 
 .asset-description {
+  font-family: var(--font-nunito), sans-serif;
   font-size: 16px;
   color: #333;
   margin: 0;
@@ -64,7 +67,7 @@
 
 .details-grid {
   display: grid;
-  grid-template-columns: 200px 200px;
+  grid-template-columns: repeat(3, 1fr); // or 1fr if you want them flexible
   gap: 16px 24px;
   overflow: visible;
 }
@@ -90,6 +93,7 @@
 }
 
 .detail-label {
+  font-family: var(--font-nunito), sans-serif;
   font-weight: 600;
   font-size: 13px;
   text-transform: uppercase;
@@ -108,3 +112,51 @@ mat-dialog-actions {
   gap: 12px;
 }
 
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: all;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  p {
+    font-family: var(--font-nunito), sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+}
+
+.dimmed {
+  pointer-events: none;
+  opacity: 0; // You can use 0 to fully hide
+  filter: blur(0.5px); // optional: adds a subtle "inactive" blur
+}
+
+.asset-description.truncated {
+  max-height: 150px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+::ng-deep markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+}

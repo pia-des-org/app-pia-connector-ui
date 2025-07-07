@@ -16,7 +16,6 @@ export class ContractDefinitionEditorDialog implements OnInit {
   accessPolicy?: PolicyDefinition;
   contractPolicy?: PolicyDefinition;
   assets: Asset | Asset[] = [];
-  publishToMarketplace = false;
 
   contractDefinition: ContractDefinitionInput = {
     "@id": '',
@@ -48,6 +47,13 @@ export class ContractDefinitionEditorDialog implements OnInit {
         this.assets = this.availableAssets.filter(asset => assetIds.includes(asset.id));
       }
     })
+  }
+
+  blockInvalidChars(event: KeyboardEvent): void {
+    const allowed = /^[a-zA-Z0-9\-]$/;
+    if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
+      event.preventDefault();
+    }
   }
 
   get isFormValid(): boolean {
@@ -82,8 +88,7 @@ export class ContractDefinitionEditorDialog implements OnInit {
     };
 
     this.dialogRef.close({
-      contractDefinition,
-      publishToMarketplace: this.publishToMarketplace,
+      contractDefinition
     });
   }
 
