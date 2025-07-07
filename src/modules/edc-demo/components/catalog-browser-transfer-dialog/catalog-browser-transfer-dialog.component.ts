@@ -1,6 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { StorageType } from '../../models/storage-type';
+<<<<<<< HEAD
+=======
+import {DataAddress} from "@think-it-labs/edc-connector-client";
+import { ContractAgreement } from "../../../mgmt-api-client/model";
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 
 @Component({
   selector: 'edc-demo-catalog-browser-transfer-dialog',
@@ -39,9 +44,14 @@ export class CatalogBrowserTransferDialog implements OnInit {
   // Azure Storage
   azureConfig = {
     account: '',
+<<<<<<< HEAD
     keyName: '',
     container: '',
     blobName: ''
+=======
+    sasToken: '',
+    container: ''
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   };
 
   constructor(
@@ -82,9 +92,14 @@ export class CatalogBrowserTransferDialog implements OnInit {
     // Reset Azure fields
     this.azureConfig = {
       account: '',
+<<<<<<< HEAD
       keyName: '',
       container: '',
       blobName: ''
+=======
+      sasToken: '',
+      container: ''
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
     };
   }
 
@@ -146,12 +161,20 @@ export class CatalogBrowserTransferDialog implements OnInit {
         type: 'AzureStorage',
         account: this.azureConfig.account,
         container: this.azureConfig.container,
+<<<<<<< HEAD
         blobname: this.azureConfig.blobName,
         keyName: this.azureConfig.keyName
+=======
+        keyName: this.azureConfig.sasToken
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
       };
     }
 
     // Close dialog and return selected configuration
+<<<<<<< HEAD
     this.dialogRef.close({ storageTypeId: this.selectedStorageType, dataDestination });
+=======
+    this.dialogRef.close({ dataDestination });
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 }

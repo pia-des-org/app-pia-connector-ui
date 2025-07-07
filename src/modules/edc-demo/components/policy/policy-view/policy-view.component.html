@@ -1,15 +1,27 @@
+<<<<<<< HEAD
 <div id="wrapper" *ngIf="filteredPolicies$ | async as policyDefinitions" class="policy-wrapper">
+=======
+<div id="wrapper" *ngIf="filteredPolicies$ | async as policyDefinitions" class="card-element-wrapper">
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   <div class="search-bar-container">
     <div class="search-left">
       <div class="search-wrapper">
         <input
           class="search-input"
           type="text"
+<<<<<<< HEAD
           placeholder="Search Policies"
           [(ngModel)]="searchText"
           (input)="onSearch()"
         />
         <button class="clear-btn" (click)="searchText=''; onSearch()">
+=======
+          [placeholder]="'policyView.searchPlaceholder' | translate"
+          [(ngModel)]="searchText"
+          (input)="onSearch()"
+        />
+        <button class="clear-btn-searchbar" (click)="searchText=''; onSearch()">
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
           <span class="material-icons">close</span>
         </button>
       </div>
@@ -17,6 +29,7 @@
 
     <button (click)="onCreate()" mat-raised-button class="create-button">
       <mat-icon>add</mat-icon>
+<<<<<<< HEAD
       Create Policy
     </button>
   </div>
@@ -38,6 +51,29 @@
       <mat-card-content>
         <div>Constraints</div>
         <div class="bpn-line">BPN: to be clarified</div>
+=======
+      {{ 'policyView.createPolicy' | translate }}
+    </button>
+  </div>
+
+  <div class="card-element-grid">
+    <mat-card *ngFor="let policy of policyDefinitions" class="card-element">
+      <mat-card-header>
+        <div mat-card-avatar class="card-icon">
+          <mat-icon svgIcon="policy:title"></mat-icon>
+        </div>
+        <mat-card-title>
+          <span class="clickable-title" [matTooltip]="policy['@id']" (click)="openPolicyDialog(policy)">
+            {{ policy['@id'] | truncate:20 }}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle>{{ 'policyView.policy' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div>{{ 'policyView.constraints' | translate }}</div>
+        <div class="bpn-line"> {{ getBpnConstraint(policy) || '-'}}</div>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
       </mat-card-content>
     </mat-card>
   </div>

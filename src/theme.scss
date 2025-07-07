@@ -3,10 +3,13 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
-
 @import "node_modules/@angular/material/theming";
 @include mat-core();
 
+<<<<<<< HEAD
+=======
+// === MAGENTA PALETTE (Theme 1) ===
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 $magenta-palette: mat.define-palette((
   50: #fce4ec,
   100: #f8bbd0,
@@ -40,10 +43,16 @@ $magenta-palette: mat.define-palette((
   )
 ));
 
+<<<<<<< HEAD
+=======
+// === ORANGE PALETTE (Theme 2) ===
+$orange-palette: mat.define-palette(mat.$blue-palette);
+
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 $theming-material-components-primary: $magenta-palette;
 $theming-material-components-accent: $magenta-palette;
 $theming-material-components-warn: mat-palette($mat-red);
-$theming-material-components-typography: mat.define-typography-config($font-family: 'Open Sans');
+$theming-material-components-typography: mat.define-typography-config($font-family: 'Nunito Sans');
 
 $theme1: mat.define-light-theme((
   color: (
@@ -55,6 +64,7 @@ $theme1: mat.define-light-theme((
   density: 0,
 ));
 
+<<<<<<< HEAD
 
 /* Default (light) theme */
 @include mat.all-component-themes($theme1);
@@ -74,4 +84,37 @@ $theme1: mat.define-light-theme((
 :root {
   --primary-color: #{mat.get-color-from-palette($magenta-palette, 500)};
   --primary-color-contrast: #{mat.get-contrast-color-from-palette($magenta-palette, 500)};
+=======
+// === THEME 2 ===
+$theme2: mat.define-light-theme((
+  color: (
+    primary: $orange-palette,
+    accent: $orange-palette,
+    warn: mat.define-palette(mat.$red-palette),
+  ),
+  typography: $theming-material-components-typography,
+  density: 0,
+));
+
+body.theme-1 {
+  @include mat.all-component-themes($theme1);
+  --primary-color: #{mat.get-color-from-palette($magenta-palette, 500)};
+  --primary-color-contrast: #{mat.get-contrast-color-from-palette($magenta-palette, 500)};
 }
+
+body.theme-2 {
+  @include mat.all-component-themes($theme2);
+  --primary-color: #{mat.get-color-from-palette($orange-palette, 500)};
+  --primary-color-contrast: #{mat.get-contrast-color-from-palette($orange-palette, 500)};
+}
+
+:root {
+  --font-nunito: 'Nunito Sans', sans-serif;
+  --font-quicksand: 'Quicksand', sans-serif;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 8px;
+}
+

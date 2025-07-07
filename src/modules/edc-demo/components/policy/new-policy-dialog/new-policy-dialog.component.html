@@ -1,5 +1,9 @@
 <div class="dialog-header">
+<<<<<<< HEAD
   <h2 class="dialog-title">Create New Policy</h2>
+=======
+  <h2 class="dialog-title">{{ 'policyEditor.createTitle' | translate }}</h2>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 </div>
 
 <mat-dialog-content>
@@ -7,11 +11,19 @@
     <div class="section-content">
       <!-- Policy Name -->
       <mat-form-field appearance="outline" class="form-field full-width" color="accent">
+<<<<<<< HEAD
         <mat-label>Name</mat-label>
         <input
           matInput
           [(ngModel)]="policyName"
           placeholder="Enter policy name"
+=======
+        <mat-label>{{ 'policyEditor.name' | translate }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="policyName"
+          placeholder="{{ 'policyEditor.namePlaceholder' | translate }}"
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
           required
         />
       </mat-form-field>
@@ -26,7 +38,11 @@
             [(ngModel)]="accessOption"
           />
           <span class="radio-circle"></span>
+<<<<<<< HEAD
           Restrict access to the following BPNs
+=======
+          {{ 'policyEditor.restrictAccess' | translate }}
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
         </label>
 
         <label class="custom-radio" [class.selected]="accessOption === 'public'">
@@ -37,6 +53,7 @@
             [(ngModel)]="accessOption"
           />
           <span class="radio-circle"></span>
+<<<<<<< HEAD
           Everyone should have access (set it to public)
         </label>
 
@@ -44,21 +61,51 @@
 
 
       <!-- BPN Input (only if restricted) -->
+=======
+          {{ 'policyEditor.publicAccess' | translate }}
+        </label>
+      </div>
+
+      <!-- BPN Chip Input (only if restricted) -->
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
       <mat-form-field
         *ngIf="accessOption === 'bpn'"
         appearance="outline"
         class="form-field full-width"
       >
+<<<<<<< HEAD
         <mat-label>Business Partner Number</mat-label>
         <input matInput [(ngModel)]="businessPartnerNumber" required />
       </mat-form-field>
+=======
+        <mat-label>{{ 'policyEditor.bpn' | translate }}</mat-label>
+        <mat-chip-grid #bpnGrid aria-label="BPN input">
+          <mat-chip *ngFor="let bpn of businessPartnerNumbers" [removable]="true" (removed)="removeBpn(bpn)">
+            {{ bpn }}
+            <button matChipRemove><mat-icon>cancel</mat-icon></button>
+          </mat-chip>
+          <input
+            placeholder="{{ 'policyEditor.addBpn' | translate }}"
+            [matChipInputFor]="bpnGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addBpn($event)"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
+
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
     </div>
   </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-stroked-button class="cancel-button" mat-dialog-close>
+<<<<<<< HEAD
     Cancel
+=======
+    {{ 'policyEditor.cancel' | translate }}
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   </button>
 
   <button
@@ -67,6 +114,10 @@
     [disabled]="!isGeneralValid()"
     (click)="onSave()"
   >
+<<<<<<< HEAD
     Create
+=======
+    {{ 'policyEditor.create' | translate }}
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   </button>
 </mat-dialog-actions>

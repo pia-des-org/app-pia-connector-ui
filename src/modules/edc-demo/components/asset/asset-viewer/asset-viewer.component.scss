@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* === Search Bar + Buttons === */
 .search-bar-container {
   display: flex;
@@ -154,3 +155,12 @@
   }
 }
 
+=======
+.card-element-grid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); // reduced min-width
+}
+
+.mat-mdc-card-content {
+  padding-left: 10px !important;
+}
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43

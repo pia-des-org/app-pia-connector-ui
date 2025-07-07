@@ -3,21 +3,35 @@
     <mat-card *ngFor="let contract of contracts" class="contract-card">
       <mat-card-header>
         <div mat-card-avatar class="contract-icon">
+<<<<<<< HEAD
           <mat-icon>link</mat-icon>
+=======
+          <mat-icon svgIcon="contracts:title"></mat-icon>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
         </div>
         <mat-card-title [matTooltip]="contract.id" class="contract-title">
           {{ contract.id | truncate:16 }}
         </mat-card-title>
+<<<<<<< HEAD
         <mat-card-subtitle>Description</mat-card-subtitle>
+=======
+        <mat-card-subtitle>{{ 'contracts.subtitle' | translate }}</mat-card-subtitle>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
       </mat-card-header>
 
       <mat-card-content>
         <div class="contract-info-row">
           <!-- Asset -->
           <div class="contract-info-block">
+<<<<<<< HEAD
             <mat-icon>category</mat-icon>
             <div class="contract-info-text">
               <div class="contract-label">ASSET</div>
+=======
+            <mat-icon svgIcon="contracts:asset"></mat-icon>
+            <div class="contract-info-text">
+              <div class="contract-label">{{ 'contracts.asset' | translate }}</div>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
               <div [matTooltip]="contract.assetId" class="contract-value">
                 {{ contract.assetId | truncate:16 }}
               </div>
@@ -26,10 +40,19 @@
 
           <!-- Signing Date -->
           <div class="contract-info-block">
+<<<<<<< HEAD
             <mat-icon>draw</mat-icon>
             <div class="contract-info-text">
             <div class="contract-label">SIGNING DATE</div>
             <div class="contract-value">{{ asDate(contract.mandatoryValue('edc', 'contractSigningDate')) }}</div>
+=======
+            <mat-icon svgIcon="contracts:signing_date"></mat-icon>
+            <div class="contract-info-text">
+              <div class="contract-label">{{ 'contracts.signingDate' | translate }}</div>
+              <div class="contract-value">
+                {{ asDate(contract.mandatoryValue('edc', 'contractSigningDate')) }}
+              </div>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
             </div>
           </div>
         </div>
@@ -37,14 +60,22 @@
         <!-- Provider (below) -->
         <div class="contract-info-row provider-row">
           <div class="contract-info-block">
+<<<<<<< HEAD
             <mat-icon>person</mat-icon>
             <div class="contract-info-text">
             <div class="contract-label">PROVIDER</div>
             <div class="contract-value">{{ contract.providerId }}</div>
+=======
+            <mat-icon svgIcon="contracts:provider"></mat-icon>
+            <div class="contract-info-text">
+              <div class="contract-label">{{ 'contracts.provider' | translate }}</div>
+              <div class="contract-value">{{ contract.providerId }}</div>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
             </div>
           </div>
         </div>
 
+<<<<<<< HEAD
 
         <!-- Transfer button -->
         <mat-card-actions class="card-actions">
@@ -54,6 +85,21 @@
           </button>
         </mat-card-actions>
 
+=======
+        <!-- Transfer button -->
+        <mat-card-actions class="card-actions">
+          <button
+            (click)="onTransferClicked(contract)"
+            [disabled]="isTransferInProgress(contract.id!)"
+            color="accent"
+            mat-stroked-button
+          >
+            <mat-icon>arrow_forward</mat-icon>
+            {{ 'contracts.transfer' | translate }}
+          </button>
+        </mat-card-actions>
+
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
         <mat-card-footer class="contract-card-footer">
           <mat-progress-bar *ngIf="isTransferInProgress(contract.id!)" color="accent" mode="indeterminate"></mat-progress-bar>
         </mat-card-footer>

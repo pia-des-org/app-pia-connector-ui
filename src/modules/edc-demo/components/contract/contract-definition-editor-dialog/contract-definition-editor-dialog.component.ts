@@ -54,6 +54,7 @@ export class ContractDefinitionEditorDialog implements OnInit {
     const hasAsset = Array.isArray(this.assets)
       ? this.assets.length > 0
       : !!this.assets;
+<<<<<<< HEAD
 
     return !!this.contractDefinition['@id']?.trim()
       && !!this.accessPolicy
@@ -84,6 +85,39 @@ export class ContractDefinitionEditorDialog implements OnInit {
     this.dialogRef.close({
       contractDefinition: this.contractDefinition,
       publishToMarketplace: this.publishToMarketplace
+=======
+
+    return !!this.contractDefinition['@id']?.trim()
+      && !!this.accessPolicy
+      && !!this.contractPolicy
+      && hasAsset;
+  }
+
+
+  onSave(): void {
+    const selectedAsset = Array.isArray(this.assets) ? this.assets[0] : this.assets;
+
+    const contractDefinition = {
+      "@id": this.contractDefinition["@id"]?.trim(),
+      "@context": {},
+      "@type": "ContractDefinition",
+      accessPolicyId: this.accessPolicy!['@id'],
+      contractPolicyId: this.contractPolicy!['@id'],
+      assetsSelector: [
+        {
+          "@type": "CriterionDto",
+          operandLeft: "https://w3id.org/edc/v0.0.1/ns/id",
+          operator: "=",
+          operandRight: selectedAsset.id,
+        },
+      ],
+    };
+
+    this.dialogRef.close({
+      contractDefinition,
+      publishToMarketplace: this.publishToMarketplace,
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
     });
   }
+
 }

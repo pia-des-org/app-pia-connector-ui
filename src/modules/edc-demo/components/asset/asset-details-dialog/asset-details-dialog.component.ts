@@ -8,6 +8,7 @@ import { Asset } from '../../../../mgmt-api-client/model';
   styleUrls: ['./asset-details-dialog.component.scss']
 })
 export class AssetDetailsDialogComponent {
+<<<<<<< HEAD
   keyMap = {
     name: 'https://w3id.org/edc/v0.0.1/ns/name',
     description: 'https://w3id.org/edc/v0.0.1/ns/description',
@@ -16,11 +17,23 @@ export class AssetDetailsDialogComponent {
     contentType: 'https://w3id.org/edc/v0.0.1/ns/contentType',
   };
 
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { asset: Asset },
     private dialogRef: MatDialogRef<AssetDetailsDialogComponent>
   ) {}
 
+<<<<<<< HEAD
+=======
+  formatKeywords(raw: any): string {
+    if (Array.isArray(raw)) {
+      return raw.join('; ');
+    }
+    return typeof raw === 'string' ? raw : '-';
+  }
+
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   mapDatasourceType(raw: string): string {
     const map = {
       HttpData: 'REST-API endpoint',
@@ -31,6 +44,7 @@ export class AssetDetailsDialogComponent {
     return map[raw as keyof typeof map] || raw || '-';
   }
 
+<<<<<<< HEAD
 
   getNestedProp(fullKey: string): string {
     const props = this.data.asset?.properties || {};
@@ -54,6 +68,8 @@ export class AssetDetailsDialogComponent {
 
 
 
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   close(): void {
     this.dialogRef.close();
   }

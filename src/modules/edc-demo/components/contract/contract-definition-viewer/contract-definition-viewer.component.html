@@ -1,15 +1,27 @@
+<<<<<<< HEAD
 <div *ngIf="filteredContractDefinitions$ | async as contractDefinitions" class="assets-wrapper">
+=======
+<div *ngIf="filteredContractDefinitions$ | async as contractDefinitions" class="card-element-wrapper">
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   <div class="search-bar-container">
     <div class="search-left">
       <div class="search-wrapper">
         <input
           class="search-input"
           type="text"
+<<<<<<< HEAD
           placeholder="Search Contract Definitions"
           [(ngModel)]="searchText"
           (input)="onSearch()"
         />
         <button class="clear-btn" (click)="searchText=''; onSearch()">
+=======
+          [placeholder]="'contractView.searchPlaceholder' | translate"
+          [(ngModel)]="searchText"
+          (input)="onSearch()"
+        />
+        <button class="clear-btn-searchbar" (click)="searchText=''; onSearch()">
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
           <span class="material-icons">close</span>
         </button>
       </div>
@@ -17,6 +29,7 @@
 
     <button (click)="onCreate()" mat-raised-button class="create-button">
       <mat-icon>add</mat-icon>
+<<<<<<< HEAD
       Create Data Offer
     </button>
   </div>
@@ -33,29 +46,64 @@
         </span>
         </mat-card-title>
         <mat-card-subtitle>Data Offer</mat-card-subtitle>
+=======
+      {{ 'contractView.create' | translate }}
+    </button>
+  </div>
+
+  <div class="card-element-grid">
+    <mat-card *ngFor="let contractDefinition of contractDefinitions" class="card-element">
+      <mat-card-header>
+        <div mat-card-avatar class="card-icon">
+          <mat-icon svgIcon="dataOffer:title"></mat-icon>
+        </div>
+        <mat-card-title>
+          <span [matTooltip]="contractDefinition.id">
+            {{ contractDefinition.id | truncate: 32 }}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle>{{ 'contractView.subtitle' | translate }}</mat-card-subtitle>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
       </mat-card-header>
 
       <mat-card-content>
         <div class="contract-detail-row">
           <div class="contract-detail">
+<<<<<<< HEAD
             <div class="detail-label">ACCESS POLICY</div>
+=======
+            <div class="detail-label">{{ 'contractView.accessPolicy' | translate }}</div>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
             <div class="detail-value">{{ contractDefinition.accessPolicyId }}</div>
           </div>
 
           <div class="contract-detail">
+<<<<<<< HEAD
             <div class="detail-label">USAGE POLICY</div>
+=======
+            <div class="detail-label">{{ 'contractView.usagePolicy' | translate }}</div>
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
             <div class="detail-value">{{ contractDefinition.contractPolicyId }}</div>
           </div>
 
           <div class="contract-detail">
+<<<<<<< HEAD
             <div class="detail-label">ASSET NAME</div>
             <div class="detail-value">
               {{ contractDefinition.assetsSelector[0].mandatoryValue('edc', 'operandRight') || 'TO BE DEFINED' }}
+=======
+            <div class="detail-label">{{ 'contractView.assetName' | translate }}</div>
+            <div class="detail-value">
+              {{ contractDefinition.assetsSelector[0].mandatoryValue('edc', 'operandRight') || ('contractView.toBeDefined' | translate) }}
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
             </div>
           </div>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 </div>

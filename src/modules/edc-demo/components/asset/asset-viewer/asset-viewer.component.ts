@@ -8,7 +8,11 @@ import {AssetEditorDialog} from "../asset-editor-dialog/asset-editor-dialog.comp
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../confirmation-dialog/confirmation-dialog.component";
 import {NotificationService} from "../../../services/notification.service";
 import {AssetDetailsDialogComponent} from "../asset-details-dialog/asset-details-dialog.component";
+<<<<<<< HEAD
 
+=======
+import { NS, CONTEXT_MAP } from '../../namespaces';
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 
 @Component({
   selector: 'edc-demo-asset-viewer',
@@ -24,7 +28,7 @@ export class AssetViewerComponent implements OnInit {
 
   constructor(private assetService: AssetService,
               private notificationService: NotificationService,
-              private readonly dialog: MatDialog) {
+              private readonly dialog: MatDialog,) {
 }
 
   private showError(error: string, errorMessage: string) {
@@ -33,6 +37,27 @@ export class AssetViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // const dialogData = ConfirmDialogModel.forDelete("asset", `testNamespaces1`)
+    // const ref = this.dialog.open(ConfirmationDialogComponent, {
+    //   maxWidth: '90vw',
+    //   maxHeight: '90vh',
+    //   width: 'auto',
+    //   height: 'auto',
+    //   data: dialogData
+    // });
+    //
+    // ref.afterClosed().subscribe({
+    //   next: res => {
+    //     if (res) {
+    //       this.assetService.removeAsset('testNamespaces1').subscribe({
+    //         next: () => this.fetch$.next(null),
+    //         error: err => this.showError(err, "This asset cannot be deleted"),
+    //         complete: () => this.notificationService.showInfo("Successfully deleted")
+    //       });
+    //     }
+    //   }
+    // });
+
     this.filteredAssets$ = this.fetch$
       .pipe(
         switchMap(() => {
@@ -55,11 +80,26 @@ export class AssetViewerComponent implements OnInit {
     const dialogRef = this.dialog.open(AssetDetailsDialogComponent, {
       data: {asset}
     });
+<<<<<<< HEAD
+=======
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.delete) {
+        this.onDelete(asset);
+      }
+    });
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 
   onDelete(asset: Asset) {
     const dialogData = ConfirmDialogModel.forDelete("asset", `"${asset.id}"`)
-    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: "20%", data: dialogData});
+    const ref = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      width: 'auto',
+      height: 'auto',
+      data: dialogData
+    });
 
     ref.afterClosed().subscribe({
       next: res => {

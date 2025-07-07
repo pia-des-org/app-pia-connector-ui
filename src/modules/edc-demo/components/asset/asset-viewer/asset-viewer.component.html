@@ -1,15 +1,27 @@
+<<<<<<< HEAD
 <div *ngIf="filteredAssets$ | async as assets" class="assets-wrapper">
+=======
+<div *ngIf="filteredAssets$ | async as assets" class="card-element-wrapper">
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   <div class="search-bar-container">
     <div class="search-left">
       <div class="search-wrapper">
         <input
           class="search-input"
           type="text"
+<<<<<<< HEAD
           placeholder="Search Assets"
           [(ngModel)]="searchText"
           (input)="onSearch()"
         />
         <button class="clear-btn" (click)="searchText=''; onSearch()">
+=======
+          [placeholder]="'asset.searchPlaceholder' | translate"
+          [(ngModel)]="searchText"
+          (input)="onSearch()"
+        />
+        <button class="clear-btn-searchbar" (click)="searchText=''; onSearch()">
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
           <span class="material-icons">close</span>
         </button>
       </div>
@@ -17,6 +29,7 @@
 
     <button (click)="onCreate()" mat-raised-button class="create-button">
       <mat-icon>add</mat-icon>
+<<<<<<< HEAD
       Create Asset
     </button>
   </div>
@@ -37,10 +50,35 @@
 
       <mat-card-content>
         {{ asset.properties.optionalValue('edc', 'description') }}
+=======
+      {{ 'asset.createButton' | translate }}
+    </button>
+  </div>
+
+  <div class="card-element-grid">
+    <mat-card *ngFor="let asset of assets" class="card-element">
+      <mat-card-header>
+        <div mat-card-avatar class="card-icon">
+          <mat-icon svgIcon="assetViewer:title"></mat-icon>
+        </div>
+        <mat-card-title>
+          <span class="clickable-title" [matTooltip]="asset.properties.optionalValue('dcterms', 'title') || ''" (click)="openAssetDialog(asset)">
+            {{ (asset.properties.optionalValue('edc', 'id') || '') | truncate: 24 }}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle [matTooltip]="asset.id">{{ asset.id | truncate: 24 }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        {{ asset.properties.optionalValue('dcterms', 'description') }}
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
       </mat-card-content>
 
       <mat-progress-bar *ngIf="isBusy()" color="accent" mode="indeterminate"></mat-progress-bar>
     </mat-card>
   </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 </div>

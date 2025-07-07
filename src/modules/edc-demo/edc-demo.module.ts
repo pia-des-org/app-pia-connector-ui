@@ -53,9 +53,18 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {AssetDetailsDialogComponent} from "./components/asset/asset-details-dialog/asset-details-dialog.component";
 import {PolicyDetailsDialogComponent} from "./components/policy/policy-details-dialog/policy-details-dialog.component";
+<<<<<<< HEAD
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getCustomPaginatorIntl } from './components/transfer-history/custom-paginator-intl';
+=======
+import {NegotiateTransferComponent} from "./components/negotiate-transfer/negotiate-transfer.component"
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { getCustomPaginatorIntl } from './components/transfer-history/custom-paginator-intl';
+import {MatChipsModule} from "@angular/material/chips";
+import {TranslateModule} from "@ngx-translate/core";
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 
 @NgModule({
   imports: [
@@ -87,6 +96,11 @@ import { getCustomPaginatorIntl } from './components/transfer-history/custom-pag
     MatRadioModule,
     MatCheckboxModule,
     MatTooltipModule,
+<<<<<<< HEAD
+=======
+    MatChipsModule,
+    TranslateModule
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   ],
   declarations: [
     CatalogBrowserComponent,
@@ -111,7 +125,12 @@ import { getCustomPaginatorIntl } from './components/transfer-history/custom-pag
     IntroductionComponent,
     ConfirmationDialogComponent,
     AssetDetailsDialogComponent,
+<<<<<<< HEAD
     PolicyDetailsDialogComponent
+=======
+    PolicyDetailsDialogComponent,
+    NegotiateTransferComponent
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   ],
   exports: [
     CatalogBrowserComponent,

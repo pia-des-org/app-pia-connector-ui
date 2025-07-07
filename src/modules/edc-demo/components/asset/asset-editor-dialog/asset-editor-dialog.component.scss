@@ -5,6 +5,7 @@
   height: 100%; // full height of the dialog
 }
 
+<<<<<<< HEAD
 /* === Dialog Layout === */
 .dialog-header {
   padding: 24px 32px 8px 32px; // Top, Right, Bottom, Left
@@ -21,6 +22,8 @@ mat-dialog-content {
   overflow: auto;
 }
 
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 /* === Section Styles === */
 .section {
   border-radius: 6px;
@@ -41,8 +44,13 @@ mat-dialog-content {
   transition: 0.2s;
 
   &.active {
+<<<<<<< HEAD
     color: #e91e63;
     border-left-color: #e91e63;
+=======
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 
   mat-icon {
@@ -128,7 +136,11 @@ mat-form-field {
 .remove-link {
   font-size: 13px;
   font-weight: 500;
+<<<<<<< HEAD
   color: #e91e63;
+=======
+  color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   cursor: pointer;
   text-decoration: none;
   margin-top: 4px;
@@ -150,6 +162,7 @@ mat-dialog-actions {
   gap: 12px;
 }
 
+<<<<<<< HEAD
 /* Cancel Button (Magenta Border and Text) */
 .cancel-button {
   color: #e91e63;
@@ -177,11 +190,20 @@ mat-dialog-actions {
 .clickable-title {
   cursor: pointer;
   color: #d10073;
+=======
+.clickable-title {
+  cursor: pointer;
+  color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   text-decoration: underline;
   transition: color 0.2s ease;
 
   &:hover {
+<<<<<<< HEAD
     color: #a50058;
+=======
+    color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 }
 

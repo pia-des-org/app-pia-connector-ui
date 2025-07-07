@@ -6,7 +6,11 @@
 }
 
 .details-wrapper {
+<<<<<<< HEAD
   padding: 32px;
+=======
+  padding: 40px;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   max-width: 640px;
   display: flex;
   flex-direction: column;
@@ -20,17 +24,30 @@
 }
 
 .icon-circle {
+<<<<<<< HEAD
   width: 72px;
   height: 72px;
   border-radius: 50%;
+=======
+  width: 56px;
+  height: 56px;
+  border-radius: 1000px;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   background-color: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
 }
 
 .icon-circle mat-icon {
   color: #d10073;
+=======
+  padding: 12px;
+}
+
+.icon-circle mat-icon {
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   font-size: 42px;
   line-height: 1;
   height: 42px;
@@ -39,6 +56,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
+=======
+  color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 }
 
 .title-block {
@@ -49,16 +70,28 @@
     margin: 0;
     font-size: 24px;
     font-weight: 600;
+<<<<<<< HEAD
+=======
+    font-family: var(--font-quicksand), sans-serif !important;;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 
   .asset-id {
     font-size: 14px;
+<<<<<<< HEAD
+=======
+    font-weight: 400;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
     color: #555;
   }
 }
 
 .asset-description {
+<<<<<<< HEAD
   font-size: 16px;
+=======
+  font-size: 14px;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   color: #333;
   margin: 0;
 }
@@ -66,7 +99,11 @@
 .details-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(240px, 1fr));
+<<<<<<< HEAD
   gap: 24px 40px; // vertical and horizontal gap
+=======
+  gap: 40px;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   overflow: visible;
 }
 
@@ -79,7 +116,10 @@
 
 .detail-icon {
   font-size: 40px;
+<<<<<<< HEAD
   color: #d10073;
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   line-height: 1;
   margin-top: 2px;
   flex-shrink: 0;
@@ -92,18 +132,31 @@
 }
 
 .detail-label {
+<<<<<<< HEAD
   font-weight: 600;
   font-size: 13px;
+=======
+  font-weight: 700;
+  font-size: 12px;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   text-transform: uppercase;
   color: #333;
 }
 
 .detail-value {
+<<<<<<< HEAD
   font-size: 15px;
   color: #111;
 }
 
 
+=======
+  font-size: 14px;
+  font-weight: 400;
+  color: #111;
+}
+
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 mat-dialog-actions {
   padding: 0 32px 32px;
   display: flex;
@@ -111,6 +164,7 @@ mat-dialog-actions {
   gap: 12px;
 }
 
+<<<<<<< HEAD
 /* Cancel Button (Magenta Border and Text) */
 .cancel-button {
   color: #e91e63;
@@ -123,3 +177,5 @@ mat-dialog-actions {
   background-color: #e91e63;
   color: white;
 }
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43

@@ -5,6 +5,7 @@
   height: 100%;
 }
 
+<<<<<<< HEAD
 /* === Dialog Layout === */
 .dialog-header {
   padding: 24px 32px 8px 32px;
@@ -22,6 +23,8 @@ mat-dialog-content {
   padding: 0 32px;
 }
 
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 /* === Form Fields === */
 .section-content.vertical-layout {
   display: flex;
@@ -66,7 +69,11 @@ mat-form-field {
 
 
 .required-star {
+<<<<<<< HEAD
   color: #e91e63;
+=======
+  color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   margin-left: 2px;
 }
 
@@ -82,6 +89,7 @@ mat-dialog-actions {
   justify-content: flex-end;
   gap: 12px;
 }
+<<<<<<< HEAD
 
 .cancel-button {
   color: #e91e63;
@@ -102,3 +110,5 @@ mat-dialog-actions {
     color: white;
   }
 }
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43

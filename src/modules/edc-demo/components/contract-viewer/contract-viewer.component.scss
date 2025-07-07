@@ -18,14 +18,25 @@
 }
 
 .contract-title {
+<<<<<<< HEAD
   font-size: 16px;
   font-weight: 600;
+=======
+  font-family: var(--font-quicksand), sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   margin-bottom: 4px;
   margin-top: 16px;
 }
 
 mat-card-subtitle {
+<<<<<<< HEAD
   font-size: 12px;
+=======
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 14px;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   color: #777;
 }
 
@@ -75,13 +86,23 @@ mat-card-subtitle {
 }
 
 .contract-label {
+<<<<<<< HEAD
   font-size: 13px;
   font-weight: 600;
+=======
+  font-family: var(--font-nunito), sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   color: #111;
   margin-top: 4px;
 }
 
 .contract-value {
+<<<<<<< HEAD
+=======
+  font-family: var(--font-nunito), sans-serif;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   font-size: 14px;
   color: #333;
 }

@@ -6,6 +6,7 @@
   background-color: #fff;
 }
 
+<<<<<<< HEAD
 /* === Dialog Header === */
 .dialog-header {
   padding: 24px 32px 8px 32px;
@@ -24,6 +25,8 @@ mat-dialog-content {
   padding: 0 32px;
 }
 
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
 /* === Form Layout === */
 .form-row {
   display: flex;
@@ -48,7 +51,11 @@ mat-dialog-content {
   .radio-circle {
     width: 20px;
     height: 20px;
+<<<<<<< HEAD
     border: 2px solid #e91e63;
+=======
+    border: 2px solid var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
     border-radius: 50%;
     position: relative;
     transition: all 0.2s ease;
@@ -62,7 +69,11 @@ mat-dialog-content {
     left: 3px;
     width: 14px;
     height: 14px;
+<<<<<<< HEAD
     background-color: #e91e63;
+=======
+    background-color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
     border-radius: 50%;
     z-index: 2;
   }
@@ -72,7 +83,11 @@ mat-dialog-content {
   }
 
   &.selected {
+<<<<<<< HEAD
     color: #e91e63;
+=======
+    color: var(--primary-color);
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 }
 
@@ -107,16 +122,28 @@ mat-form-field {
 
   // 🔥 Override focus/accent color to magenta
   ::ng-deep .mat-form-field-appearance-outline.mat-accent .mat-form-field-outline-thick {
+<<<<<<< HEAD
     border-color: #e91e63 !important;
   }
 
   ::ng-deep .mat-form-field-appearance-outline.mat-accent .mat-form-field-label {
     color: #e91e63 !important;
+=======
+    border-color: var(--primary-color) !important;
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline.mat-accent .mat-form-field-label {
+    color: var(--primary-color) !important;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 
   ::ng-deep .mat-form-field-appearance-outline.mat-accent .mat-form-field-outline-start,
   ::ng-deep .mat-form-field-appearance-outline.mat-accent .mat-form-field-outline-end {
+<<<<<<< HEAD
     border-color: #e91e63 !important;
+=======
+    border-color: var(--primary-color) !important;
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
   }
 }
 
@@ -143,6 +170,7 @@ mat-dialog-actions {
   justify-content: flex-end;
   gap: 12px;
 }
+<<<<<<< HEAD
 
 /* Cancel Button (Magenta Border and Text) */
 .cancel-button {
@@ -165,3 +193,5 @@ mat-dialog-actions {
     color: white;
   }
 }
+=======
+>>>>>>> bf94d2d90e492eb87deaa5cd7cd5d00e5f789a43
