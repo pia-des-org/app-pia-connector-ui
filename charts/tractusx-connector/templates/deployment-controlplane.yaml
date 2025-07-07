@@ -324,9 +324,9 @@ spec:
             - name: "EDC_DATAPLANE_SELECTOR_DEFAULTPLANE_URL"
               value: {{ include "txdc.dataplane.url.control" . }}/transfer
             - name: "EDC_DATAPLANE_SELECTOR_DEFAULTPLANE_SOURCETYPES"
-              value: "{{ .Values.controlplane.dataplanceSourceTypes }} | default "HttpData,AmazonS3,AzureStorage" }}"
+              value: {{ .Values.controlplane.dataplanceSourceTypes | default "HttpData,AmazonS3,AzureStorage" }}
             - name: "EDC_DATAPLANE_SELECTOR_DEFAULTPLANE_DESTINATIONTYPES"
-              value: "{{ .Values.controlplane.dataplaneDestinationTypes }} | default "HttpProxy,AmazonS3,AzureStorage,HttpData" }}"
+              value: {{ .Values.controlplane.dataplaneDestinationTypes | default "HttpProxy,AmazonS3,AzureStorage,HttpData" }}
             - name: "EDC_DATAPLANE_SELECTOR_DEFAULTPLANE_PROPERTIES"
               value: |-
                 {{ printf "{ \"publicApiUrl\": \"%s\" }" (include "txdc.dataplane.url.public" . ) }}
