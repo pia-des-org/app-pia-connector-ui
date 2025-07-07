@@ -41,7 +41,7 @@ export class PolicyViewComponent implements OnInit {
       switchMap(() => {
         const policyDefinitions = this.policyService.queryAllPolicies();
         return !!this.searchText ?
-          policyDefinitions.pipe(map(policies => policies.filter(policy => this.isFiltered(policy, this.searchText))))
+          policyDefinitions.pipe(map(policies => policies.filter((policy: any) => this.isFiltered(policy, this.searchText))))
           :
           policyDefinitions;
       }));

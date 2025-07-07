@@ -13,6 +13,7 @@ export class EdcConnectorProviderService {
   ) {}
 
   async init(): Promise<void> {
+    console.log("Auth initiated");
     const token = await this.keycloak.getToken();
     const config = this.configService.getConfig();
 
