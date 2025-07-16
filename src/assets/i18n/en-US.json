@@ -46,6 +46,8 @@
     "qualityNote": "Quality Note",
     "language": "Language",
     "languageEn": "English",
+    "geographicalLocation": "Geographical coverage",
+    "geographicalLocationValue": "Add geographical coverage",
     "additionalAttributes": "Additional metadata attributes",
     "addAdditionalAttribute": "Add an attribute",
     "attributeName": "Attribute name",

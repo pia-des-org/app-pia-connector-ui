@@ -28,6 +28,7 @@ export class AssetEditorDialog implements OnInit {
     mediaType: '',
     qualityNote: '',
     language: '',
+    geographicalLocation: '',
     customProperties: [] as { name: string; value: string }[]
   };
 
@@ -294,6 +295,17 @@ export class AssetEditorDialog implements OnInit {
 
     if (this.languageControl.value?.id?.trim()) {
       properties[`${NS.DCTERMS}language`] = this.languageControl.value.id;
+    }
+
+    if (this.assetMetadata.geographicalLocation?.trim()) {
+      properties[`${NS.DCTERMS}spatial`] = {
+        [`${NS.LOCN}geometry`]: [
+          {
+            "@type": `${CONTEXT_MAP.geosparql}wktLiteral`,
+            "@value": this.assetMetadata.geographicalLocation.trim()
+          }
+        ]
+      };
     }
 
     const assetInput: AssetInput = {

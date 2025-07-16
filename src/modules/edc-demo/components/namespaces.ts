@@ -9,6 +9,8 @@ export const NS = {
   EDC: 'edc:',
   ODRL: 'odrl:',
   DSPACE: 'dspace:',
+  LOCN: 'locn:',
+  GEOSPARQL: 'geosparql:',
 };
 
 export const CONTEXT_MAP = {
@@ -22,4 +24,6 @@ export const CONTEXT_MAP = {
   edc: 'https://w3id.org/edc/v0.0.1/ns/',
   odrl: 'http://www.w3.org/ns/odrl/2/',
   dspace: 'https://w3id.org/dspace/v0.8/',
+  locn: 'http://www.w3.org/ns/locn#',
+  geosparql: 'http://www.opengis.net/ont/geosparql#',
 };
