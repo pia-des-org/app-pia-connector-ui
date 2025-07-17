@@ -30,7 +30,7 @@
       </div>
 
       <div class="description-header">
-        <span class="label">{{ 'assetEditor.description' | translate }}</span>
+        <span class="label"></span>
         <button mat-button
                 color="primary"
                 (click)="openPreviewDialog()"
@@ -79,6 +79,14 @@
         [control]="languageControl"
       ></language-select>
 
+      <div class="description-header">
+        <span class="label"></span>
+        <button mat-button
+                color="primary"
+                (click)="openGeographicalPreviewDialog()">
+          {{ 'assetEditor.geographicalOpenWktMap' | translate }}
+        </button>
+      </div>
       <mat-form-field appearance="outline" class="form-field full-width">
         <mat-label>{{ 'assetEditor.geographicalLocation' | translate }}</mat-label>
         <input matInput [(ngModel)]="assetMetadata.geographicalLocation" placeholder="{{ 'assetEditor.geographicalLocationValue' | translate }}" />

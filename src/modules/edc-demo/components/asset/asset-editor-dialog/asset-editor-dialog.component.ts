@@ -99,6 +99,10 @@ export class AssetEditorDialog implements OnInit {
     });
   }
 
+  openGeographicalPreviewDialog(): void {
+    window.open('https://wktmap.com/', '_blank', 'noopener,noreferrer');
+  }
+
   onNameChange(value: string): void {
     this.assetMetadata.name = value;
     this.assetMetadata.id = this.slugify(value);
@@ -319,7 +323,4 @@ export class AssetEditorDialog implements OnInit {
     this.dialogRef.close({ assetInput });
   }
 }
-//        [`${NS.DQV}hasQualityAnnotation`]: {
-//           "@type": 'dqv:QualityAnnotation',
-//           [`${NS.RDFS}comment`]: this.assetMetadata.qualityNote
-//         },
+
