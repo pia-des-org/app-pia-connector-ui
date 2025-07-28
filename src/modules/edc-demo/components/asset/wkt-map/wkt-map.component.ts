@@ -13,6 +13,7 @@ declare module 'leaflet' {
     pm: {
       addControls: (options?: any) => void;
       enableDraw: (type: string, options?: any) => void;
+      disableGlobalEditMode: () => void;
       disableDraw: () => void;
     };
   }
@@ -37,7 +38,7 @@ export class WktMapComponent implements AfterViewInit {
   @Output() wktChange = new EventEmitter<string>();
 
   private map!: L.Map;
-  private drawnLayer?: L.Layer;
+  private drawnLayers = L.featureGroup();
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -50,6 +51,8 @@ export class WktMapComponent implements AfterViewInit {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
+
+    this.drawnLayers.addTo(this.map);
   }
 
   private enableDrawingTools(): void {
@@ -67,33 +70,40 @@ export class WktMapComponent implements AfterViewInit {
       removalMode: true
     });
 
-    // Listen for shape creation
     this.map.on('pm:create', (e: any) => {
-      // Clear previous layer if any
-      if (this.drawnLayer) {
-        this.map.removeLayer(this.drawnLayer);
-      }
-
-      this.drawnLayer = e.layer;
-
-      const geojson = e.layer.toGeoJSON();
-      const wkt = wellknown.stringify(geojson.geometry);
-      this.wktChange.emit(wkt);
+      this.drawnLayers.addLayer(e.layer);
+      this.map.pm.disableGlobalEditMode();
+      this.emitWktFromAllLayers();
     });
 
-    // Listen for edits (only first layer supported for now)
     this.map.on('pm:edit', () => {
-      if (this.drawnLayer) {
-        const geojson = (this.drawnLayer as any).toGeoJSON();
-        const wkt = wellknown.stringify(geojson.geometry);
-        this.wktChange.emit(wkt);
-      }
+      this.emitWktFromAllLayers();
     });
 
-    // Listen for deletions
-    this.map.on('pm:remove', () => {
-      this.drawnLayer = undefined;
-      this.wktChange.emit('');
+    this.map.on('pm:remove', (e: any) => {
+      this.emitWktFromAllLayers();
     });
   }
+
+  private emitWktFromAllLayers(): void {
+    const geometries: GeoJSON.Geometry[] = [];
+
+    this.drawnLayers.eachLayer((layer: any) => {
+      const geoJson = layer.toGeoJSON() as GeoJSON.Feature;
+      if (geoJson.geometry) {
+        geometries.push(geoJson.geometry);
+      }
+    });
+
+    const geometryCollection = {
+      type: 'GeometryCollection',
+      geometries
+    };
+
+    const wkt = wellknown.stringify(geometryCollection as any);
+    this.wktChange.emit(wkt);
+
+  }
+
+
 }
