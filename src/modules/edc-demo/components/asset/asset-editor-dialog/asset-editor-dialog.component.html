@@ -80,13 +80,9 @@
       ></language-select>
 
       <div class="description-header">
-        <span class="label"></span>
-        <button mat-button
-                color="primary"
-                (click)="openGeographicalPreviewDialog()">
-          {{ 'assetEditor.geographicalOpenWktMap' | translate }}
-        </button>
+        <app-wkt-map (wktChange)="assetMetadata.geographicalLocation = $event"></app-wkt-map>
       </div>
+
       <mat-form-field appearance="outline" class="form-field full-width">
         <mat-label>{{ 'assetEditor.geographicalLocation' | translate }}</mat-label>
         <input matInput [(ngModel)]="assetMetadata.geographicalLocation" placeholder="{{ 'assetEditor.geographicalLocationValue' | translate }}" />

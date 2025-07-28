@@ -62,6 +62,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {LanguageSelectComponent} from "./components/asset/language-select/language-select.component";
 import { MarkdownModule } from 'ngx-markdown';
 import { MarkdownPreviewDialogComponent } from './components/asset/markdown-preview-dialog/markdown-preview-dialog.component';
+import { WktMapComponent } from './components/asset/wkt-map/wkt-map.component'
 
 @NgModule({
   imports: [
@@ -124,6 +125,7 @@ import { MarkdownPreviewDialogComponent } from './components/asset/markdown-prev
     NegotiateTransferComponent,
     LanguageSelectComponent,
     MarkdownPreviewDialogComponent,
+    WktMapComponent,
   ],
   exports: [
     CatalogBrowserComponent,
