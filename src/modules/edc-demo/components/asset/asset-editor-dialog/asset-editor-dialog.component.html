@@ -83,11 +83,6 @@
         <app-wkt-map (wktChange)="assetMetadata.geographicalLocation = $event"></app-wkt-map>
       </div>
 
-      <mat-form-field appearance="outline" class="form-field full-width">
-        <mat-label>{{ 'assetEditor.geographicalLocation' | translate }}</mat-label>
-        <input matInput [(ngModel)]="assetMetadata.geographicalLocation" placeholder="{{ 'assetEditor.geographicalLocationValue' | translate }}" />
-      </mat-form-field>
-
       <div class="additional-attribute-row">
         <span class="section-label">
           {{ 'assetEditor.additionalAttributes' | translate }}
