@@ -1,5 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 
+/**
+ * Component for displaying a list of policy rules with an optional title.
+ */
 @Component({
   selector: 'policy-rules',
   templateUrl: './policy-rule-viewer.component.html',

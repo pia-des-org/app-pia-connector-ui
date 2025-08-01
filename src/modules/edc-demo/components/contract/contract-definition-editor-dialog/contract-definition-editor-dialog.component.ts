@@ -5,6 +5,13 @@ import {
 } from "../../../../mgmt-api-client";
 import { Asset, ContractDefinitionInput, PolicyDefinition } from "../../../../mgmt-api-client/model"
 
+/**
+ * Dialog component for creating or editing a contract definition.
+ *
+ * Allows users to select an access policy, contract policy, and assets.
+ * On submission, the component constructs a ContractDefinitionInput object
+ * and returns it to the caller.
+ */
 @Component({
   selector: 'edc-demo-contract-definition-editor-dialog',
   templateUrl: './contract-definition-editor-dialog.component.html',
@@ -33,6 +40,10 @@ export class ContractDefinitionEditorDialog implements OnInit {
     }
   }
 
+  /**
+   * Initializes the component by loading all policies and assets,
+   * and preselecting any provided values from the injected data.
+   */
   ngOnInit(): void {
     this.policyService.queryAllPolicies().subscribe(policyDefinitions => {
       this.policies = policyDefinitions;
@@ -49,6 +60,12 @@ export class ContractDefinitionEditorDialog implements OnInit {
     })
   }
 
+  /**
+   * Prevents the user from entering invalid characters in the contract ID input.
+   * Only alphanumeric characters and dashes are allowed.
+   *
+   * @param event Keyboard event from input
+   */
   blockInvalidChars(event: KeyboardEvent): void {
     const allowed = /^[a-zA-Z0-9\-]$/;
     if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
@@ -56,6 +73,10 @@ export class ContractDefinitionEditorDialog implements OnInit {
     }
   }
 
+  /**
+   * Indicates whether the form is valid for submission.
+   * All required fields must be filled: ID, access policy, contract policy, and at least one asset.
+   */
   get isFormValid(): boolean {
     const hasAsset = Array.isArray(this.assets)
       ? this.assets.length > 0
@@ -67,7 +88,10 @@ export class ContractDefinitionEditorDialog implements OnInit {
       && hasAsset;
   }
 
-
+  /**
+   * Constructs and returns the finalized contract definition based on user input.
+   * Closes the dialog and passes the data to the calling component.
+   */
   onSave(): void {
     const selectedAsset = Array.isArray(this.assets) ? this.assets[0] : this.assets;
 
@@ -91,5 +115,4 @@ export class ContractDefinitionEditorDialog implements OnInit {
       contractDefinition
     });
   }
-
 }

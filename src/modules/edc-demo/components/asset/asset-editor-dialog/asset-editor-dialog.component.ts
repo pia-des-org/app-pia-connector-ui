@@ -11,6 +11,10 @@ import {FormControl} from "@angular/forms";
 import {LanguageSelectItemService} from "../language-select/language-select-item.service";
 import {MarkdownPreviewDialogComponent} from "../markdown-preview-dialog/markdown-preview-dialog.component";
 
+/**
+ * Dialog component for creating a new asset.
+ * Supports REST, Amazon S3, and Azure Blob Storage as data sources.
+ */
 @Component({
   selector: 'edc-demo-asset-editor-dialog',
   templateUrl: './asset-editor-dialog.component.html',
@@ -89,6 +93,7 @@ export class AssetEditorDialog implements OnInit {
     }
   }
 
+  /** Opens a dialog to preview the asset's Markdown description. */
   openPreviewDialog(): void {
     this.dialog.open(MarkdownPreviewDialogComponent, {
       data: {
@@ -99,15 +104,19 @@ export class AssetEditorDialog implements OnInit {
     });
   }
 
-  openGeographicalPreviewDialog(): void {
-    window.open('https://wktmap.com/', '_blank', 'noopener,noreferrer');
-  }
-
+  /**
+   * Updates asset name and ID based on user input.
+   * @param value Name string entered by the user
+   */
   onNameChange(value: string): void {
     this.assetMetadata.name = value;
     this.assetMetadata.id = this.slugify(value);
   }
 
+  /**
+   * Prevents invalid characters from being typed in the name field.
+   * Allows only alphanumeric characters, spaces, and hyphens.
+   */
   blockInvalidChars(event: KeyboardEvent): void {
     const allowed = /^[a-zA-Z0-9 \-]$/;
     if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
@@ -115,6 +124,7 @@ export class AssetEditorDialog implements OnInit {
     }
   }
 
+  /** Converts input value into a slugified asset ID. */
   private slugify(value: string): string {
     return value
       .trim()
@@ -125,6 +135,7 @@ export class AssetEditorDialog implements OnInit {
       .replace(/^_+|_+$/g, '');       // Trim underscores from start/end
   }
 
+  /** Adds a keyword to the asset's metadata from a chip input. */
   addKeyword(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (value) {
@@ -133,6 +144,10 @@ export class AssetEditorDialog implements OnInit {
     event.chipInput?.clear();
   }
 
+  /**
+   * Removes a keyword from the metadata list.
+   * @param keyword The keyword to remove
+   */
   removeKeyword(keyword: string): void {
     const index = this.assetMetadata.keywords.indexOf(keyword);
     if (index >= 0) {
@@ -140,6 +155,10 @@ export class AssetEditorDialog implements OnInit {
     }
   }
 
+  /**
+   * Switches between form sections: general and datasource.
+   * Prevents navigating to datasource if general section is invalid.
+   */
   toggleSection(target: 'general' | 'datasource'): void {
     if (this.section[target]) return;
     if (target === 'datasource' && !this.isGeneralValid()) return;
@@ -149,6 +168,7 @@ export class AssetEditorDialog implements OnInit {
     this.section[target] = true;
   }
 
+  /** Checks if the general metadata section is valid. */
   isGeneralValid(): boolean {
     return !!this.assetMetadata.name?.trim()
       && !!this.assetMetadata.id?.trim()
@@ -157,6 +177,7 @@ export class AssetEditorDialog implements OnInit {
       && !!this.assetMetadata.ontologyType?.trim();
   }
 
+  /** Validates the currently selected datasource configuration. */
   isDatasourceValid(): boolean {
     switch (this.selectedStorageType) {
       case 'rest':
@@ -177,38 +198,53 @@ export class AssetEditorDialog implements OnInit {
     }
   }
 
+  /** Toggles visibility of authentication fields in REST config. */
   toggleAuth(): void {
     this.restConfig.auth.visible = !this.restConfig.auth.visible;
   }
 
+  /** Toggles visibility of the REST payload section. */
   togglePayload(): void {
     this.restConfig.payload = this.restConfig.payload ? null : { contentType: '', body: '' };
   }
 
+  /** Adds an empty HTTP header field to the REST config. */
   addHeader(): void {
     this.restConfig.additionalHeaders.push({ name: '', value: '' });
   }
 
+  /**
+   * Removes a specific header field by index.
+   * @param index Index of the header to remove
+   */
   removeHeader(index: number): void {
     this.restConfig.additionalHeaders.splice(index, 1);
   }
 
+  /** Adds an empty custom property to the asset metadata. */
   addCustomProperty(): void {
     this.assetMetadata.customProperties.push({ name: '', value: '' });
   }
 
+  /**
+   * Removes a custom property by index.
+   * @param index Index of the property to remove
+   */
   removeCustomProperty(index: number): void {
     this.assetMetadata.customProperties.splice(index, 1);
   }
 
+  /** Returns whether both form sections are valid. */
   get isFormValid(): boolean {
     return this.isGeneralValid() && this.isDatasourceValid();
   }
 
+  /** Resets storage-specific fields when storage type changes. */
   onStorageTypeChanged(): void {
     this.clearDatasourceFields();
   }
 
+  /** Clears all datasource fields across all types. */
   clearDatasourceFields(): void {
     this.restConfig.method = '';
     this.restConfig.url = '';
@@ -225,6 +261,7 @@ export class AssetEditorDialog implements OnInit {
     this.azureConfig.blobName = '';
   }
 
+  /** Prepares and submits the asset data, then closes the dialog. */
   onSave(): void {
     let dataAddress: any = { type: this.selectedStorageType };
 

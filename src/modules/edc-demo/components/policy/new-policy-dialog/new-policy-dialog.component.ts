@@ -5,7 +5,9 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { EcosystemService } from '../../../../app/components/services/ecosystem.service';
 
-
+/**
+ * Dialog component for creating a new data access policy.
+ */
 @Component({
   selector: 'app-new-policy-dialog',
   templateUrl: './new-policy-dialog.component.html',
@@ -30,6 +32,10 @@ export class NewPolicyDialogComponent {
               private ecosystemService: EcosystemService
   ) {}
 
+  /**
+   * Blocks characters that are not allowed in the policy name.
+   * Only letters, numbers, and hyphens are allowed.
+   */
   blockInvalidChars(event: KeyboardEvent): void {
     const allowed = /^[a-zA-Z0-9\-]$/;
     if (!allowed.test(event.key) && !['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'].includes(event.key)) {
@@ -37,6 +43,9 @@ export class NewPolicyDialogComponent {
     }
   }
 
+  /**
+   * Adds a Business Partner Number (BPN) from chip input.
+   */
   addBpn(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
     if (value) {
@@ -45,6 +54,9 @@ export class NewPolicyDialogComponent {
     event.chipInput?.clear();
   }
 
+  /**
+   * Removes a Business Partner Number (BPN) from the list.
+   */
   removeBpn(bpn: string): void {
     const index = this.businessPartnerNumbers.indexOf(bpn);
     if (index >= 0) {
@@ -52,11 +64,20 @@ export class NewPolicyDialogComponent {
     }
   }
 
+  /**
+   * Validates general form input.
+   * Policy name must not be empty.
+   * If access is restricted to BPNs, at least one BPN must be present.
+   */
   isGeneralValid(): boolean {
     if (!this.policyName.trim()) return false;
     return !(this.accessOption === 'bpn' && this.businessPartnerNumbers.length === 0);
   }
 
+  /**
+   * Builds the final PolicyDefinitionInput and closes the dialog,
+   * returning the built object to the caller.
+   */
   onSave(): void {
     if (!this.isGeneralValid()) return;
 

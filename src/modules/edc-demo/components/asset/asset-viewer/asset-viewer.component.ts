@@ -8,8 +8,10 @@ import {AssetEditorDialog} from "../asset-editor-dialog/asset-editor-dialog.comp
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../confirmation-dialog/confirmation-dialog.component";
 import {NotificationService} from "../../../services/notification.service";
 import {AssetDetailsDialogComponent} from "../asset-details-dialog/asset-details-dialog.component";
-import { NS, CONTEXT_MAP } from '../../namespaces';
 
+/**
+ * Component for viewing, creating, and deleting assets.
+ */
 @Component({
   selector: 'edc-demo-asset-viewer',
   templateUrl: './asset-viewer.component.html',
@@ -27,11 +29,20 @@ export class AssetViewerComponent implements OnInit {
               private readonly dialog: MatDialog,) {
 }
 
+  /**
+   * Displays an error message using the notification service and logs the error to the console.
+   * @param error Full error object or message
+   * @param errorMessage User-facing message to display
+   */
   private showError(error: string, errorMessage: string) {
     this.notificationService.showError(errorMessage);
     console.error(error);
   }
 
+  /**
+   * Initializes the component and sets up the filtered asset stream.
+   * Filters assets if search text is present.
+   */
   ngOnInit(): void {
     this.filteredAssets$ = this.fetch$
       .pipe(
@@ -43,6 +54,10 @@ export class AssetViewerComponent implements OnInit {
         }));
   }
 
+  /**
+   * Returns a shortened version of the asset description (max 50 chars).
+   * @param asset Asset to display description for
+   */
   getShortDescription(asset: Asset): string {
     const desc = asset.properties.optionalValue('dcterms', 'description');
     if (typeof desc === 'string') {
@@ -51,15 +66,21 @@ export class AssetViewerComponent implements OnInit {
     return '';
   }
 
-
+  /** Returns true if a transfer operation is in progress. */
   isBusy() {
     return this.isTransferring;
   }
 
+  /** Triggers asset reloading based on current search text. */
   onSearch() {
     this.fetch$.next(null);
   }
 
+  /**
+   * Opens a dialog to view asset details.
+   * If the dialog result indicates deletion, triggers deletion.
+   * @param asset The asset to display
+   */
   openAssetDialog(asset: Asset) {
     const dialogRef = this.dialog.open(AssetDetailsDialogComponent, {
       data: {asset}
@@ -72,8 +93,13 @@ export class AssetViewerComponent implements OnInit {
     });
   }
 
+  /**
+   * Prompts for confirmation and deletes the given asset.
+   * Shows success or error notifications accordingly.
+   * @param asset The asset to delete
+   */
   onDelete(asset: Asset) {
-    const dialogData = ConfirmDialogModel.forDelete("asset", `"${asset.id}"`)
+    const dialogData = ConfirmDialogModel.forDelete("asset", `"${asset.id}"`);
     const ref = this.dialog.open(ConfirmationDialogComponent, {
       maxWidth: '90vw',
       maxHeight: '90vh',
@@ -95,6 +121,11 @@ export class AssetViewerComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens the asset creation dialog.
+   * If the user submits valid data, the new asset is sent to the backend.
+   * On success, refreshes the asset list and shows a success notification.
+   */
   onCreate() {
     const dialogRef = this.dialog.open(AssetEditorDialog);
     dialogRef.afterClosed().pipe(first()).subscribe((result: { assetInput?: AssetInput }) => {

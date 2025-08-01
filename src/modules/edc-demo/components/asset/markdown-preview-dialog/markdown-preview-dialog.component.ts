@@ -1,6 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+/**
+ * Dialog component that previews Markdown-formatted text.
+ */
 @Component({
   selector: 'app-markdown-preview-dialog',
   template: `

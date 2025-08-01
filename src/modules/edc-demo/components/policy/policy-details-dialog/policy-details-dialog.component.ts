@@ -1,6 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+/**
+ * Dialog component for displaying a JSON policy object.
+ */
 @Component({
   selector: 'app-policy-details-dialog',
   templateUrl: './policy-details-dialog.component.html',
@@ -14,6 +17,10 @@ export class PolicyDetailsDialogComponent {
     private dialogRef: MatDialogRef<PolicyDetailsDialogComponent>
   ) {}
 
+  /**
+   * Returns either the raw or cleaned policy JSON object.
+   * Cleaned version removes and re-adds '@context' as the last field.
+   */
   get displayedJson(): any {
     if (!this.cleaned) {
       return this.data.policy;

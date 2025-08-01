@@ -14,6 +14,10 @@ import {AppConfigService} from "../../../app/app-config.service";
 import {NegotiationResult} from "../../models/negotiation-result";
 import {Router} from "@angular/router";
 
+/**
+ * Dialog component to initiate a contract negotiation based on a selected dataset
+ * retrieved from the remote provider’s catalog.
+ */
 @Component({
   selector: 'app-negotiate-transfer',
   templateUrl: './negotiate-transfer.component.html',
@@ -67,6 +71,10 @@ export class NegotiateTransferComponent implements OnInit {
     this.fetchCatalog();
   }
 
+  /**
+   * Fetches the catalog from the given provider, extracts dataset and connection details,
+   * and determines whether negotiation can start.
+   */
   private fetchCatalog(): void {
     const catalogRequest: CatalogRequest = {
       providerUrl: this.data.providerUrl,
@@ -110,6 +118,9 @@ export class NegotiateTransferComponent implements OnInit {
 
   }
 
+  /**
+   * Helper to extract participant ID from catalog response.
+   */
   private extractParticipantId(result: any): string | null {
     const participantArray = result?.['https://w3id.org/edc/v0.0.1/ns/participantId'];
     const value = participantArray?.[0]?.['@value'];
@@ -117,6 +128,9 @@ export class NegotiateTransferComponent implements OnInit {
     return value ?? null;
   }
 
+  /**
+   * Helper to extract endpoint URL (connector address) from catalog response.
+   */
   private extractEndpointUrl(result: any): string | null {
     const participantArray = result?.['https://www.w3.org/ns/dcat/service'];
     const endpointUrl = participantArray?.[0]?.['https://purl.org/dc/terms/endpointUrl'];
@@ -124,6 +138,9 @@ export class NegotiateTransferComponent implements OnInit {
     return value ?? null;
   }
 
+  /**
+   * Searches catalog for a dataset matching the given asset ID.
+   */
   private findMatchingDataset(result: any, assetId: string): any | null {
     const datasets = result?.['https://www.w3.org/ns/dcat/dataset'];
 
@@ -134,6 +151,9 @@ export class NegotiateTransferComponent implements OnInit {
     return datasets.find((dataset: any) => dataset['@id'] === assetId) ?? null;
   }
 
+  /**
+   * Extracts metadata from a dataset (title, description, mediaType, etc.).
+   */
   private extractDatasetProperties(dataset: any): void {
     const getValue = (obj: any, key: string): string | undefined => {
       const valueArr = obj?.[key];
@@ -152,6 +172,9 @@ export class NegotiateTransferComponent implements OnInit {
     this.datasetId = dataset['@id'];
   }
 
+  /**
+   * Initiates the contract negotiation for the selected dataset and starts polling its status.
+   */
   startNegotiation(): void {
     if (!this.matchedDataset || !this.participantId) {
       this.notificationService.showError("Missing dataset or participant ID.");

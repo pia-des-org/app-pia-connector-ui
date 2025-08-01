@@ -1,6 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
+/**
+ * Confirmation dialog component for reusable user confirmations.
+ *
+ * Presents a title, message, and confirm/cancel actions.
+ * The caller receives `true` on confirm and `false` on cancel.
+ */
 @Component({
   selector: 'app-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
@@ -25,6 +31,10 @@ export class ConfirmationDialogComponent implements OnInit {
   }
 }
 
+/**
+ * Model class to hold configuration for the ConfirmationDialogComponent.
+ * Includes customizable texts and button colors.
+ */
 export class ConfirmDialogModel {
   private _confirmText: string = "OK";
   private _cancelText: string = "Cancel";
@@ -66,6 +76,11 @@ export class ConfirmDialogModel {
     this._confirmText = value;
   }
 
+  /**
+   * Factory method to create a preconfigured delete confirmation dialog.
+   * @param type The type of entity being deleted (e.g., 'asset')
+   * @param identifier The identifier/name of the entity
+   */
   public static forDelete(type: string, identifier: string): ConfirmDialogModel {
     const dialogData = new ConfirmDialogModel("Deletion confirmation", `Please confirm you want to delete ${type} ${identifier}. This action cannot be undone.`)
     dialogData.confirmColor = "warn";
