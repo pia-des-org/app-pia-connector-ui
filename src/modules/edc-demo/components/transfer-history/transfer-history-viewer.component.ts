@@ -9,6 +9,10 @@ import {
 } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
+
+/**
+ * Component to display and manage transfer process history in a paginated table.
+ */
 @Component({
   selector: 'edc-demo-transfer-history',
   templateUrl: './transfer-history-viewer.component.html',
@@ -16,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class TransferHistoryViewerComponent implements OnInit {
 
+  /** Columns to be shown in the transfer history table. */
   columns: string[] = ['id', 'state', 'lastUpdated', 'connectorId', 'assetId', 'contractId'];
   storageExplorerLinkTemplate: string | undefined;
 
@@ -35,11 +40,18 @@ export class TransferHistoryViewerComponent implements OnInit {
     private appConfigService: AppConfigService
   ) {}
 
+  /**
+   * Lifecycle method called once the component is initialized.
+   * Loads the transfer processes and retrieves config values.
+   */
   ngOnInit(): void {
     this.loadTransferProcesses();
     this.storageExplorerLinkTemplate = this.appConfigService.getConfig()?.storageExplorerLinkTemplate;
   }
 
+  /**
+   * Fetches all transfer processes and updates the pagination state.
+   */
   loadTransferProcesses(): void {
     this.transferProcessService.queryAllTransferProcesses().subscribe(transfers => {
       this.allTransfers = transfers;
@@ -49,12 +61,19 @@ export class TransferHistoryViewerComponent implements OnInit {
     });
   }
 
+  /**
+   * Updates the list of transfers to be displayed based on current pagination.
+   */
   updateDisplayedTransfers(): void {
     const start = this.pageIndex * this.pageSize;
     const end = Math.min(start + this.pageSize, this.totalTransfers);
     this.displayedTransfers = this.allTransfers.slice(start, end);
   }
 
+  /**
+   * Handles user selection of a new page size.
+   * @param event DOM event from page size selector.
+   */
   onPageSizeChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.pageSize = +select.value;
@@ -62,6 +81,7 @@ export class TransferHistoryViewerComponent implements OnInit {
     this.updateDisplayedTransfers();
   }
 
+  /** Navigates to the next page, if one exists. */
   nextPage(): void {
     if (this.pageIndex < this.pageCount - 1) {
       this.pageIndex++;
@@ -69,6 +89,7 @@ export class TransferHistoryViewerComponent implements OnInit {
     }
   }
 
+  /** Navigates to the previous page, if one exists. */
   previousPage(): void {
     if (this.pageIndex > 0) {
       this.pageIndex--;
@@ -76,14 +97,17 @@ export class TransferHistoryViewerComponent implements OnInit {
     }
   }
 
+  /** Gets the first row number shown on the current page (for display purposes). */
   get pageStart(): number {
     return this.pageIndex * this.pageSize + 1;
   }
 
+  /** Gets the last row number shown on the current page (for display purposes). */
   get pageEnd(): number {
     return Math.min((this.pageIndex + 1) * this.pageSize, this.totalTransfers);
   }
 
+  /** Calculates total number of available pages. */
   get pageCount(): number {
     return Math.ceil(this.totalTransfers / this.pageSize);
   }

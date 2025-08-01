@@ -10,7 +10,9 @@ import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../confirmatio
 import {NotificationService} from "../../../services/notification.service";
 import { ContractDefinitionInput, ContractDefinition } from "../../../../mgmt-api-client/model"
 
-
+/**
+ * Component to view, filter, create, and delete contract definitions.
+ */
 @Component({
   selector: 'edc-demo-contract-definition-viewer',
   templateUrl: './contract-definition-viewer.component.html',
@@ -27,6 +29,10 @@ export class ContractDefinitionViewerComponent implements OnInit {
               private readonly dialog: MatDialog) {
   }
 
+  /**
+   * Loads all contract definitions and applies optional filtering by search text.
+   * Executes on component initialization and whenever `fetch$` is triggered.
+   */
   ngOnInit(): void {
     this.filteredContractDefinitions$ = this.fetch$
       .pipe(
@@ -39,10 +45,19 @@ export class ContractDefinitionViewerComponent implements OnInit {
         }));
   }
 
+  /**
+   * Triggers the data reload based on the current search text.
+   */
   onSearch() {
     this.fetch$.next(null);
   }
 
+  /**
+   * Opens a confirmation dialog before deleting a contract definition.
+   * If confirmed, deletes the contract and refreshes the list.
+   *
+   * @param contractDefinition The contract definition to delete
+   */
   onDelete(contractDefinition: ContractDefinition) {
     const dialogData = ConfirmDialogModel.forDelete("contract definition", contractDefinition.id);
 
@@ -58,7 +73,8 @@ export class ContractDefinitionViewerComponent implements OnInit {
   }
 
   /**
-   * TODO add marketplace checkbox, what do with it? send the offer to marketplace BE? i guess
+   * Opens a dialog to create a new contract definition.
+   * If the form is submitted, sends it to the backend and refreshes the list.
    */
   onCreate() {
     const dialogRef = this.dialog.open(ContractDefinitionEditorDialog);

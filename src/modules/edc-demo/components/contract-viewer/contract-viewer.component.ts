@@ -28,6 +28,9 @@ interface RunningTransferProcess {
   state: TransferProcessStates;
 }
 
+/**
+ * Displays a list of finalized contract agreements and enables users to initiate data transfers.
+ */
 @Component({
   selector: 'app-contract-viewer',
   templateUrl: './contract-viewer.component.html',
@@ -53,6 +56,9 @@ export class ContractViewerComponent implements OnInit {
               private appConfig: AppConfigService) {
   }
 
+  /**
+   * Returns true if a given transfer state indicates completion (or failure).
+   */
   private static isFinishedState(state: string): boolean {
     return [
       "COMPLETED",
@@ -60,6 +66,9 @@ export class ContractViewerComponent implements OnInit {
       "ENDED"].includes(state);
   }
 
+  /**
+   * Fetches and stores only finalized contract negotiations for later use (e.g. to resolve connector address).
+   */
   async getConnectorAddressData() {
     await this.contractNegotiationService.queryNegotiations()
       .forEach((response: ContractNegotiation[]) => {
@@ -69,6 +78,10 @@ export class ContractViewerComponent implements OnInit {
       })
   }
 
+  /**
+   * Loads finalized negotiations, then initializes contracts.
+   * If queryParams include providerUrl and assetId, opens transfer dialog automatically.
+   */
   async ngOnInit(): Promise<void> {
     await this.getConnectorAddressData();
     this.refreshContracts();
@@ -91,6 +104,10 @@ export class ContractViewerComponent implements OnInit {
       });
   }
 
+  /**
+   * Loads all contract agreements and enriches them with connector addresses from finalized negotiations.
+   * Filters out contracts without matching finalized negotiation.
+   */
   refreshContracts(): void {
     this.contractAgreementService.queryAllAgreements().pipe(
       map((allContracts: ContractAgreement[]) => {
@@ -119,7 +136,9 @@ export class ContractViewerComponent implements OnInit {
     });
   }
 
-
+  /**
+   * Converts an epoch timestamp (in seconds) to a localized date string.
+   */
   asDate(epochSeconds?: number): string {
     if(epochSeconds){
       const d = new Date(0);
@@ -129,6 +148,10 @@ export class ContractViewerComponent implements OnInit {
     return '';
   }
 
+  /**
+   * Opens transfer dialog and, upon confirmation, sends transfer request.
+   * Starts polling the process until completed.
+   */
   onTransferClicked(contract: ContractAgreement) {
     const dialogRef = this.dialog.open(CatalogBrowserTransferDialog);
 
@@ -149,15 +172,24 @@ export class ContractViewerComponent implements OnInit {
     });
   }
 
+  /**
+   * Checks whether the given contract is currently being transferred.
+   */
   isTransferInProgress(contractId: string): boolean {
     return !!this.runningTransfers.find(rt => rt.contractId === contractId);
   }
 
+  /**
+   * Returns polling timeout in ms from config, defaulting to 60 seconds.
+   */
   private get POLLING_TIMEOUT_MS(): number {
     const config = this.appConfig.getConfig();
     return config?.transferPollingTimeoutMs || 60000;
   }
 
+  /**
+   * Builds a transfer request object from contract and selected destination.
+   */
   private createTransferRequest(contract: ContractAgreement, dataDestination: any): TransferRequest {
     return {
       '@context': {
@@ -177,6 +209,10 @@ export class ContractViewerComponent implements OnInit {
     };
   }
 
+  /**
+   * Starts polling the transfer status until it finishes or times out.
+   * Navigates to transfer history on success.
+   */
   private startPolling(transferProcessId: IdResponse, contractId: string) {
     // track this transfer process
     this.runningTransfers.push({
@@ -192,6 +228,10 @@ export class ContractViewerComponent implements OnInit {
 
   }
 
+  /**
+   * Polls transfer processes to check for completion or errors.
+   * If completed, clears polling and notifies the user.
+   */
   private pollRunningTransfers() {
     return () => {
       const now = Date.now();

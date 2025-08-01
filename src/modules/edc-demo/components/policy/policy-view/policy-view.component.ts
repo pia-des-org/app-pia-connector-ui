@@ -8,8 +8,10 @@ import {NotificationService} from "../../../services/notification.service";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../confirmation-dialog/confirmation-dialog.component";
 import {PolicyDefinition, PolicyDefinitionInput, IdResponse, Asset} from "../../../../mgmt-api-client/model";
 import {PolicyDetailsDialogComponent} from "../policy-details-dialog/policy-details-dialog.component";
-import { tap } from 'rxjs/operators';
 
+/**
+ * Component responsible for displaying, creating, and deleting policy definitions.
+ */
 @Component({
   selector: 'app-policy-view',
   templateUrl: './policy-view.component.html',
@@ -36,6 +38,7 @@ export class PolicyViewComponent implements OnInit {
 
   }
 
+  /** Initialize observable that loads and optionally filters all policies */
   ngOnInit(): void {
     this.filteredPolicies$ = this.fetch$.pipe(
       switchMap(() => {
@@ -47,6 +50,10 @@ export class PolicyViewComponent implements OnInit {
       }));
   }
 
+  /**
+   * Opens the policy details dialog and optionally deletes the policy if requested.
+   * @param policy The selected policy to view (and optionally delete)
+   */
   openPolicyDialog(policy: PolicyDefinition): void {
     const mergedPolicy = {
       '@id': policy['@id'],
@@ -64,11 +71,12 @@ export class PolicyViewComponent implements OnInit {
     });
   }
 
-
+  /** Triggers a re-fetch based on the current search input */
   onSearch() {
     this.fetch$.next(null);
   }
 
+  /** Opens the new policy creation dialog, then saves the result */
   onCreate() {
     const dialogRef = this.dialog.open(NewPolicyDialogComponent);
     dialogRef.afterClosed().pipe(first()).subscribe({
@@ -88,13 +96,18 @@ export class PolicyViewComponent implements OnInit {
   }
 
   /**
-   * simple full-text search - serialize to JSON and see if "searchText"
-   * is contained
+   * Simple JSON-based full-text filter function for policies.
+   * @param policy The policy object to check
+   * @param searchText The lowercase filter string
    */
   private isFiltered(policy: PolicyDefinition, searchText: string) {
     return JSON.stringify(policy).includes(searchText);
   }
 
+  /**
+   * Opens a confirmation dialog, then deletes the selected policy if confirmed.
+   * @param policy The policy to delete
+   */
   delete(policy: PolicyDefinition) {
 
     let policyId = policy['@id']!;
@@ -123,6 +136,10 @@ export class PolicyViewComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens a confirmation dialog, then deletes the selected policy if confirmed.
+   * @param policy The policy to delete
+   */
   getBpnConstraint(policy: PolicyDefinition): string | null {
     const edcPolicy = policy['edc:policy'];
     if (!edcPolicy) return null;
@@ -144,8 +161,7 @@ export class PolicyViewComponent implements OnInit {
     return bpns.length > 0 ? `BPN: ${bpns.join(', ')}` : null;
   }
 
-
-
+  /** Displays a formatted error message using the NotificationService */
   private showError(error: Error, errorMessage: string) {
     console.error(error);
     this.notificationService.showError(errorMessage);

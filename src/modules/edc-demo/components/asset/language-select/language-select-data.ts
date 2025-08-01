@@ -1,5 +1,17 @@
 import {LanguageSelectItem} from './language-select-item';
 
+/**
+ * Static list of available languages used by the LanguageSelectComponent.
+ *
+ * Each entry is a LanguageSelectItem containing:
+ * - `id`: ISO 639-1 code (or 'MULTI_LINGUAL' for mixed content)
+ * - `label`: Display name for the language
+ * - `comment` (optional): Explanation for special cases
+ * - `sameAs` (optional): Link to DBpedia resource for the language
+ *
+ * This data is used by LanguageSelectItemService to populate language dropdowns.
+ */
+
 export const LANGUAGE_SELECT_DATA: LanguageSelectItem[] = [
   {
     id: 'MULTI_LINGUAL',

@@ -16,6 +16,13 @@ interface RunningTransferProcess {
   state: TransferProcessStates;
 }
 
+/**
+ * Catalog browser component responsible for displaying and managing contract offers.
+ *
+ * Users can search for available contract offers, initiate negotiations, and track their
+ * current negotiation or transfer status. Completed negotiations are handled with in-place
+ * updates and user notifications.
+ */
 @Component({
   selector: 'edc-demo-catalog-browser',
   templateUrl: './catalog-browser.component.html',
@@ -38,14 +45,26 @@ export class CatalogBrowserComponent implements OnInit {
               @Inject('HOME_CONNECTOR_STORAGE_ACCOUNT') private homeConnectorStorageAccount: string) {
   }
 
+  /**
+   * Initializes the component. Currently resets the filtered offers stream.
+   */
   ngOnInit(): void {
     this.filteredContractOffers$ = of([]);
   }
 
+  /**
+   * Triggers a refresh of the contract offers based on the current search text.
+   */
   onSearch() {
     this.fetch$.next(null);
   }
 
+  /**
+   * Initiates a contract negotiation with the provider based on the selected offer.
+   * Starts polling negotiation state and handles successful or failed outcomes.
+   *
+   * @param contractOffer The selected offer to negotiate
+   */
   onNegotiateClicked(contractOffer: ContractOffer) {
     const initiateRequest: ContractNegotiationRequest = {
       connectorAddress: contractOffer.originator,
@@ -102,10 +121,22 @@ export class CatalogBrowserComponent implements OnInit {
     });
   }
 
+  /**
+   * Checks if a given contract offer is currently in negotiation or transfer.
+   *
+   * @param contractOffer The offer to check
+   * @returns True if the offer is busy, false otherwise
+   */
   isBusy(contractOffer: ContractOffer) {
     return this.runningNegotiations.get(contractOffer.id) !== undefined || !!this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.assetId);
   }
 
+  /**
+   * Returns the current state of a contract offer, based on transfer or negotiation progress.
+   *
+   * @param contractOffer The offer to check
+   * @returns A string describing the current state
+   */
   getState(contractOffer: ContractOffer): string {
     const transferProcess = this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.assetId);
     if (transferProcess) {
@@ -120,6 +151,12 @@ export class CatalogBrowserComponent implements OnInit {
     return '';
   }
 
+  /**
+   * Determines whether a contract offer has been successfully negotiated.
+   *
+   * @param contractOffer The offer to check
+   * @returns True if the offer has a finished negotiation
+   */
   isNegotiated(contractOffer: ContractOffer) {
     return this.finishedNegotiations.get(contractOffer.id) !== undefined;
   }

@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { StorageType } from '../../models/storage-type';
-import {DataAddress} from "@think-it-labs/edc-connector-client";
-import { ContractAgreement } from "../../../mgmt-api-client/model";
 
+/**
+ * Dialog component for configuring and submitting a data transfer destination
+ */
 @Component({
   selector: 'edc-demo-catalog-browser-transfer-dialog',
   templateUrl: './catalog-browser-transfer-dialog.component.html',
@@ -53,10 +54,12 @@ export class CatalogBrowserTransferDialog implements OnInit {
 
   ngOnInit(): void {}
 
+  /** Resets all fields whenever the selected storage type is changed. */
   onStorageTypeChanged(): void {
     this.clearDatasourceFields();
   }
 
+  /** Clears all data source configuration fields for all storage types. */
   clearDatasourceFields(): void {
     // Reset REST fields
     this.restConfig.method = '';
@@ -88,24 +91,35 @@ export class CatalogBrowserTransferDialog implements OnInit {
     };
   }
 
+  /** Toggles the visibility of authentication configuration fields. */
   toggleAuth(): void {
     this.restConfig.auth.visible = !this.restConfig.auth.visible;
   }
 
+  /** Toggles the presence of a request payload section. */
   togglePayload(): void {
     this.restConfig.payload = this.restConfig.payload
       ? null
       : { contentType: '', body: '' };
   }
 
+  /** Adds an empty custom header field to the REST configuration. */
   addHeader(): void {
     this.restConfig.additionalHeaders.push({ name: '', value: '' });
   }
 
+  /**
+   * Removes a header at the given index from the REST config.
+   * @param index Index of the header to remove
+   */
   removeHeader(index: number): void {
     this.restConfig.additionalHeaders.splice(index, 1);
   }
 
+  /**
+   * Gathers the selected configuration into a `dataDestination` object
+   * and closes the dialog, passing it back to the caller.
+   */
   onTransfer(): void {
     let dataDestination: any = { type: this.selectedStorageType };
 
