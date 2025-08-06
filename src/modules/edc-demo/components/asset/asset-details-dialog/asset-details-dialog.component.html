@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <markdown class="asset-description" [data]="data.asset.properties.optionalValue('dcterms', 'description')"></markdown>
+    <div class="asset-description" [innerHTML]="data.asset.properties.optionalValue('dcterms', 'description')"></div>
 
     <div class="details-grid">
       <div class="detail-item">

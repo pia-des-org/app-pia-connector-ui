@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import {first, map, switchMap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {AssetInput, Asset } from "../../../../mgmt-api-client/model";
@@ -44,14 +45,26 @@ export class AssetViewerComponent implements OnInit {
    * Filters assets if search text is present.
    */
   ngOnInit(): void {
-    this.filteredAssets$ = this.fetch$
-      .pipe(
-        switchMap(() => {
-          const assets$ = this.assetService.requestAssets();
-          return !!this.searchText
-            ? assets$.pipe(map(assets => assets.filter(asset => asset.properties.optionalValue<string>('edc', 'name')?.includes(this.searchText))))
-            : assets$;
-        }));
+    this.filteredAssets$ = this.fetch$.pipe(
+      switchMap(() => {
+        const assets$ = this.assetService.requestAssets().pipe(
+          catchError(err => {
+            console.error('Failed to load assets:', err);
+            return of([]); // fallback: return empty list
+          })
+        );
+
+        return !!this.searchText
+          ? assets$.pipe(
+            map(assets =>
+              assets.filter(asset =>
+                asset.properties.optionalValue<string>('edc', 'name')?.includes(this.searchText)
+              )
+            )
+          )
+          : assets$;
+      })
+    );
   }
 
   /**
@@ -61,7 +74,7 @@ export class AssetViewerComponent implements OnInit {
   getShortDescription(asset: Asset): string {
     const desc = asset.properties.optionalValue('dcterms', 'description');
     if (typeof desc === 'string') {
-      return desc.length > 50 ? desc.slice(0, 50) + '...' : desc;
+      return desc.length > 300 ? desc.slice(0, 300) + '...' : desc;
     }
     return '';
   }

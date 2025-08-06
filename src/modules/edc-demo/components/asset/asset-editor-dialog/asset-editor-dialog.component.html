@@ -39,10 +39,15 @@
         </button>
       </div>
 
-      <mat-form-field appearance="outline" class="form-field full-width">
-        <mat-label>{{ 'assetEditor.description' | translate }}</mat-label>
-        <textarea matInput rows="4" [(ngModel)]="assetMetadata.description" placeholder="{{ 'assetEditor.describe' | translate }}" required></textarea>
-      </mat-form-field>
+      <div class="editor-wrapper">
+        <quill-editor
+          [(ngModel)]="assetMetadata.description"
+          [placeholder]="'assetEditor.describe' | translate"
+          [styles]="{height: '200px'}"
+          [modules]="quillModules">
+        </quill-editor>
+      </div>
+
 
       <mat-form-field appearance="outline" class="form-field full-width">
         <mat-label>{{ 'assetEditor.ontologyType' | translate }}</mat-label>

@@ -23,6 +23,15 @@ import {MarkdownPreviewDialogComponent} from "../markdown-preview-dialog/markdow
 export class AssetEditorDialog implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
+  quillModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link', 'image'],
+      ['clean']
+    ]
+  };
+
   assetMetadata = {
     name: '',
     id: '',

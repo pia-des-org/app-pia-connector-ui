@@ -62,7 +62,8 @@ import {TranslateModule} from "@ngx-translate/core";
 import {LanguageSelectComponent} from "./components/asset/language-select/language-select.component";
 import { MarkdownModule } from 'ngx-markdown';
 import { MarkdownPreviewDialogComponent } from './components/asset/markdown-preview-dialog/markdown-preview-dialog.component';
-import { WktMapComponent } from './components/asset/wkt-map/wkt-map.component'
+import { WktMapComponent } from './components/asset/wkt-map/wkt-map.component';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
   imports: [
@@ -96,7 +97,8 @@ import { WktMapComponent } from './components/asset/wkt-map/wkt-map.component'
     MatTooltipModule,
     MatChipsModule,
     TranslateModule,
-    MarkdownModule
+    MarkdownModule,
+    QuillModule.forRoot()
   ],
   declarations: [
     CatalogBrowserComponent,
