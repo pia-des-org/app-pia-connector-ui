@@ -36,8 +36,9 @@
       </mat-card-header>
 
       <mat-card-content>
-        <markdown class="asset-description" [data]="getShortDescription(asset)"></markdown>
+        <div class="asset-description" [innerHTML]="getShortDescription(asset)"></div>
       </mat-card-content>
+
 
       <mat-progress-bar *ngIf="isBusy()" color="accent" mode="indeterminate"></mat-progress-bar>
     </mat-card>
