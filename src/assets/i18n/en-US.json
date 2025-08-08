@@ -11,6 +11,7 @@
   "nav": {
     "provide": "Provide",
     "consume": "Consume",
+    "title": "Segittur Data Space",
     "assets": "Assets",
     "policies": "Policies",
     "offers": "Offers",

@@ -1,0 +1,205 @@
+{
+  "route": {
+    "gettingStarted": "Primeiros pasos",
+    "catalogBrowser": "Navegador de catálogo",
+    "contracts": "Contratos",
+    "transferHistory": "Historial de transferencias",
+    "contractDefinitions": "Definicións de contrato",
+    "policies": "Políticas",
+    "myAssets": "Activos"
+  },
+  "nav": {
+    "provide": "Proporcionar",
+    "consume": "Consumir",
+    "title": "Espazo de datos de Segittur",
+    "assets": "Activos",
+    "policies": "Políticas",
+    "offers": "Ofertas",
+    "contracts": "Contratos",
+    "transfers": "Transferencias",
+    "logout": "Pechar sesión",
+    "username": "Nome de usuario"
+  },
+  "asset": {
+    "searchPlaceholder": "Buscar activos",
+    "createButton": "Crear activo"
+  },
+  "assetEditor": {
+    "createTitle": "Crear novo activo",
+    "section": {
+      "general": "1. Información xeral",
+      "datasource": "2. Información da fonte de datos"
+    },
+    "name": "Nome",
+    "namePlaceholder": "Nome do activo",
+    "id": "Id",
+    "description": "Descrición",
+    "descriptionPreview": "Vista previa",
+    "descriptionPreviewTitle": "Vista previa da descrición",
+    "describe": "Describir",
+    "ontologyType": "Tipo de ontoloxía",
+    "organization": "Organización",
+    "tourismService": "Servizo turístico",
+    "tourismResource": "Recurso turístico",
+    "keywords": "Palabras clave",
+    "addKeyword": "Engadir palabra clave",
+    "mediaType": "Tipo de medio",
+    "qualityNote": "Nota de calidade",
+    "language": "Idioma",
+    "languageEn": "Inglés",
+    "geographicalLocation": "Cobertura xeográfica",
+    "geographicalLocationValue": "POINT (-93.427734 31.052934)",
+    "geographicalOpenWktMap": "Previsualizar no mapa",
+    "additionalAttributes": "Atributos de metadatos adicionais",
+    "addAdditionalAttribute": "Engadir un atributo",
+    "attributeName": "Nome do atributo",
+    "attributeValue": "Valor do atributo",
+    "attributeNamePlaceholder": "namespace:propiedade",
+    "attributeValuePlaceholder": "valor",
+    "select": "Seleccionar",
+    "type": "Tipo",
+    "rest": "Punto final REST-API",
+    "s3": "S3",
+    "azure": "Almacenamento de Azure",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "close": "Cancelar",
+    "freeText": "Campo de texto libre",
+
+    "method": "Método",
+    "url": "URL",
+    "urlError": "A URL debe comezar con https://",
+
+    "authSection": "AUTENTICACIÓN",
+    "addAuth": "Engadir autenticación",
+    "removeAuth": "Eliminar autenticación",
+    "authType": "Tipo",
+    "authHeaderName": "Nome da cabeceira de autenticación",
+    "vaultSecretName": "Nome do secreto de Vault",
+    "authHeaderValue": "Valor da cabeceira de autenticación",
+    "vault": "Cabeceira con secreto de Vault",
+    "value": "Cabeceira con valor",
+
+    "additionalHeaders": "CABECEIRAS ADICIONAIS",
+    "addAdditionalHeader": "Engadir cabeceira adicional",
+    "headerName": "Nome da cabeceira",
+    "headerValue": "Valor da cabeceira",
+    "remove": "Eliminar",
+
+    "payload": "CORPO DA SOLICITUDE",
+    "addPayload": "Engadir corpo",
+    "removePayload": "Eliminar corpo",
+    "contentType": "Tipo de contido",
+    "body": "Contido",
+
+    "s3Fields": {
+      "region": "Rexión",
+      "bucket": "Bucket",
+      "bucketPlaceholder": "Bucket",
+      "keyName": "Ruta do obxecto",
+      "keyNamePlaceholder": "Introduce o nome da clave",
+      "accessKey": "Clave de acceso",
+      "secretKey": "Clave secreta"
+    },
+
+    "azureFields": {
+      "account": "Nome da conta",
+      "accountPlaceholder": "Introduce o nome da conta",
+      "sasToken": "Token SAS",
+      "sasTokenPlaceholder": "Introduce o token SAS",
+      "container": "Contedor",
+      "containerPlaceholder": "Nome do contedor",
+      "blobName": "Nome do blob",
+      "blobNamePlaceholder": "Introduce o nome do blob"
+    }
+  },
+  "assetDetails": {
+    "ontologyType": "TIPO DE ONTOLOXÍA",
+    "datasourceType": "TIPO DE FONTE DE DATOS",
+    "contentType": "TIPO DE CONTIDO",
+    "keywords": "PALABRAS CLAVE",
+    "qualityNote": "NOTA DE CALIDADE",
+    "language": "IDIOMA",
+    "cancel": "Cancelar",
+    "delete": "Eliminar"
+  },
+  "policyView": {
+    "searchPlaceholder": "Buscar Políticas",
+    "createPolicy": "Crear Política",
+    "policy": "Política",
+    "constraints": "Restricións"
+  },
+  "policyDetails": {
+    "title": "Detalles da política",
+    "cleanedJson": "JSON limpo",
+    "close": "Pechar",
+    "delete": "Eliminar"
+  },
+  "policyEditor": {
+    "createTitle": "Crear Nova Política",
+    "name": "Nome",
+    "namePlaceholder": "Introduce o nome da política",
+    "restrictAccess": "Restrinxir acceso aos seguintes BPN",
+    "publicAccess": "Todo o mundo debería ter acceso (establecer como público)",
+    "bpn": "Número de Socio Comercial",
+    "addBpn": "Introduce o BPN",
+    "cancel": "Cancelar",
+    "create": "Crear"
+  },
+  "contractView": {
+    "searchPlaceholder": "Buscar Ofertas de Datos",
+    "create": "Crear Oferta de Datos",
+    "subtitle": "Oferta de Datos",
+    "accessPolicy": "POLÍTICA DE ACCESO",
+    "usagePolicy": "POLÍTICA DE USO",
+    "assetName": "NOME DO ACTIVO",
+    "toBeDefined": "POR DEFINIR"
+  },
+  "contractDialog": {
+    "title": "Crear Oferta de Datos",
+    "id": "ID",
+    "idPlaceholder": "Tipo",
+    "accessPolicy": "Política de Acceso",
+    "usagePolicy": "Política de Uso",
+    "assets": "Activos",
+    "publish": "Publicar no Mercado",
+    "cancel": "Cancelar",
+    "create": "Crear"
+  },
+  "contracts": {
+    "subtitle": "Descrición",
+    "asset": "ACTIVO",
+    "signingDate": "DATA DE SINATURA",
+    "provider": "PROVEDOR",
+    "transfer": "Transferir"
+  },
+  "transferDialog": {
+    "title": "Iniciar Transferencia",
+    "datasink": "Destino de Datos",
+    "rest": "Punto Final REST-API",
+    "s3": "S3",
+    "azure": "Almacenamento Azure",
+    "cancel": "Cancelar",
+    "start": "Iniciar transferencia"
+  },
+  "transferHistory": {
+    "id": "ID",
+    "state": "Estado",
+    "lastUpdated": "Última actualización",
+    "connectorId": "ID do Conector",
+    "assetId": "ID do Activo",
+    "contractId": "ID do Contrato",
+    "refresh": "Actualizar",
+    "of": "de",
+    "elements": "elementos",
+    "elementsPerPage": "Elementos por páxina"
+  },
+  "negotiation": {
+    "ontologyType": "TIPO DE ONTOLOXÍA",
+    "organization": "ORGANIZACIÓN",
+    "cancel": "Cancelar",
+    "negotiate": "Negociar",
+    "negotiating": "Negociando...",
+    "mediaType": "Tipo de medio"
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "route": {
+    "gettingStarted": "Lehen pausoak",
+    "catalogBrowser": "Katalogo nabigatzailea",
+    "contracts": "Kontratuak",
+    "transferHistory": "Transferentzia historia",
+    "contractDefinitions": "Kontratu definizioak",
+    "policies": "Politikak",
+    "myAssets": "Nire aktiboak"
+  },
+  "nav": {
+    "provide": "Hornitu",
+    "consume": "Kontsumitu",
+    "title": "Segittur datu espazioa",
+    "assets": "Aktiboak",
+    "policies": "Politikak",
+    "offers": "Eskaintzak",
+    "contracts": "Kontratuak",
+    "transfers": "Transferentziak",
+    "logout": "Saioa itxi",
+    "username": "Erabiltzaile izena"
+  },
+  "asset": {
+    "searchPlaceholder": "Aktiboak bilatu",
+    "createButton": "Aktiboa sortu"
+  },
+  "assetEditor": {
+    "createTitle": "Aktibo berria sortu",
+    "section": {
+      "general": "1. Informazio orokorra",
+      "datasource": "2. Datu iturriko informazioa"
+    },
+    "name": "Izena",
+    "namePlaceholder": "Aktiboaren izena",
+    "id": "Id",
+    "description": "Deskribapena",
+    "descriptionPreview": "Aurrebista",
+    "descriptionPreviewTitle": "Deskribapen aurrebista",
+    "describe": "Deskribatu",
+    "ontologyType": "Ontologia mota",
+    "organization": "Erakundea",
+    "tourismService": "Turismo zerbitzua",
+    "tourismResource": "Turismo baliabidea",
+    "keywords": "Gako hitzak",
+    "addKeyword": "Gako hitza gehitu",
+    "mediaType": "Media mota",
+    "qualityNote": "Kalitate oharra",
+    "language": "Hizkuntza",
+    "languageEn": "Ingelesa",
+    "geographicalLocation": "Estaldura geografikoa",
+    "geographicalLocationValue": "POINT (-93.427734 31.052934)",
+    "geographicalOpenWktMap": "Mapan aurreikusi",
+    "additionalAttributes": "Metadatu atributu gehigarriak",
+    "addAdditionalAttribute": "Atributua gehitu",
+    "attributeName": "Atributu izena",
+    "attributeValue": "Atributu balioa",
+    "attributeNamePlaceholder": "namespace:propietatea",
+    "attributeValuePlaceholder": "balioa",
+    "select": "Hautatu",
+    "type": "Mota",
+    "rest": "REST-API amaiera puntua",
+    "s3": "S3",
+    "azure": "Azure biltegiratzea",
+    "cancel": "Utzi",
+    "create": "Sortu",
+    "close": "Utzi",
+    "freeText": "Testu libre eremua",
+
+    "method": "Metodoa",
+    "url": "URL",
+    "urlError": "URLak https:// hasiera izan behar du",
+
+    "authSection": "AUTENTIFIKAZIOA",
+    "addAuth": "Autentifikazioa gehitu",
+    "removeAuth": "Autentifikazioa kendu",
+    "authType": "Mota",
+    "authHeaderName": "Autentifikazio goiburuko izena",
+    "vaultSecretName": "Vault sekretu izena",
+    "authHeaderValue": "Autentifikazio goiburuko balioa",
+    "vault": "Vault sekretua duen goiburukoa",
+    "value": "Balioa duen goiburukoa",
+
+    "additionalHeaders": "GOIBURUKO GEHIGARRIAK",
+    "addAdditionalHeader": "Goiburuko gehigarria gehitu",
+    "headerName": "Goiburuko izena",
+    "headerValue": "Goiburuko balioa",
+    "remove": "Kendu",
+
+    "payload": "ESKAERA GORPUTZA",
+    "addPayload": "Gorputza gehitu",
+    "removePayload": "Gorputza kendu",
+    "contentType": "Eduki mota",
+    "body": "Edukia",
+
+    "s3Fields": {
+      "region": "Eskualdea",
+      "bucket": "Bucket",
+      "bucketPlaceholder": "Bucket",
+      "keyName": "Objektu bidea",
+      "keyNamePlaceholder": "Gako izena sartu",
+      "accessKey": "Sarrera gakoa",
+      "secretKey": "Gako sekretua"
+    },
+
+    "azureFields": {
+      "account": "Kontu izena",
+      "accountPlaceholder": "Kontu izena sartu",
+      "sasToken": "SAS tokena",
+      "sasTokenPlaceholder": "SAS tokena sartu",
+      "container": "Edukiontzia",
+      "containerPlaceholder": "Edukiontziko izena",
+      "blobName": "Blob izena",
+      "blobNamePlaceholder": "Blob izena sartu"
+    }
+  },
+  "assetDetails": {
+    "ontologyType": "ONTOLOGIA MOTA",
+    "datasourceType": "DATU ITURRI MOTA",
+    "contentType": "EDUKI MOTA",
+    "keywords": "GAKO HITZAK",
+    "qualityNote": "KALITATE OHARRA",
+    "language": "HIZKUNTZA",
+    "cancel": "Utzi",
+    "delete": "Ezabatu"
+  },
+  "policyView": {
+    "searchPlaceholder": "Politikak bilatu",
+    "createPolicy": "Politika sortu",
+    "policy": "Politika",
+    "constraints": "Murrizketak"
+  },
+  "policyDetails": {
+    "title": "Politika xehetasunak",
+    "cleanedJson": "JSON garbitu",
+    "close": "Itxi",
+    "delete": "Ezabatu"
+  },
+  "policyEditor": {
+    "createTitle": "Politika Berria Sortu",
+    "name": "Izena",
+    "namePlaceholder": "Politika izena sartu",
+    "restrictAccess": "Hurrengo BPN-etarako sarbidea mugatu",
+    "publicAccess": "Mundu guztiak sarbidea izan behar du (publiko gisa ezarri)",
+    "bpn": "Bazkide Komertziala Zenbakia",
+    "addBpn": "BPN sartu",
+    "cancel": "Utzi",
+    "create": "Sortu"
+  },
+  "contractView": {
+    "searchPlaceholder": "Datu Eskaintzak bilatu",
+    "create": "Datu Eskaintza sortu",
+    "subtitle": "Datu Eskaintza",
+    "accessPolicy": "SARRERA POLITIKA",
+    "usagePolicy": "ERABILERA POLITIKA",
+    "assetName": "AKTIBO IZENA",
+    "toBeDefined": "DEFINITZEKO"
+  },
+  "contractDialog": {
+    "title": "Datu Eskaintza sortu",
+    "id": "ID",
+    "idPlaceholder": "Mota",
+    "accessPolicy": "Sarrera Politika",
+    "usagePolicy": "Erabilera Politika",
+    "assets": "Aktiboak",
+    "publish": "Merkatuan argitaratu",
+    "cancel": "Utzi",
+    "create": "Sortu"
+  },
+  "contracts": {
+    "subtitle": "Deskribapena",
+    "asset": "AKTIBOA",
+    "signingDate": "SINADURA DATA",
+    "provider": "HORNITZAILEA",
+    "transfer": "Transferitu"
+  },
+  "transferDialog": {
+    "title": "Transferentzia hasi",
+    "datasink": "Datu Helmuga",
+    "rest": "REST-API Amaiera Puntua",
+    "s3": "S3",
+    "azure": "Azure Biltegiratzea",
+    "cancel": "Utzi",
+    "start": "Transferentzia hasi"
+  },
+  "transferHistory": {
+    "id": "ID",
+    "state": "Egoera",
+    "lastUpdated": "Azken eguneraketa",
+    "connectorId": "Konektore ID",
+    "assetId": "Aktibo ID",
+    "contractId": "Kontratu ID",
+    "refresh": "Freskatu",
+    "of": "/-tik",
+    "elements": "elementu",
+    "elementsPerPage": "Orrialdeko elementuak"
+  },
+  "negotiation": {
+    "ontologyType": "ONTOLOGIA MOTA",
+    "organization": "ERAKUNDEA",
+    "cancel": "Utzi",
+    "negotiate": "Negoziatu",
+    "negotiating": "Negoziatzen...",
+    "mediaType": "Media mota"
+  }
+}
