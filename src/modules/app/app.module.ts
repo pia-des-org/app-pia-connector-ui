@@ -17,10 +17,14 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import {AppConfigService} from "./app-config.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API} from "./variables";
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {EdcApiKeyInterceptor} from "./edc.apikey.interceptor";
 import {environment} from "../../environments/environment";
 import { EdcConnectorClient } from "@think-it-labs/edc-connector-client";
+import { KeycloakService, KeycloakAngularModule } from 'keycloak-angular';
+import { EdcConnectorProviderService } from './edc.connector.client.provider';
+import { initializeApp } from './keycloak-init.factory';
+import {CertificateService} from "./components/services/certificate.service";
 
 
 @NgModule({
@@ -28,6 +32,8 @@ import { EdcConnectorClient } from "@think-it-labs/edc-connector-client";
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
+    KeycloakAngularModule,
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -44,9 +50,9 @@ import { EdcConnectorClient } from "@think-it-labs/edc-connector-client";
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: (configService: AppConfigService) => () => configService.loadConfig(),
-      deps: [AppConfigService],
-      multi: true
+      useFactory: initializeApp,
+      deps: [KeycloakService, AppConfigService, EdcConnectorProviderService, CertificateService],
+      multi: true,
     },
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
     {

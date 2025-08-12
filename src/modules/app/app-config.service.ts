@@ -8,6 +8,9 @@ export interface AppConfig {
   storageAccount: string;
   storageExplorerLinkTemplate: string;
   theme: string;
+  keycloakUrl: string;
+  keycloakRealm: string;
+  keycloakClientId: string;
 }
 
 @Injectable({

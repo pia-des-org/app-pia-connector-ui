@@ -33,7 +33,13 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "keycloak-js",
+              "@think-it-labs/edc-connector-client",
+              "base64-js",
+              "js-sha256"
+            ]
           },
           "configurations": {
             "production": {

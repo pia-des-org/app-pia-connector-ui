@@ -8,6 +8,9 @@ EDC Data Dashboard is a dev frontend application for [EDC Management API](https:
 
 Developer documentation can be found under [docs/developer](docs/developer/), where the main concepts and decisions are captured as [decision records](docs/developer/decision-records/).
 
+
+For trying FNMT mTLS locally without Docker, see [docs/FNMT_without_Docker.md](docs/FNMT_without_Docker.md).
+
 ## Running the frontend locally
 Should you want to run the frontend on your development machine, you'll have to configure some backend values. Those are stored in `app.config.json`, and
 by default contain the following:
