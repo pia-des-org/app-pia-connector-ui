@@ -3,5 +3,12 @@
     {
         "target": "http://localhost:18080",
         "secure": false
+    },
+    "/me":
+    {
+        "target": "https://localhost:4443",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
     }
 }

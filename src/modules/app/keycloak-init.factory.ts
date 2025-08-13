@@ -24,5 +24,13 @@ export function initializeApp(
           }
         }))
       .then(() => edcProvider.init())
-      .then(() => { return; });
+      .then(async () => {
+        // After successful Keycloak authentication, then request the FNMT certificate via /me
+        const loggedIn = await keycloak.isLoggedIn();
+        if (loggedIn) {
+          // Don't block the initializer on this; just trigger the request
+          certificateService.fetchCertificateInfo().toPromise();
+        }
+        return;
+      });
 }

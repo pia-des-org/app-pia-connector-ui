@@ -1,4 +1,55 @@
 <div *ngIf="filteredAssets$ | async as assets" class="card-element-wrapper">
+  <!-- Certificate Verification Card -->
+  <mat-card class="verification-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>security</mat-icon>
+      <mat-card-title>Verificación de Identidad</mat-card-title>
+      <mat-card-subtitle>Verifique su identidad usando su certificado digital FNMT</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="verificationInProgress" class="verification-progress">
+        <mat-spinner diameter="30"></mat-spinner>
+        <span>Verificando identidad...</span>
+      </div>
+
+      <div *ngIf="!verificationInProgress">
+        <!-- Certificate Status -->
+        <div class="certificate-status" *ngIf="certificateDN">
+          <mat-icon color="primary">verified_user</mat-icon>
+          <span>Certificado digital detectado</span>
+        </div>
+        <div class="certificate-status missing" *ngIf="!certificateDN">
+          <mat-icon color="warn">gpp_maybe</mat-icon>
+          <span>Certificado digital no detectado</span>
+        </div>
+
+        <!-- Verification Status -->
+        <div *ngIf="identityVerified" class="verification-success">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <span>Identidad verificada correctamente</span>
+        </div>
+
+        <div *ngIf="verificationError" class="verification-error">
+          <mat-icon color="warn">error</mat-icon>
+          <span>{{ verificationError }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button (click)="verifyIdentity()" [disabled]="verificationInProgress" color="primary" mat-raised-button>
+        <mat-icon>verified_user</mat-icon> Verificar Identidad
+      </button>
+      <button (click)="refreshCertificateAndVerify()" [disabled]="verificationInProgress" color="accent" mat-raised-button matTooltip="Actualiza el certificado si has cambiado de certificado o si tienes problemas de detección">
+        <mat-icon>refresh</mat-icon> Actualizar Certificado
+      </button>
+      <button (click)="showCertificateHelp()" [disabled]="verificationInProgress" color="basic" mat-button matTooltip="Información sobre certificados digitales">
+        <mat-icon>help_outline</mat-icon> Ayuda
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
   <div class="search-bar-container">
     <div class="search-left">
       <div class="search-wrapper">
@@ -15,7 +66,7 @@
       </div>
     </div>
 
-    <button (click)="onCreate()" mat-raised-button class="create-button">
+    <button (click)="onCreate()" [disabled]="!identityVerified" mat-raised-button class="create-button">
       <mat-icon>add</mat-icon>
       {{ 'asset.createButton' | translate }}
     </button>

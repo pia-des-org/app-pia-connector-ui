@@ -1,0 +1,193 @@
+<div class="certificate-selector-container">
+  <h2 mat-dialog-title>Selector de Certificado Digital</h2>
+
+  <mat-dialog-content>
+    <!-- Loading indicator -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando información del certificado...</p>
+    </div>
+
+    <!-- Error message -->
+    <div *ngIf="error" class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{error}}</p>
+      <button mat-raised-button color="primary" (click)="refreshCertificate()">
+        Reintentar
+      </button>
+    </div>
+
+    <!-- No certificate detected -->
+    <div *ngIf="!loading && !error && !certificateInfo?.clientProvided" class="no-cert-container">
+      <mat-icon color="warn" class="large-icon">security</mat-icon>
+      <h3>No se ha detectado ningún certificado</h3>
+      <p>
+        Para utilizar esta aplicación, necesita tener instalado un certificado digital FNMT
+        en su navegador y seleccionarlo cuando se le solicite.
+      </p>
+
+      <div class="browser-guidance">
+        <h4>Cómo instalar su certificado en {{browserName || 'su navegador'}}</h4>
+        <ol>
+          <li>Descargue su certificado desde la <a href="https://www.sede.fnmt.gob.es/certificados" target="_blank">web oficial de la FNMT</a></li>
+          <li>Instale el certificado siguiendo las instrucciones proporcionadas por la FNMT</li>
+          <li>
+            <span *ngIf="browserName === 'Chrome'">Abra Chrome y vaya a Configuración > Privacidad y seguridad > Seguridad > Gestionar certificados</span>
+            <span *ngIf="browserName === 'Edge'">Abra Edge y vaya a Configuración > Cookies y permisos del sitio > Gestionar certificados</span>
+            <span *ngIf="browserName === 'Firefox'">Abra Firefox y vaya a Opciones > Privacidad y Seguridad > Certificados > Ver Certificados</span>
+            <span *ngIf="!browserName">Verifique que el certificado está correctamente instalado en su navegador</span>
+          </li>
+          <li>Asegúrese de que el certificado aparece en la pestaña "Personal" o "Sus certificados"</li>
+          <li>Cierre y vuelva a abrir el navegador para asegurarse de que los cambios surten efecto</li>
+          <li>Vuelva a cargar esta página y cuando se le solicite, seleccione su certificado</li>
+        </ol>
+
+        <button mat-stroked-button color="primary" (click)="openBrowserCertificateSettings()">
+          <mat-icon>settings</mat-icon> Abrir configuración de certificados
+        </button>
+      </div>
+    </div>
+
+    <!-- Certificate detected - show info -->
+    <div *ngIf="!loading && !error && certificateInfo?.clientProvided" class="cert-info-container">
+      <!-- Certificate type indicator -->
+      <!-- Removed representation certificate type as per requirements -->
+      <div class="cert-type-indicator" [ngClass]="{
+        'cert-type-personal': detectedCertificateType === 'personal',
+        'cert-type-unknown': detectedCertificateType === 'unknown'
+      }">
+        <mat-icon class="large-icon">person</mat-icon>
+        <h3>
+          <span *ngIf="detectedCertificateType === 'personal'">Certificado Personal</span>
+          <span *ngIf="detectedCertificateType === 'unknown'">Certificado Desconocido</span>
+        </h3>
+      </div>
+
+      <!-- Certificate details -->
+      <div class="cert-details">
+        <h4>Detalles del Certificado</h4>
+
+        <div class="detail-row">
+          <span class="detail-label">Tipo:</span>
+          <span class="detail-value">
+            <!-- Removed representation certificate type as per requirements -->
+            <strong *ngIf="detectedCertificateType === 'personal'">Certificado Personal (Ciudadano)</strong>
+            <strong *ngIf="detectedCertificateType === 'unknown'">Certificado Desconocido</strong>
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Emitido por:</span>
+          <span class="detail-value">{{certificateInfo?.clientCertInfo?.issuer?.CN || 'No disponible'}}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Sujeto:</span>
+          <span class="detail-value">{{certificateInfo?.clientCertInfo?.subject?.CN || 'No disponible'}}</span>
+        </div>
+
+        <!-- Removed company organization information display as per requirements -->
+
+        <div class="detail-row">
+          <span class="detail-label">Válido desde:</span>
+          <span class="detail-value">{{certificateInfo?.clientCertInfo?.validFrom || 'No disponible'}}</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="detail-label">Válido hasta:</span>
+          <span class="detail-value">{{certificateInfo?.clientCertInfo?.validTo || 'No disponible'}}</span>
+        </div>
+      </div>
+
+      <!-- Certificate selection guidance -->
+      <div class="cert-guidance">
+        <h4>¿Cómo seleccionar un certificado diferente?</h4>
+
+        <!-- Removed representation certificate references as per requirements -->
+
+        <div *ngIf="detectedCertificateType === 'personal'">
+          <p>
+            Actualmente está utilizando su <strong>certificado personal de ciudadano</strong>.
+          </p>
+          <p>
+            Si desea utilizar un certificado diferente, siga estos pasos:
+          </p>
+        </div>
+
+        <div *ngIf="detectedCertificateType === 'unknown'">
+          <p>
+            Actualmente está utilizando un certificado que no podemos identificar claramente.
+          </p>
+          <p>
+            Si desea seleccionar un certificado FNMT personal, siga estos pasos:
+          </p>
+        </div>
+
+        <!-- Browser-specific instructions -->
+        <div class="browser-steps">
+          <!-- Updated browser instructions to remove representation certificate references as per requirements -->
+          <div *ngIf="browserName === 'Chrome'">
+            <ol>
+              <li>Cierre todas las pestañas de Chrome excepto esta</li>
+              <li>Vaya a Configuración > Privacidad y seguridad > Seguridad > Gestionar certificados</li>
+              <li>En la pestaña "Personal", verifique que tiene su certificado personal instalado</li>
+              <li>Cierre Chrome completamente</li>
+              <li>Vuelva a abrir Chrome y acceda a esta página</li>
+              <li>Cuando aparezca el selector de certificados, elija el certificado que desea utilizar</li>
+              <li>Si no aparece el selector, borre la caché y los datos de navegación e inténtelo de nuevo</li>
+            </ol>
+          </div>
+
+          <div *ngIf="browserName === 'Edge'">
+            <ol>
+              <li>Cierre todas las pestañas de Edge excepto esta</li>
+              <li>Vaya a Configuración > Cookies y permisos del sitio > Gestionar certificados</li>
+              <li>En la pestaña "Personal", verifique que tiene su certificado personal instalado</li>
+              <li>Cierre Edge completamente</li>
+              <li>Vuelva a abrir Edge y acceda a esta página</li>
+              <li>Cuando aparezca el selector de certificados, elija el certificado que desea utilizar</li>
+              <li>Si no aparece el selector, borre la caché y los datos de navegación e inténtelo de nuevo</li>
+            </ol>
+          </div>
+
+          <div *ngIf="browserName === 'Firefox'">
+            <ol>
+              <li>Cierre todas las pestañas de Firefox excepto esta</li>
+              <li>Vaya a Opciones > Privacidad y Seguridad > Certificados > Ver Certificados</li>
+              <li>En la pestaña "Sus certificados", verifique que tiene su certificado personal instalado</li>
+              <li>Cierre Firefox completamente</li>
+              <li>Vuelva a abrir Firefox y acceda a esta página</li>
+              <li>Cuando aparezca el selector de certificados, elija el certificado que desea utilizar</li>
+              <li>Si no aparece el selector, vaya a Opciones > Privacidad y Seguridad > Borrar datos > Borrar</li>
+            </ol>
+          </div>
+
+          <div *ngIf="!browserName || (browserName !== 'Chrome' && browserName !== 'Edge' && browserName !== 'Firefox')">
+            <ol>
+              <li>Cierre todas las pestañas de su navegador excepto esta</li>
+              <li>Acceda a la configuración de certificados de su navegador</li>
+              <li>Verifique que tiene su certificado personal instalado</li>
+              <li>Cierre su navegador completamente</li>
+              <li>Vuelva a abrir su navegador y acceda a esta página</li>
+              <li>Cuando aparezca el selector de certificados, elija el certificado que desea utilizar</li>
+              <li>Si no aparece el selector, borre la caché y los datos de navegación e inténtelo de nuevo</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button mat-stroked-button color="primary" (click)="openBrowserCertificateSettings()">
+            <mat-icon>settings</mat-icon> Abrir configuración de certificados
+          </button>
+          <button mat-raised-button color="primary" (click)="refreshCertificate()">
+            <mat-icon>refresh</mat-icon> Actualizar información
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog()">Cerrar</button>
+  </mat-dialog-actions>
+</div>
