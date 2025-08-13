@@ -41,12 +41,6 @@
       <button (click)="verifyIdentity()" [disabled]="verificationInProgress" color="primary" mat-raised-button>
         <mat-icon>verified_user</mat-icon> Verificar Identidad
       </button>
-      <button (click)="refreshCertificateAndVerify()" [disabled]="verificationInProgress" color="accent" mat-raised-button matTooltip="Actualiza el certificado si has cambiado de certificado o si tienes problemas de detección">
-        <mat-icon>refresh</mat-icon> Actualizar Certificado
-      </button>
-      <button (click)="showCertificateHelp()" [disabled]="verificationInProgress" color="basic" mat-button matTooltip="Información sobre certificados digitales">
-        <mat-icon>help_outline</mat-icon> Ayuda
-      </button>
     </mat-card-actions>
   </mat-card>
 

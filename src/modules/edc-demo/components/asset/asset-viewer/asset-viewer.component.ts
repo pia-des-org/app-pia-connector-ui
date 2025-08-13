@@ -3,25 +3,15 @@ import {BehaviorSubject, Observable, of} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {first, map, switchMap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSpinner} from '@angular/material/progress-spinner';
 import {AssetInput, Asset } from "../../../../mgmt-api-client/model";
 import {AssetService} from "../../../../mgmt-api-client";
 import {AssetEditorDialog} from "../asset-editor-dialog/asset-editor-dialog.component";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../confirmation-dialog/confirmation-dialog.component";
 import {NotificationService} from "../../../services/notification.service";
 import {AssetDetailsDialogComponent} from "../asset-details-dialog/asset-details-dialog.component";
-import {KeycloakService} from 'keycloak-angular';
-import {KeycloakProfile} from 'keycloak-js';
-import {CertificateService} from '../../../../app/components/services/certificate.service';
 import {LoggingService} from '../../../../app/components/services/logging.service';
-import {CertificateSelectorComponent} from '../../../../app/components/certificate-selector/certificate-selector.component';
+import {IdentityVerificationService, IdentityVerificationResult} from '../../../../app/components/services/identity-verification.service';
 
-// Extended interface for KeycloakProfile to include attributes
-interface KeycloakProfileWithAttributes extends KeycloakProfile {
-  attributes?: {
-    [key: string]: string[];
-  };
-}
 
 /**
  * Component for viewing, creating, and deleting assets.
@@ -61,8 +51,7 @@ export class AssetViewerComponent implements OnInit {
     private assetService: AssetService,
     private notificationService: NotificationService,
     private readonly dialog: MatDialog,
-    private keycloakService: KeycloakService,
-    private certificateService: CertificateService,
+    private identityService: IdentityVerificationService,
     private logger: LoggingService
   ) {
     this.logger.info(this.COMPONENT_NAME, 'Component initialized');
@@ -79,133 +68,7 @@ export class AssetViewerComponent implements OnInit {
     this.logger.error(this.COMPONENT_NAME, errorMessage, error, context);
   }
 
-  /**
-   * Extracts the DNI from the certificate DN
-   * FNMT certificates typically contain the DNI in the CN field in format:
-   * CN=SURNAME1 SURNAME2 NAME - NIF XXXXXXXXX
-   * @returns The DNI (without NIF prefix) or null if not found
-   */
-  private extractDNIFromCertificate(dn: string | null): string | null {
-    this.logger.debug(this.COMPONENT_NAME, 'Extracting DNI from certificate DN', { dn });
 
-    if (!dn) {
-      this.logger.warn(this.COMPONENT_NAME, 'Certificate DN is null or empty, cannot extract DNI');
-      return null;
-    }
-
-    // Try to match the pattern for DNI in the certificate
-    // Format is typically: CN=SURNAME1 SURNAME2 NAME - NIF XXXXXXXXX
-    this.logger.debug(this.COMPONENT_NAME, 'Applying regex pattern to extract DNI', {
-      pattern: 'NIF\\s+([0-9A-Z]+)',
-      dnLength: dn.length
-    });
-
-    const match = dn.match(/NIF\s+([0-9A-Z]+)/i);
-
-    if (match) {
-      const dni = match[1].trim();
-      this.logger.info(this.COMPONENT_NAME, 'Successfully extracted DNI from certificate', {
-        dni: this.maskDNI(dni)
-      });
-      return dni;
-    } else {
-      this.logger.warn(this.COMPONENT_NAME, 'Failed to extract DNI from certificate DN', {
-        dn: dn.substring(0, 20) + '...' // Show only beginning for privacy
-      });
-      return null;
-    }
-  }
-
-  /**
-   * Gets the DNI from the Keycloak user profile
-   *
-   * IMPORTANT: This method has been modified to return a hardcoded DNI value (5125507N)
-   *
-   * HOW TO REVERT THIS CHANGE:
-   * 1. Remove the hardcoded return statement below
-   * 2. Uncomment the original implementation block (between comment markers)
-   * 3. Remove this notice
-   *
-   * @returns Promise resolving to the user's DNI or null if not available
-   */
-  private async getDNIFromKeycloak(): Promise<string | null> {
-    this.logger.info(this.COMPONENT_NAME, 'Attempting to get DNI from Keycloak user profile');
-
-    // HARDCODED DNI IMPLEMENTATION
-    // Implemented on 2025-08-13 as per requirement
-    this.logger.info(this.COMPONENT_NAME, 'Using hardcoded DNI value: 5125507N');
-    return "99999972C";
-
-    /* ORIGINAL IMPLEMENTATION - Uncomment to revert hardcoding
-    try {
-      // Check if user is logged in
-      this.logger.debug(this.COMPONENT_NAME, 'Checking Keycloak authentication status');
-      const isLoggedIn = await this.keycloakService.isLoggedIn();
-
-      if (!isLoggedIn) {
-        this.logger.warn(this.COMPONENT_NAME, 'User is not logged in with Keycloak');
-        return null;
-      }
-
-      this.logger.info(this.COMPONENT_NAME, 'User is authenticated with Keycloak, loading user profile');
-
-      // Get user profile data and cast to our extended interface
-      const userProfile = await this.keycloakService.loadUserProfile() as KeycloakProfileWithAttributes;
-
-      // Log profile info (excluding sensitive data)
-      this.logger.debug(this.COMPONENT_NAME, 'Received user profile from Keycloak', {
-        username: userProfile.username,
-        firstName: userProfile.firstName,
-        lastName: userProfile.lastName,
-        email: userProfile.email ? '[REDACTED]' : undefined,
-        hasAttributes: !!userProfile.attributes,
-        attributeKeys: userProfile.attributes ? Object.keys(userProfile.attributes) : []
-      });
-
-      // DNI should be in the attributes section
-      // The exact field name might vary depending on Keycloak configuration
-      // Common fields: dni, document_number, idNumber, etc.
-      this.logger.debug(this.COMPONENT_NAME, 'Checking for DNI in various attribute fields');
-
-      const potentialDniFields = [
-        { field: 'dni', value: userProfile?.attributes?.dni?.[0] },
-        { field: 'document_number', value: userProfile?.attributes?.document_number?.[0] },
-        { field: 'idNumber', value: userProfile?.attributes?.idNumber?.[0] }
-      ];
-
-      // Log which fields were checked and if they had values
-      this.logger.debug(this.COMPONENT_NAME, 'DNI field check results', {
-        checkedFields: potentialDniFields.map(f => ({
-          field: f.field,
-          hasValue: !!f.value
-        }))
-      });
-
-      const dni = userProfile?.attributes?.dni?.[0] ||
-                 userProfile?.attributes?.document_number?.[0] ||
-                 userProfile?.attributes?.idNumber?.[0] ||
-                 null;
-
-      if (dni) {
-        this.logger.info(this.COMPONENT_NAME, 'Successfully retrieved DNI from Keycloak profile', {
-          dniField: potentialDniFields.find(f => f.value === dni)?.field,
-          dni: this.maskDNI(dni)
-        });
-      } else {
-        this.logger.warn(this.COMPONENT_NAME, 'No DNI found in any of the expected attribute fields', {
-          availableAttributes: userProfile.attributes ? Object.keys(userProfile.attributes) : []
-        });
-      }
-
-      return dni;
-    } catch (error) {
-      this.logger.error(this.COMPONENT_NAME, 'Error getting DNI from Keycloak', error, {
-        keycloakRealmName: this.keycloakService.getKeycloakInstance().realm
-      });
-      return null;
-    }
-    */
-  }
 
   /**
    * Verifies that the user's identity matches between Keycloak and the FNMT certificate
@@ -214,137 +77,35 @@ export class AssetViewerComponent implements OnInit {
   public async verifyIdentity(): Promise<boolean> {
     this.logger.info(this.COMPONENT_NAME, 'Starting identity verification process');
 
+    // Reset state
+    this.verificationInProgress = true;
+    this.identityVerified = false;
+    this.verificationError = null;
+
     try {
-      // Reset state
-      this.verificationInProgress = true;
-      this.identityVerified = false;
-      this.verificationError = null;
-      this.logger.debug(this.COMPONENT_NAME, 'Reset verification state');
+      const result: IdentityVerificationResult = await this.identityService.verifyIdentity();
 
-      // Step 1: Get the DNI from Keycloak
-      this.logger.info(this.COMPONENT_NAME, 'Step 1: Getting DNI from Keycloak');
-      this.keycloakDNI = await this.getDNIFromKeycloak();
+      // Update local state for UI
+      this.certificateDN = result.certificateDN;
+      this.certificateDNI = result.dniFromCert;
+      this.keycloakDNI = result.dniFromKeycloak;
 
-      if (!this.keycloakDNI) {
-        const errorMsg = 'No se pudo obtener el DNI del usuario en Keycloak. Asegúrese de que su perfil contiene un número de documento válido.';
-        this.verificationError = errorMsg;
-        this.logger.error(this.COMPONENT_NAME, 'Verification failed: No DNI in Keycloak profile', null, {
-          step: 'Step 1: Getting DNI from Keycloak',
-          outcome: 'failure',
-          reason: 'dni_missing_from_keycloak'
-        });
-        this.notificationService.showError('Verificación fallida: Información de usuario incompleta');
+      if (!result.verified) {
+        const msg =
+          result.errorMessage === 'No DNI in Keycloak profile'
+            ? 'No se pudo obtener el DNI del usuario en Keycloak. Asegúrese de que su perfil contiene un número de documento válido.'
+            : result.errorMessage === 'Certificate not detected'
+            ? 'No se pudo obtener el certificado digital. Asegúrese de que su certificado personal FNMT está instalado y que accede por HTTPS.'
+            : result.errorMessage === 'Cannot extract DNI from certificate'
+            ? 'No se pudo extraer el DNI del certificado digital.'
+            : 'Verificación de identidad no válida.';
+
+        this.verificationError = msg;
+        this.notificationService.showError(msg);
         return false;
       }
 
-      this.logger.info(this.COMPONENT_NAME, 'Successfully retrieved DNI from Keycloak', {
-        step: 'Step 1',
-        outcome: 'success',
-        maskedDNI: this.maskDNI(this.keycloakDNI)
-      });
-
-      // Step 2: Request the certificate with automatic retries
-      this.logger.info(this.COMPONENT_NAME, 'Step 2: Requesting certificate information with retry capability');
-      try {
-        // Use the enhanced certificate service with automatic retries
-        // Force a fresh certificate request to ensure we're not using a cached value
-        const certificateDN = await this.certificateService.refreshCertificate().toPromise();
-        // Ensure certificateDN is string or null, not undefined
-        this.certificateDN = certificateDN || null;
-
-        // Get certificate state for better error handling
-        const certState = this.certificateService.getCertificateState();
-
-        this.logger.debug(this.COMPONENT_NAME, 'Certificate information request completed', {
-          hasCertificateDN: !!this.certificateDN,
-          certificateState: certState,
-          step: 'Step 2'
-        });
-      } catch (certError) {
-        this.logger.error(this.COMPONENT_NAME, 'Error fetching certificate', certError, {
-          step: 'Step 2',
-          outcome: 'failure',
-          reason: 'certificate_fetch_error'
-        });
-        this.verificationError = 'Error al obtener el certificado digital. Compruebe su conexión y que está accediendo mediante HTTPS.';
-        this.notificationService.showError('Error de comunicación con el servidor de certificados');
-        return false;
-      }
-
-      if (!this.certificateDN) {
-        this.logger.warn(this.COMPONENT_NAME, 'No certificate DN received from service', {
-          step: 'Step 2',
-          outcome: 'failure',
-          reason: 'certificate_not_detected'
-        });
-        this.verificationError = 'No se pudo obtener el certificado digital. Por favor, asegúrese de que su certificado está instalado y seleccionado en el navegador.';
-        this.notificationService.showInfo(
-          'Certificado no detectado',
-          'Más información',
-          () => this.showCertificateHelp()
-        );
-        return false;
-      }
-
-      this.logger.info(this.COMPONENT_NAME, 'Successfully retrieved certificate DN', {
-        step: 'Step 2',
-        outcome: 'success',
-        dnLength: this.certificateDN.length
-      });
-
-      // Step 3: Extract the DNI from the certificate
-      this.logger.info(this.COMPONENT_NAME, 'Step 3: Extracting DNI from certificate');
-      this.certificateDNI = this.extractDNIFromCertificate(this.certificateDN);
-
-      if (!this.certificateDNI) {
-        this.logger.error(this.COMPONENT_NAME, 'Failed to extract DNI from certificate', null, {
-          step: 'Step 3',
-          outcome: 'failure',
-          reason: 'dni_extraction_failed'
-        });
-        this.verificationError = 'No se pudo extraer el DNI del certificado digital. El formato del certificado puede no ser compatible.';
-        this.notificationService.showError('Error al procesar el certificado digital');
-        return false;
-      }
-
-      this.logger.info(this.COMPONENT_NAME, 'Successfully extracted DNI from certificate', {
-        step: 'Step 3',
-        outcome: 'success',
-        maskedDNI: this.maskDNI(this.certificateDNI)
-      });
-
-      // Step 4: Compare the DNIs
-      this.logger.info(this.COMPONENT_NAME, 'Step 4: Comparing DNIs from Keycloak and certificate');
-
-      // Normalize DNIs by removing any non-alphanumeric characters and converting to uppercase
-      const normalizedKeycloakDNI = this.keycloakDNI.replace(/[^a-z0-9]/gi, '').toUpperCase();
-      const normalizedCertificateDNI = this.certificateDNI.replace(/[^a-z0-9]/gi, '').toUpperCase();
-
-      this.logger.debug(this.COMPONENT_NAME, 'Normalized DNIs for comparison', {
-        keycloakDNI: this.maskDNI(normalizedKeycloakDNI),
-        certificateDNI: this.maskDNI(normalizedCertificateDNI),
-        step: 'Step 4'
-      });
-
-      this.identityVerified = normalizedKeycloakDNI === normalizedCertificateDNI;
-
-      if (!this.identityVerified) {
-        this.logger.warn(this.COMPONENT_NAME, 'DNI mismatch between Keycloak and certificate', {
-          step: 'Step 4',
-          outcome: 'failure',
-          reason: 'dni_mismatch',
-          keycloakDNI: this.maskDNI(normalizedKeycloakDNI),
-          certificateDNI: this.maskDNI(normalizedCertificateDNI)
-        });
-        this.verificationError = `El DNI del usuario (${this.maskDNI(normalizedKeycloakDNI)}) no coincide con el del certificado digital (${this.maskDNI(normalizedCertificateDNI)})`;
-        this.notificationService.showError('Los datos de identidad no coinciden');
-        return false;
-      }
-
-      // If we reached here, verification was successful
-      this.logger.info(this.COMPONENT_NAME, 'Identity verification completed successfully', {
-        outcome: 'success'
-      });
+      this.identityVerified = true;
       this.notificationService.showInfo('Identidad verificada correctamente', 'OK');
       return true;
     } catch (error) {
@@ -375,75 +136,6 @@ export class AssetViewerComponent implements OnInit {
     return `${firstTwo}...${lastTwo}`;
   }
 
-  /**
-   * Shows help information about digital certificates
-   *
-   * Opens the CertificateSelectorComponent dialog to provide guidance on:
-   * - Certificate status and details
-   * - How to select between personal and representation certificates
-   * - Browser-specific instructions for certificate management
-   */
-  /**
-   * Shows help information about digital certificates and provides troubleshooting guidance
-   */
-  public showCertificateHelp(): void {
-    this.logger.info(this.COMPONENT_NAME, 'Opening certificate selector dialog');
-
-    // Open dialog using the CertificateSelectorComponent
-    const dialogRef = this.dialog.open(CertificateSelectorComponent, {
-      width: '800px',
-      maxWidth: '95vw',
-      maxHeight: '90vh',
-      panelClass: 'certificate-selector-dialog',
-      disableClose: false
-    });
-
-    // Log when dialog is closed
-    dialogRef.afterClosed().subscribe(result => {
-      this.logger.debug(this.COMPONENT_NAME, 'Certificate selector dialog closed', { result });
-
-      // If the dialog returns a result indicating a certificate change/refresh,
-      // trigger a verification retry using the enhanced refresh method
-      if (result === 'refresh') {
-        this.logger.info(this.COMPONENT_NAME, 'Certificate refresh requested from help dialog');
-        this.refreshCertificateAndVerify();
-      }
-    });
-  }
-
-  /**
-   * Refreshes the certificate and retries the identity verification process.
-   * This is useful when:
-   * - The user has changed their certificate selection in the browser
-   * - The initial certificate detection failed
-   * - The user wants to retry verification after fixing certificate issues
-   *
-   * @returns Promise that resolves to true if verification was successful after refresh
-   */
-  public async refreshCertificateAndVerify(): Promise<boolean> {
-    this.logger.info(this.COMPONENT_NAME, 'Manually refreshing certificate and retrying verification');
-
-    // Notify the user that we're refreshing the certificate
-    this.notificationService.showInfo('Actualizando información del certificado...', '');
-
-    // Clear certificate state to force a complete refresh
-    this.certificateDN = null;
-    this.certificateDNI = null;
-
-    // Re-run the full verification process
-    const result = await this.verifyIdentity();
-
-    if (result) {
-      this.notificationService.showInfo('Certificado actualizado y verificación completada correctamente', 'OK');
-    } else {
-      // verifyIdentity already shows appropriate error messages
-      this.logger.warn(this.COMPONENT_NAME, 'Certificate refresh and verification failed', {
-        error: this.verificationError
-      });
-    }
-
-    return result;
-  }
 
   /**
    * Initializes the component and sets up the filtered asset stream.
