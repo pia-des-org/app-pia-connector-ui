@@ -1,11 +1,13 @@
 {
-  "apiKey": "ApiKeyDefaultValue",
-  "managementApiUrl": "http://localhost:4200/management",
-  "catalogUrl": "http://localhost:4200/management",
+  "apiKey": "",
+  "managementApiUrl": "https://edc-provider-dev-espd.spaincentral.cloudapp.azure.com/data",
+  "catalogUrl": "",
   "storageAccount": "company2assets",
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
   "theme": "theme-2",
-  "keycloakUrl": "http://localhost:8080/auth",
-  "keycloakRealm": "segittur",
-  "keycloakClientId": "segittur-client"
+  "keycloakUrl": "https://centralidp-dev-espd.spaincentral.cloudapp.azure.com/auth",
+  "keycloakRealm": "CX-Central",
+  "keycloakClientId": "connector-ui",
+  "transferPollingTimeoutMs": 60000
 }
+

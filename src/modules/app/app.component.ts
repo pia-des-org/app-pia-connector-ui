@@ -40,16 +40,6 @@ export class AppComponent implements OnInit {
         this.titleService.setTitle(title);
       });
 
-    // Fetch certificate information from backend (/me) and update fields when available
-    this.certificateService.fetchCertificateInfo().subscribe({
-      next: (dn) => {
-        this.certificateDN = dn;
-        this.organizationName = this.certificateService.getOrganizationFromCertificate();
-      },
-      error: () => {
-        // already logged in service; keep values as null
-      }
-    });
   }
 
   /**

@@ -24,10 +24,5 @@ export function initializeApp(
           }
         }))
       .then(() => edcProvider.init())
-      .then(() => {
-        // Fetch certificate information after authentication is complete
-        // Call toPromise() but don't return its result to maintain Promise<void> return type
-        certificateService.fetchCertificateInfo().toPromise();
-        return;
-      });
+      .then(() => { return; });
 }
