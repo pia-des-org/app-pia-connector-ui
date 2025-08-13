@@ -12,20 +12,21 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import { Injectable } from '@angular/core';
-import { HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
-import { Observable, from }                                        from 'rxjs';
-
-import { EdcConnectorClient } from '@think-it-labs/edc-connector-client';
+import { HttpResponse, HttpErrorResponse, HttpEvent, HttpContext } from '@angular/common/http';
+import { Observable, throwError, from }                                        from 'rxjs';
 import { AssetInput, Asset, IdResponse, QuerySpec } from "../model"
+import {EdcConnectorProviderService} from "../../app/edc.connector.client.provider";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssetService {
 
-    private assets = this.edcConnectorClient.management.assets;
+    private assets;
 
-    constructor(private edcConnectorClient: EdcConnectorClient) {
+    constructor(private connectorProvider: EdcConnectorProviderService) {
+      const client = this.connectorProvider.getClient();
+      this.assets = client.management.assets;
     }
 
     /**

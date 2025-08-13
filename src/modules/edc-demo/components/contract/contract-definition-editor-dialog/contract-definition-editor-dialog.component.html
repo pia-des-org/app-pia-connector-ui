@@ -1,0 +1,68 @@
+<div class="dialog-header">
+  <h2 class="dialog-title">{{ 'contractDialog.title' | translate }}</h2>
+</div>
+
+<mat-dialog-content>
+  <div class="section">
+    <div class="section-content vertical-layout">
+
+      <!-- ID -->
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'contractDialog.id' | translate }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="contractDefinition['@id']"
+          (keydown)="blockInvalidChars($event)"
+          [placeholder]="'contractDialog.idPlaceholder' | translate"
+          required
+        />
+      </mat-form-field>
+
+      <!-- Access Policy -->
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'contractDialog.accessPolicy' | translate }}</mat-label>
+        <mat-select [(ngModel)]="accessPolicy" required>
+          <mat-option *ngFor="let policy of policies" [value]="policy">
+            {{ policy['@id'] }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Usage Policy -->
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'contractDialog.usagePolicy' | translate }}</mat-label>
+        <mat-select [(ngModel)]="contractPolicy" required>
+          <mat-option *ngFor="let policy of policies" [value]="policy">
+            {{ policy['@id'] }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Assets -->
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'contractDialog.assets' | translate }}</mat-label>
+        <mat-select [(ngModel)]="assets" required>
+          <mat-option *ngFor="let asset of availableAssets" [value]="asset">
+            {{ asset.id }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button class="cancel-button" mat-dialog-close>
+    {{ 'contractDialog.cancel' | translate }}
+  </button>
+
+  <button
+    mat-flat-button
+    class="create-button"
+    [disabled]="!isFormValid"
+    (click)="onSave()"
+  >
+    {{ 'contractDialog.create' | translate }}
+  </button>
+</mat-dialog-actions>

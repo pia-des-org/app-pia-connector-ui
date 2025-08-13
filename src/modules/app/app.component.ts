@@ -50,7 +50,4 @@ export class AppComponent implements OnInit {
     return this.certificateService.hasCertificate();
   }
 
-  themeClass(): string | undefined {
-    return this.configService.getConfig()?.theme;
-  }
 }

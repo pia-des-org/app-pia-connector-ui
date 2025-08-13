@@ -1,0 +1,12 @@
+.card-element-grid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.bpn-line {
+  font-size: 13px;
+  color: #111;
+}
+
+.mat-mdc-card-content {
+  padding-left: 10px !important;
+}

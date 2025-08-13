@@ -1,0 +1,326 @@
+<div class="dialog-header">
+  <h2 class="dialog-title">{{ 'assetEditor.createTitle' | translate }}</h2>
+</div>
+
+<mat-dialog-content>
+  <div class="section">
+    <div class="section-header" (click)="toggleSection('general')" [class.active]="section.general">
+      <span>{{ 'assetEditor.section.general' | translate }}</span>
+      <mat-icon [ngClass]="{ 'green': isGeneralValid() }">
+        {{ isGeneralValid() ? 'radio_button_checked' : 'radio_button_unchecked' }}
+      </mat-icon>
+    </div>
+
+    <div [hidden]="!section.general" class="section-content">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.name' | translate }}</mat-label>
+          <input
+            matInput
+            [(ngModel)]="assetMetadata.name"
+            (ngModelChange)="onNameChange($event)"
+            (keydown)="blockInvalidChars($event)"
+            placeholder="{{ 'assetEditor.namePlaceholder' | translate }}"
+            required />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.id' | translate }}<span class="required-star">*</span></mat-label>
+          <input matInput [(ngModel)]="assetMetadata.id" readonly [disabled]="true" />
+        </mat-form-field>
+      </div>
+
+      <div class="description-header">
+        <span class="label"></span>
+        <button mat-button
+                color="primary"
+                (click)="openPreviewDialog()"
+                [disabled]="!assetMetadata.description">
+          {{ 'assetEditor.descriptionPreview' | translate }}
+        </button>
+      </div>
+
+      <div class="editor-wrapper">
+        <quill-editor
+          [(ngModel)]="assetMetadata.description"
+          [placeholder]="'assetEditor.describe' | translate"
+          [styles]="{height: '200px'}"
+          [modules]="quillModules">
+        </quill-editor>
+      </div>
+
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.ontologyType' | translate }}</mat-label>
+        <mat-select [(ngModel)]="assetMetadata.ontologyType" required>
+          <mat-option value="Organization">{{ 'assetEditor.organization' | translate }}</mat-option>
+          <mat-option value="TourismService">{{ 'assetEditor.tourismService' | translate }}</mat-option>
+          <mat-option value="TourismResource">{{ 'assetEditor.tourismResource' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.keywords' | translate }}</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Keyword input" required>
+          <mat-chip *ngFor="let keyword of assetMetadata.keywords" [removable]="true" (removed)="removeKeyword(keyword)">
+            {{ keyword }}
+            <button matChipRemove><mat-icon>cancel</mat-icon></button>
+          </mat-chip>
+          <input placeholder="{{ 'assetEditor.addKeyword' | translate }}" [matChipInputFor]="chipGrid" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true" (matChipInputTokenEnd)="addKeyword($event)" />
+        </mat-chip-grid>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.mediaType' | translate }}</mat-label>
+        <input matInput [(ngModel)]="assetMetadata.mediaType" placeholder="{{ 'assetEditor.freeText' | translate }}" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.qualityNote' | translate }}</mat-label>
+        <input matInput [(ngModel)]="assetMetadata.qualityNote" placeholder="{{ 'assetEditor.freeText' | translate }}" />
+      </mat-form-field>
+
+      <language-select
+        [label]="'assetEditor.language' | translate"
+        [control]="languageControl"
+      ></language-select>
+
+      <div class="description-header">
+        <app-wkt-map (wktChange)="assetMetadata.geographicalLocation = $event"></app-wkt-map>
+      </div>
+
+      <div class="additional-attribute-row">
+        <span class="section-label">
+          {{ 'assetEditor.additionalAttributes' | translate }}
+        </span>
+        <span class="available-prefixes">
+          Allow metadata namespaces :
+          <ng-container *ngFor="let ns of namespaces; let last = last">
+            <span matTooltip="{{ ns.iri }}" class="prefix-chip"> {{ ns.prefix }}</span><span *ngIf="!last">, </span>
+          </ng-container>
+        </span>
+
+        <a class="action-link" (click)="addCustomProperty()">{{ 'assetEditor.addAdditionalAttribute' | translate }}</a>
+      </div>
+
+      <div *ngFor="let prop of assetMetadata.customProperties; let i = index" class="form-row align-center">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.attributeName' | translate }}</mat-label>
+          <input matInput [(ngModel)]="prop.name" placeholder="{{ 'assetEditor.attributeNamePlaceholder' | translate }}" required>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.attributeValue' | translate }}</mat-label>
+          <input matInput [(ngModel)]="prop.value" placeholder="{{ 'assetEditor.attributeValuePlaceholder' | translate }}" required>
+        </mat-form-field>
+        <a class="remove-link" (click)="removeCustomProperty(i)">{{ 'assetEditor.remove' | translate }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header" (click)="toggleSection('datasource')" [class.active]="section.datasource">
+      <span>{{ 'assetEditor.section.datasource' | translate }}</span>
+      <mat-icon [ngClass]="{ 'success': isDatasourceValid() }">
+        {{ isDatasourceValid() ? 'radio_button_checked' : 'radio_button_unchecked' }}
+      </mat-icon>
+    </div>
+
+    <div *ngIf="section.datasource" class="section-content">
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.type' | translate }}</mat-label>
+        <mat-select [(ngModel)]="selectedStorageType" (selectionChange)="onStorageTypeChanged()">
+          <mat-option value="rest">{{ 'assetEditor.rest' | translate }}</mat-option>
+          <mat-option value="amazonS3">{{ 'assetEditor.s3' | translate }}</mat-option>
+          <mat-option value="azure">{{ 'assetEditor.azure' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <ng-container [ngSwitch]="selectedStorageType">
+        <ng-container *ngSwitchCase="'rest'">
+          <ng-container *ngTemplateOutlet="restFields"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'amazonS3'">
+          <ng-container *ngTemplateOutlet="s3Fields"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'azure'">
+          <ng-container *ngTemplateOutlet="azureFields"></ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button class="cancel-button" mat-dialog-close>{{ 'assetEditor.cancel' | translate }}</button>
+  <button mat-flat-button class="create-button" [disabled]="!isFormValid" (click)="onSave()">{{ 'assetEditor.create' | translate }}</button>
+</mat-dialog-actions>
+
+<ng-template #restFields>
+  <!-- Method + URL -->
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.method' | translate }}</mat-label>
+      <mat-select [(ngModel)]="restConfig.method" required>
+        <mat-option value="GET">GET</mat-option>
+        <mat-option value="POST">POST</mat-option>
+        <mat-option value="PUT">PUT</mat-option>
+        <mat-option value="PATCH">PATCH</mat-option>
+        <mat-option value="DELETE">DELETE</mat-option>
+        <mat-option value="OPTIONS">OPTIONS</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.url' | translate }}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="restConfig.url"
+        #urlInput="ngModel"
+        (focus)="showPlaceholder = true"
+        (blur)="showPlaceholder = false"
+        [placeholder]="showPlaceholder ? 'https://' : ''"
+        required
+        pattern="https://.*"
+      />
+      <mat-error *ngIf="urlInput.invalid && urlInput.touched">
+        {{ 'assetEditor.urlError' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="block-row">
+    <div class="inline-row">
+      <span class="section-label">{{ 'assetEditor.authSection' | translate }}</span>
+      <a class="action-link" *ngIf="!restConfig.auth.visible" (click)="toggleAuth()">{{ 'assetEditor.addAuth' | translate }}</a>
+    </div>
+
+    <div *ngIf="restConfig.auth.visible">
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.authType' | translate }}</mat-label>
+        <mat-select [(ngModel)]="restConfig.auth.type">
+          <mat-option value="vault">{{ 'assetEditor.vault' | translate }}</mat-option>
+          <mat-option value="value">{{ 'assetEditor.value' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="form-row" *ngIf="restConfig.auth.type === 'vault'">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.authHeaderName' | translate }}</mat-label>
+          <input matInput required [(ngModel)]="restConfig.auth.headerName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.vaultSecretName' | translate }}</mat-label>
+          <input matInput required [(ngModel)]="restConfig.auth.vaultSecretName">
+        </mat-form-field>
+      </div>
+
+      <div class="form-row" *ngIf="restConfig.auth.type === 'value'">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.authHeaderName' | translate }}</mat-label>
+          <input matInput required [(ngModel)]="restConfig.auth.headerName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'assetEditor.authHeaderValue' | translate }}</mat-label>
+          <input matInput required [(ngModel)]="restConfig.auth.headerValue">
+        </mat-form-field>
+      </div>
+
+      <a class="action-remove-link" (click)="toggleAuth()">{{ 'assetEditor.removeAuth' | translate }}</a>
+    </div>
+  </div>
+
+  <div class="inline-row">
+    <span class="section-label">{{ 'assetEditor.additionalHeaders' | translate }}</span>
+    <a class="action-link" (click)="addHeader()">{{ 'assetEditor.addAdditionalHeader' | translate }}</a>
+  </div>
+
+  <div *ngFor="let header of restConfig.additionalHeaders; let i = index" class="form-row align-center">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.headerName' | translate }}</mat-label>
+      <input matInput [(ngModel)]="header.name" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.headerValue' | translate }}</mat-label>
+      <input matInput [(ngModel)]="header.value" required>
+    </mat-form-field>
+    <a class="remove-link" (click)="removeHeader(i)">{{ 'assetEditor.remove' | translate }}</a>
+  </div>
+
+  <div class="inline-row">
+    <span class="section-label">{{ 'assetEditor.payload' | translate }}</span>
+    <a class="action-link" *ngIf="!restConfig.payload" (click)="togglePayload()">{{ 'assetEditor.addPayload' | translate }}</a>
+  </div>
+
+  <div *ngIf="restConfig.payload">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.contentType' | translate }}</mat-label>
+        <input matInput [(ngModel)]="restConfig.payload.contentType" required>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'assetEditor.body' | translate }}</mat-label>
+        <textarea matInput rows="4" [(ngModel)]="restConfig.payload.body" required></textarea>
+      </mat-form-field>
+    </div>
+
+    <a class="action-remove-link" (click)="togglePayload()">{{ 'assetEditor.removePayload' | translate }}</a>
+  </div>
+</ng-template>
+
+<ng-template #s3Fields>
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.s3Fields.region' | translate }}</mat-label>
+      <input matInput [(ngModel)]="s3Config.region" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.s3Fields.bucket' | translate }}</mat-label>
+      <input matInput [(ngModel)]="s3Config.bucket" placeholder="{{ 'assetEditor.s3Fields.bucketPlaceholder' | translate }}" required />
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="outline" class="form-field full-width">
+    <mat-label>{{ 'assetEditor.s3Fields.keyName' | translate }}</mat-label>
+    <input matInput [(ngModel)]="s3Config.keyName" placeholder="{{ 'assetEditor.s3Fields.keyNamePlaceholder' | translate }}" required />
+  </mat-form-field>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.s3Fields.accessKey' | translate }}</mat-label>
+      <input matInput [(ngModel)]="s3Config.accessKey" type="password" required />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.s3Fields.secretKey' | translate }}</mat-label>
+      <input matInput [(ngModel)]="s3Config.secretKey" type="password" required />
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template #azureFields>
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.azureFields.account' | translate }}</mat-label>
+      <input matInput [(ngModel)]="azureConfig.account" placeholder="{{ 'assetEditor.azureFields.accountPlaceholder' | translate }}" required />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.azureFields.sasToken' | translate }}</mat-label>
+      <input matInput [(ngModel)]="azureConfig.sasToken" placeholder="{{ 'assetEditor.azureFields.sasTokenPlaceholder' | translate }}" type="password" required />
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.azureFields.container' | translate }}</mat-label>
+      <input matInput [(ngModel)]="azureConfig.container" placeholder="{{ 'assetEditor.azureFields.containerPlaceholder' | translate }}" required />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>{{ 'assetEditor.azureFields.blobName' | translate }}</mat-label>
+      <input matInput [(ngModel)]="azureConfig.blobName" placeholder="{{ 'assetEditor.azureFields.blobNamePlaceholder' | translate }}" required />
+    </mat-form-field>
+  </div>
+</ng-template>

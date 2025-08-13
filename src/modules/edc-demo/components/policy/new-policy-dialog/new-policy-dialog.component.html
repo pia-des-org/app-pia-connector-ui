@@ -1,0 +1,84 @@
+<div class="dialog-header">
+  <h2 class="dialog-title">{{ 'policyEditor.createTitle' | translate }}</h2>
+</div>
+
+<mat-dialog-content>
+  <div class="section">
+    <div class="section-content">
+      <!-- Policy Name -->
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>{{ 'policyEditor.name' | translate }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="policyName"
+          (keydown)="blockInvalidChars($event)"
+          placeholder="{{ 'policyEditor.namePlaceholder' | translate }}"
+          required
+        />
+      </mat-form-field>
+
+      <!-- Access Options -->
+      <div class="form-row">
+        <label class="custom-radio" [class.selected]="accessOption === 'bpn'">
+          <input
+            type="radio"
+            name="accessOption"
+            value="bpn"
+            [(ngModel)]="accessOption"
+          />
+          <span class="radio-circle"></span>
+          {{ 'policyEditor.restrictAccess' | translate }}
+        </label>
+
+        <label class="custom-radio" [class.selected]="accessOption === 'public'">
+          <input
+            type="radio"
+            name="accessOption"
+            value="public"
+            [(ngModel)]="accessOption"
+          />
+          <span class="radio-circle"></span>
+          {{ 'policyEditor.publicAccess' | translate }}
+        </label>
+      </div>
+
+      <!-- BPN Chip Input (only if restricted) -->
+      <mat-form-field
+        *ngIf="accessOption === 'bpn'"
+        appearance="outline"
+        class="form-field full-width"
+      >
+        <mat-label>{{ 'policyEditor.bpn' | translate }}</mat-label>
+        <mat-chip-grid #bpnGrid aria-label="BPN input">
+          <mat-chip *ngFor="let bpn of businessPartnerNumbers" [removable]="true" (removed)="removeBpn(bpn)">
+            {{ bpn }}
+            <button matChipRemove><mat-icon>cancel</mat-icon></button>
+          </mat-chip>
+          <input
+            placeholder="{{ 'policyEditor.addBpn' | translate }}"
+            [matChipInputFor]="bpnGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addBpn($event)"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
+
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button class="cancel-button" mat-dialog-close>
+    {{ 'policyEditor.cancel' | translate }}
+  </button>
+
+  <button
+    mat-flat-button
+    class="create-button"
+    [disabled]="!isGeneralValid()"
+    (click)="onSave()"
+  >
+    {{ 'policyEditor.create' | translate }}
+  </button>
+</mat-dialog-actions>

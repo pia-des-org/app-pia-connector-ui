@@ -1,0 +1,67 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 45vw;
+  height: 100%;
+}
+
+/* === Form Fields === */
+.section-content.vertical-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; // spacing between fields
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  font-size: 13px;
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding: 0 !important; // remove vertical space
+    margin: 0 !important;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding: 4px 0 !important; // reduce top and bottom padding
+    min-height: 36px !important; // smaller field height
+  }
+
+  ::ng-deep .mat-form-field-outline {
+    top: 0 !important; // pull outline closer
+  }
+
+  ::ng-deep .mat-form-field-label {
+    font-size: 12px !important;
+    top: -1.2em; // adjust label height positioning
+  }
+
+  ::ng-deep .mat-select-trigger {
+    padding: 4px 0 !important;
+  }
+
+  ::ng-deep .mat-input-element {
+    padding: 4px 0 !important;
+  }
+}
+
+
+.required-star {
+  color: var(--primary-color);
+  margin-left: 2px;
+}
+
+/* === Checkbox === */
+.checkbox-row {
+  font-size: 13px;
+}
+
+/* === Footer Buttons === */
+mat-dialog-actions {
+  padding: 0 32px 32px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}

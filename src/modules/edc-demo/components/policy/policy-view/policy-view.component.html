@@ -1,0 +1,44 @@
+<div id="wrapper" *ngIf="filteredPolicies$ | async as policyDefinitions" class="card-element-wrapper">
+  <div class="search-bar-container">
+    <div class="search-left">
+      <div class="search-wrapper">
+        <input
+          class="search-input"
+          type="text"
+          [placeholder]="'policyView.searchPlaceholder' | translate"
+          [(ngModel)]="searchText"
+          (input)="onSearch()"
+        />
+        <button class="clear-btn-searchbar" (click)="searchText=''; onSearch()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
+
+    <button (click)="onCreate()" mat-raised-button class="create-button">
+      <mat-icon>add</mat-icon>
+      {{ 'policyView.createPolicy' | translate }}
+    </button>
+  </div>
+
+  <div class="card-element-grid">
+    <mat-card *ngFor="let policy of policyDefinitions" class="card-element">
+      <mat-card-header>
+        <div mat-card-avatar class="card-icon">
+          <mat-icon svgIcon="policy:title"></mat-icon>
+        </div>
+        <mat-card-title>
+          <span class="clickable-title" [matTooltip]="policy['@id']" (click)="openPolicyDialog(policy)">
+            {{ policy['@id'] | truncate:20 }}
+          </span>
+        </mat-card-title>
+        <mat-card-subtitle>{{ 'policyView.policy' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div>{{ 'policyView.constraints' | translate }}</div>
+        <div class="bpn-line"> {{ getBpnConstraint(policy) || '-'}}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

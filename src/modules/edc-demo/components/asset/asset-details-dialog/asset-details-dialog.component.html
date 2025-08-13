@@ -1,0 +1,79 @@
+<mat-dialog-content class="dialog-scrollable">
+  <div class="details-wrapper">
+    <div class="details-header">
+      <div class="icon-circle">
+        <mat-icon svgIcon="assetDetails:property"></mat-icon>
+      </div>
+      <div class="title-block">
+        <h2 class="asset-name">{{ data.asset.properties.optionalValue('dcterms', 'title') }}</h2>
+        <span class="asset-id">{{ data.asset.id }}</span>
+      </div>
+    </div>
+
+    <div class="asset-description" [innerHTML]="data.asset.properties.optionalValue('dcterms', 'description')"></div>
+
+    <div class="details-grid">
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="assetDetails:property"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'assetDetails.ontologyType' | translate }}</div>
+          <div class="detail-value">{{ data.asset.properties.optionalValue('segitturont', 'concept') }}</div>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="assetDetails:property"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'assetDetails.datasourceType' | translate }}</div>
+          <div class="detail-value">
+            {{ mapDatasourceType(data.asset.dataAddress.optionalValue('edc', 'type') ?? '') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="assetDetails:property"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'assetDetails.contentType' | translate }}</div>
+          <div class="detail-value">{{ data.asset.properties.optionalValue('dcat', 'mediaType') }}</div>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="assetDetails:property"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'assetDetails.keywords' | translate }}</div>
+          <div class="detail-value">
+            {{ formatKeywords(data.asset.properties.optionalValue('dcat', 'keywords')) }}
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="assetDetails:property"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'assetDetails.qualityNote' | translate }}</div>
+          <div class="detail-value">{{ data.asset.properties.optionalValue('dqv', 'hasQualityAnnotation') }}</div>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="assetDetails:property"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'assetDetails.language' | translate }}</div>
+          <div class="detail-value">{{ data.asset.properties.optionalValue('dcterms', 'language') }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button class="cancel-button" mat-dialog-close>
+    {{ 'assetDetails.cancel' | translate }}
+  </button>
+
+  <button mat-flat-button class="delete-button" (click)="delete()">
+    {{ 'assetDetails.delete' | translate }}
+  </button>
+</mat-dialog-actions>

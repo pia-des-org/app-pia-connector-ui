@@ -1,0 +1,63 @@
+<div class="dialog-container">
+  <div [class.dimmed]="loading">
+<div class="details-wrapper">
+    <div class="details-header">
+      <div class="icon-circle">
+        <mat-icon svgIcon="negotiate:title"></mat-icon>
+      </div>
+      <div class="title-block">
+        <h2 class="asset-name">{{ title }}</h2>
+        <span class="asset-id">{{ datasetId }}</span>
+      </div>
+    </div>
+
+  <div class="asset-description truncated" [innerHTML]="description"></div>
+
+    <div class="details-grid">
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="negotiate:properties"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'negotiation.ontologyType' | translate }}</div>
+          <div class="detail-value">{{ ontologyType }}</div>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="negotiate:properties"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'negotiation.organization' | translate }}</div>
+          <div class="detail-value"> {{ participantId }} </div>
+        </div>
+      </div>
+
+      <div class="detail-item">
+        <mat-icon class="detail-icon" svgIcon="negotiate:properties"></mat-icon>
+        <div>
+          <div class="detail-label">{{ 'negotiation.mediaType' | translate }}</div>
+          <div class="detail-value"> {{ mediaType }} </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button class="cancel-button" mat-dialog-close>
+    {{ 'negotiation.cancel' | translate }}
+  </button>
+  <button
+    class="create-button"
+    mat-flat-button
+    color="primary"
+    [disabled]="!isNegotiationReady || isNegotiating"
+    (click)="startNegotiation()">
+    {{ isNegotiating ? ('negotiation.negotiating' | translate) : ('negotiation.negotiate' | translate) }}
+  </button>
+</mat-dialog-actions>
+</div>
+</div>
+<div class="loading-overlay" *ngIf="loading">
+  <div class="loading-content">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Fetching the data offer...</p>
+  </div>
+</div>

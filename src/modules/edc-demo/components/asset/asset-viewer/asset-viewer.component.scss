@@ -1,0 +1,20 @@
+.card-element-grid {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); // reduced min-width
+}
+
+.mat-mdc-card-content {
+  padding-left: 10px !important;
+}
+
+.asset-description {
+  word-break: break-word;
+  white-space: normal;
+}
+
+
+::ng-deep markdown img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+}

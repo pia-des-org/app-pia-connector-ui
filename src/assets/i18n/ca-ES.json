@@ -1,0 +1,205 @@
+{
+  "route": {
+    "gettingStarted": "Primers passos",
+    "catalogBrowser": "Navegador de catàleg",
+    "contracts": "Contractes",
+    "transferHistory": "Historial de transferències",
+    "contractDefinitions": "Definicions de contracte",
+    "policies": "Polítiques",
+    "myAssets": "Actius"
+  },
+  "nav": {
+    "provide": "Proporcionar",
+    "consume": "Consumir",
+    "title": "Espai de dades de Segittur",
+    "assets": "Actius",
+    "policies": "Polítiques",
+    "offers": "Ofertes",
+    "contracts": "Contractes",
+    "transfers": "Transferències",
+    "logout": "Tancar sessió",
+    "username": "Nom d'usuari"
+  },
+  "asset": {
+    "searchPlaceholder": "Cercar actius",
+    "createButton": "Crear actiu"
+  },
+  "assetEditor": {
+    "createTitle": "Crear nou actiu",
+    "section": {
+      "general": "1. Informació general",
+      "datasource": "2. Informació de la font de dades"
+    },
+    "name": "Nom",
+    "namePlaceholder": "Nom de l'actiu",
+    "id": "Id",
+    "description": "Descripció",
+    "descriptionPreview": "Vista prèvia",
+    "descriptionPreviewTitle": "Vista prèvia de la descripció",
+    "describe": "Descriure",
+    "ontologyType": "Tipus d'ontologia",
+    "organization": "Organització",
+    "tourismService": "Servei turístic",
+    "tourismResource": "Recurs turístic",
+    "keywords": "Paraules clau",
+    "addKeyword": "Afegir paraula clau",
+    "mediaType": "Tipus de mitjà",
+    "qualityNote": "Nota de qualitat",
+    "language": "Idioma",
+    "languageEn": "Anglès",
+    "geographicalLocation": "Cobertura geogràfica",
+    "geographicalLocationValue": "POINT (-93.427734 31.052934)",
+    "geographicalOpenWktMap": "Previsualitzar al mapa",
+    "additionalAttributes": "Atributs de metadades addicionals",
+    "addAdditionalAttribute": "Afegir un atribut",
+    "attributeName": "Nom de l'atribut",
+    "attributeValue": "Valor de l'atribut",
+    "attributeNamePlaceholder": "namespace:propietat",
+    "attributeValuePlaceholder": "valor",
+    "select": "Seleccionar",
+    "type": "Tipus",
+    "rest": "Punt final REST-API",
+    "s3": "S3",
+    "azure": "Emmagatzematge d'Azure",
+    "cancel": "Cancel·lar",
+    "create": "Crear",
+    "close": "Cancel·lar",
+    "freeText": "Camp de text lliure",
+
+    "method": "Mètode",
+    "url": "URL",
+    "urlError": "L'URL ha de començar amb https://",
+
+    "authSection": "AUTENTICACIÓ",
+    "addAuth": "Afegir autenticació",
+    "removeAuth": "Eliminar autenticació",
+    "authType": "Tipus",
+    "authHeaderName": "Nom de la capçalera d'autenticació",
+    "vaultSecretName": "Nom del secret de Vault",
+    "authHeaderValue": "Valor de la capçalera d'autenticació",
+    "vault": "Capçalera amb secret de Vault",
+    "value": "Capçalera amb valor",
+
+    "additionalHeaders": "CAPÇALERES ADDICIONALS",
+    "addAdditionalHeader": "Afegir capçalera addicional",
+    "headerName": "Nom de la capçalera",
+    "headerValue": "Valor de la capçalera",
+    "remove": "Eliminar",
+
+    "payload": "COS DE LA SOL·LICITUD",
+    "addPayload": "Afegir cos",
+    "removePayload": "Eliminar cos",
+    "contentType": "Tipus de contingut",
+    "body": "Contingut",
+
+    "s3Fields": {
+      "region": "Regió",
+      "bucket": "Bucket",
+      "bucketPlaceholder": "Bucket",
+      "keyName": "Ruta de l'objecte",
+      "keyNamePlaceholder": "Introdueix el nom de la clau",
+      "accessKey": "Clau d'accés",
+      "secretKey": "Clau secreta"
+    },
+
+    "azureFields": {
+      "account": "Nom del compte",
+      "accountPlaceholder": "Introdueix el nom del compte",
+      "sasToken": "Token SAS",
+      "sasTokenPlaceholder": "Introdueix el token SAS",
+      "container": "Contenidor",
+      "containerPlaceholder": "Nom del contenidor",
+      "blobName": "Nom del blob",
+      "blobNamePlaceholder": "Introdueix el nom del blob"
+    }
+  },
+  "assetDetails": {
+    "ontologyType": "TIPUS D'ONTOLOGIA",
+    "datasourceType": "TIPUS DE FONT DE DADES",
+    "contentType": "TIPUS DE CONTINGUT",
+    "keywords": "PARAULES CLAU",
+    "qualityNote": "NOTA DE QUALITAT",
+    "language": "IDIOMA",
+    "cancel": "Cancel·lar",
+    "delete": "Eliminar"
+  },
+  "policyView": {
+    "searchPlaceholder": "Cercar Polítiques",
+    "createPolicy": "Crear Política",
+    "policy": "Política",
+    "constraints": "Restriccions"
+  },
+  "policyDetails": {
+    "title": "Detalls de la política",
+    "cleanedJson": "JSON net",
+    "close": "Tancar",
+    "delete": "Eliminar"
+  },
+  "policyEditor": {
+    "createTitle": "Crear Nova Política",
+    "name": "Nom",
+    "namePlaceholder": "Introdueix el nom de la política",
+    "restrictAccess": "Restringir accés als següents BPN",
+    "publicAccess": "Tothom hauria de tenir accés (establir com a públic)",
+    "bpn": "Número de Soci Comercial",
+    "addBpn": "Introdueix el BPN",
+    "cancel": "Cancel·lar",
+    "create": "Crear"
+  },
+  "contractView": {
+    "searchPlaceholder": "Cercar Ofertes de Dades",
+    "create": "Crear Oferta de Dades",
+    "subtitle": "Oferta de Dades",
+    "accessPolicy": "POLÍTICA D'ACCÉS",
+    "usagePolicy": "POLÍTICA D'ÚS",
+    "assetName": "NOM DE L'ACTIU",
+    "toBeDefined": "PER DEFINIR"
+  },
+  "contractDialog": {
+    "title": "Crear Oferta de Dades",
+    "id": "ID",
+    "idPlaceholder": "Tipus",
+    "accessPolicy": "Política d'Accés",
+    "usagePolicy": "Política d'Ús",
+    "assets": "Actius",
+    "publish": "Publicar al Mercat",
+    "cancel": "Cancel·lar",
+    "create": "Crear"
+  },
+  "contracts": {
+    "subtitle": "Descripció",
+    "asset": "ACTIU",
+    "signingDate": "DATA DE SIGNATURA",
+    "provider": "PROVEÏDOR",
+    "transfer": "Transferir"
+  },
+  "transferDialog": {
+    "title": "Iniciar Transferència",
+    "datasink": "Destí de Dades",
+    "rest": "Punt Final REST-API",
+    "s3": "S3",
+    "azure": "Emmagatzematge Azure",
+    "cancel": "Cancel·lar",
+    "start": "Iniciar transferència"
+  },
+  "transferHistory": {
+    "id": "ID",
+    "state": "Estat",
+    "lastUpdated": "Última actualització",
+    "connectorId": "ID del Connector",
+    "assetId": "ID de l'Actiu",
+    "contractId": "ID del Contracte",
+    "refresh": "Actualitzar",
+    "of": "de",
+    "elements": "elements",
+    "elementsPerPage": "Elements per pàgina"
+  },
+  "negotiation": {
+    "ontologyType": "TIPUS D'ONTOLOGIA",
+    "organization": "ORGANITZACIÓ",
+    "cancel": "Cancel·lar",
+    "negotiate": "Negociar",
+    "negotiating": "Negociant...",
+    "mediaType": "Tipus de mitjà"
+  }
+}

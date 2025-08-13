@@ -3,61 +3,148 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
-
 @import "node_modules/@angular/material/theming";
 @include mat-core();
 
-$theming-material-components-primary: mat-palette($mat-teal);
-$theming-material-components-accent: mat-palette($mat-orange, A200, A100, A400);
-$theming-material-components-warn: mat-palette($mat-red);
-$theming-material-components-typography: mat.define-typography-config($font-family: 'Open Sans');
-
-$theme1: mat-dark-theme(
-  (
-   color: (
-    primary: mat-palette($mat-teal),
-    accent: mat-palette($mat-orange, A200, A100, A400),
-    warn: mat-palette($mat-red),
-  ),
-   typography: $theming-material-components-typography,
-   density: 0,
+$segittur-palette: mat.define-palette((
+  50:  #FFF3F8,
+  100: #FFEBF0,
+  200: #FFD8E5,
+  300: #FFBCD4,
+  400: #FFA0C4,
+  500: #CE0E71,
+  600: #CE0E71,
+  700: #AB005C,
+  800: #7A0841,
+  900: #4C0928,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: black,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
   )
-);
+));
 
-$theme2: mat-dark-theme(
-  (
-   color: (
-    primary: mat-palette($mat-light-blue),
-    accent: mat-palette($mat-orange, A200, A100, A400),
-    warn: mat-palette($mat-red),
-  ),
-   typography: $theming-material-components-typography,
-   density: 0,
+$asturias-palette: mat.define-palette((
+  50: #e0f3fc,
+  100: #b3def6,
+  200: #80c8f0,
+  300: #4db2ea,
+  400: #26a1e5,
+  500: #0069b4,
+  600: #005fa2,
+  700: #00528c,
+  800: #004676,
+  900: #00315c,
+  contrast: (
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
   )
-);
+));
 
-$theme3: mat-dark-theme(
-  (
-   color: (
-    primary: mat-palette($mat-light-green),
-    accent: mat-palette($mat-orange, A200, A100, A400),
-    warn: mat-palette($mat-red),
-  ),
-   typography: $theming-material-components-typography,
-   density: 0,
+$accent-palette: mat.define-palette((
+  50:  #FFFECA,
+  100: #FFFEDD9,
+  200: #FFE0BE,
+  300: #FFCA8F,
+  400: #FFB463,
+  500: #FC9F33,
+  600: #C77600,
+  700: #995D00,
+  800: #633500,
+  900: #3F2000,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: black,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
   )
-);
+));
 
-@include mat.all-component-themes($theme1);
+$warn-palette: mat.define-palette((
+  50:  #FFF3F1,
+  100: #FFE8E5,
+  200: #FFCCC8,
+  300: #FFB7B7,
+  400: #FF534C,
+  500: #B10413,
+  600: #80030C,
+  700: #500909,
+  800: #260504,
+  900: #060000,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+));
 
-.theme-1 {
-  // use default
+$theming-material-components-primary: $segittur-palette;
+$theming-material-components-accent: $asturias-palette;
+$theming-material-components-warn: $warn-palette;
+$theming-material-components-typography: mat.define-typography-config($font-family: 'Nunito Sans');
+
+$theme1: mat.define-light-theme((
+  color: (
+    primary: $segittur-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
+  ),
+  typography: $theming-material-components-typography,
+  density: 0,
+));
+
+// === THEME 2 ===
+$theme2: mat.define-light-theme((
+  color: (
+    primary: $asturias-palette,
+    accent: $asturias-palette,
+    warn: $warn-palette,
+  ),
+  typography: $theming-material-components-typography,
+  density: 0,
+));
+
+body.theme-1 {
+  @include mat.all-component-themes($theme1);
+  --primary-color: #{mat.get-color-from-palette($segittur-palette, 500)};
+  --primary-color-contrast: #{mat.get-contrast-color-from-palette($segittur-palette, 500)};
 }
 
-.theme-2 {
-  @include mat.all-component-colors($theme2);
+body.theme-2 {
+  @include mat.all-component-themes($theme2);
+  --primary-color: #{mat.get-color-from-palette($asturias-palette, 500)};
+  --primary-color-contrast: #{mat.get-contrast-color-from-palette($asturias-palette, 500)};
 }
 
-.theme-3 {
-  @include mat.all-component-colors($theme3);
+:root {
+  --font-nunito: 'Nunito Sans', sans-serif;
+  --font-quicksand: 'Quicksand', sans-serif;
 }
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 8px;
+}
+

@@ -1,17 +1,91 @@
-.sidenav-container {
+:host {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
-.sidenav {
-  width: 300px;
-}
-
-.sidenav .mat-toolbar {
-  background: inherit;
-}
-
-.mat-toolbar.mat-primary {
+.top-toolbar {
   position: sticky;
   top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  background-color: white !important;
+  color: black !important;
+}
+
+.submenu-icon {
+    color: var(--primary-color) !important;
+}
+
+.header-image {
+  background-image: url('/assets/HeaderBG.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 18rem;
+  color: white;
+  font-family: var(--font-nunito);
+  display: flex;
+  align-items: center;
+  padding-left: 3.125rem;
+}
+
+.language-button {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  text-transform: none;
+
+  mat-icon {
+    font-size: 18px;
+    vertical-align: middle;
+    margin: 0 4px;
+  }
+}
+
+.user-button {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  text-transform: none;
+
+  mat-icon {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+}
+
+.user-button .mat-icon {
+  order: 1; /* Ensure icon is placed after the text */
+  margin-left: 4px; /* Space between text and icon */
+  margin-right: 0;
+}
+
+.nav-menu-button {
+  color: inherit;
+  font-weight: 500;
+  padding-bottom: 2rem;
+  margin-top: 2rem;
+
+  &:hover {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-bottom: 4px solid var(--primary-color);
+  }
+
+  &.active {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-bottom: 4px solid var(--primary-color);
+    font-weight: bold;
+  }
+}
+
+.layout-wrapper {
+  position: relative;
   z-index: 1;
 }
