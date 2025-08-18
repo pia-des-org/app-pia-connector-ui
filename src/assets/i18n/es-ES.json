@@ -179,6 +179,7 @@
     "rest": "Punto Final REST-API",
     "s3": "S3",
     "azure": "Almacenamiento Azure",
+    "download": "Descarga directa",
     "cancel": "Cancelar",
     "start": "Iniciar transferencia"
   },

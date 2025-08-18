@@ -7,8 +7,7 @@ import {
 } from "../../../mgmt-api-client";
 import {from, Observable, of} from "rxjs";
 import {ContractAgreement, IdResponse} from "../../../mgmt-api-client/model";
-import {ContractOffer} from "../../models/contract-offer";
-import {catchError, filter, first, map, switchMap, tap} from "rxjs/operators";
+import {catchError, filter, first, map, retry, switchMap, tap} from "rxjs/operators";
 import {NotificationService} from "../../services/notification.service";
 import {
   CatalogBrowserTransferDialog
@@ -21,11 +20,20 @@ import {NegotiateTransferComponent} from "../negotiate-transfer/negotiate-transf
 import {ContractNegotiation} from "@think-it-labs/edc-connector-client"
 import {TransferRequest} from "./transferRequest";
 import { AppConfigService } from '../../../app/app-config.service';
+import { CONNECTOR_RECEIVER_API } from 'src/modules/app/variables';
+import { HttpClient } from '@angular/common/http';
 
 interface RunningTransferProcess {
   processId: string;
   contractId: string;
   state: TransferProcessStates;
+}
+
+interface PullTransferMetadata {
+  id: string,
+  endpoint: string,
+  authKey: string,
+  authCode: string,
 }
 
 /**
@@ -48,12 +56,14 @@ export class ContractViewerComponent implements OnInit {
               private assetService: AssetService,
               public dialog: MatDialog,
               @Inject('HOME_CONNECTOR_STORAGE_ACCOUNT') private homeConnectorStorageAccount: string,
+              @Inject(CONNECTOR_RECEIVER_API) private receiverUrl: string,
               private transferService: TransferProcessService,
               private catalogService: CatalogBrowserService,
               private router: Router,
               private notificationService: NotificationService,
               private contractNegotiationService : ContractNegotiationService,
-              private appConfig: AppConfigService) {
+              private appConfig: AppConfigService,
+              private httpClient: HttpClient) {
   }
 
   /**
@@ -156,12 +166,17 @@ export class ContractViewerComponent implements OnInit {
     const dialogRef = this.dialog.open(CatalogBrowserTransferDialog);
 
     dialogRef.afterClosed().pipe(first()).subscribe(result => {
-      const dataDestination: string = result.dataDestination;
+      const dataDestination: any = result.dataDestination;
 
       const request = this.createTransferRequest(contract, dataDestination);
 
       this.transferService.initiateTransfer(request).subscribe({
         next: (transferId) => {
+          if (dataDestination.type === "HttpProxy") {
+            this.downloadPullTransfer(transferId);
+            return;
+          }
+          
           this.startPolling(transferId, contract['@id']!);
         },
         error: (error) => {
@@ -202,6 +217,9 @@ export class ContractViewerComponent implements OnInit {
       connectorId: contract.providerId,
       managedResources: false,
       protocol: "dataspace-protocol-http",
+      privateProperties: {
+        receiverHttpEndpoint: this.receiverUrl
+      },
       transferType: {
         contentType: "application/octet-stream",
         isFinite: true
@@ -263,5 +281,28 @@ export class ContractViewerComponent implements OnInit {
       }, error => this.notificationService.showError(error))
     }
 
+  }
+
+  /**
+   * Assembles the client-side request of a pull transfer
+   * and downloads the data for the user to then save locally
+   */
+  private downloadPullTransfer(transferId: IdResponse) {
+    const id = transferId.id;
+    const url = this.receiverUrl + "/" + id
+
+    this.httpClient.get<PullTransferMetadata>(url).pipe(
+      retry({count: 10, delay: 1000}),
+      switchMap(meta => this.httpClient.get(meta.endpoint, {headers: {[meta.authKey]: meta.authCode}, responseType: "blob"}))
+    ).subscribe(blob => {
+      const objectUrl = URL.createObjectURL(blob)
+      
+      const link: HTMLAnchorElement = document.createElement("a")
+      link.href = objectUrl;
+      link.download = "data";
+      link.click();
+
+      URL.revokeObjectURL(objectUrl)
+    })
   }
 }

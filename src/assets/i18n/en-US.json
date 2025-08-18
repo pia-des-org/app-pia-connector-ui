@@ -178,6 +178,7 @@
     "rest": "REST-API Endpoint",
     "s3": "S3",
     "azure": "Azure Storage",
+    "download": "Direct download",
     "cancel": "Cancel",
     "start": "Start transfer"
   },

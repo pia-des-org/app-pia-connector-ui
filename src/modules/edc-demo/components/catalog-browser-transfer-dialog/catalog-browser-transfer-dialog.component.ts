@@ -164,6 +164,12 @@ export class CatalogBrowserTransferDialog implements OnInit {
       };
     }
 
+    if (this.selectedStorageType === 'download') {
+      dataDestination = {
+        type: "HttpProxy",
+      };
+    }
+
     // Close dialog and return selected configuration
     this.dialogRef.close({ dataDestination });
   }

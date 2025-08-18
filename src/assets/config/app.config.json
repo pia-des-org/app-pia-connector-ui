@@ -2,6 +2,7 @@
   "apiKey": "",
   "managementApiUrl": "https://patrim-905a50db-es.espaciodedatos.segittur.es/data",
   "catalogUrl": "https://patrim-905a50db-es.espaciodedatos.segittur.es/data",
+  "receiverUrl": "https://patrim-905a50db-es.espaciodedatos.segittur.es/receiver",
   "storageAccount": "company2assets",
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
   "keycloakUrl": "https://centralidp.espaciodedatos.segittur.es/auth",
