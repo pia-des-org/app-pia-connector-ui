@@ -176,7 +176,7 @@ export class ContractViewerComponent implements OnInit {
       this.transferService.initiateTransfer(request).subscribe({
         next: (transferId) => {
           if (dataDestination.type === "HttpProxy") {
-            this.downloadPullTransfer(transferId);
+            this.downloadPullTransfer(transferId, contract);
             return;
           }
           
@@ -290,7 +290,7 @@ export class ContractViewerComponent implements OnInit {
    * Assembles the client-side request of a pull transfer
    * and downloads the data for the user to then save locally
    */
-  private downloadPullTransfer(transferId: IdResponse) {
+  private downloadPullTransfer(transferId: IdResponse, contractAgreement: ContractAgreement) {
     const id = transferId.id;
     const url = this.receiverUrl + "/" + id
 
@@ -302,7 +302,7 @@ export class ContractViewerComponent implements OnInit {
       
       const link: HTMLAnchorElement = document.createElement("a")
       link.href = objectUrl;
-      link.download = "data";
+      link.download = contractAgreement.assetId;
       link.click();
 
       URL.revokeObjectURL(objectUrl)
