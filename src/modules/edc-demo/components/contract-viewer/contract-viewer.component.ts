@@ -21,7 +21,7 @@ import {ContractNegotiation} from "@think-it-labs/edc-connector-client"
 import {TransferRequest} from "./transferRequest";
 import { AppConfigService } from '../../../app/app-config.service';
 import { CONNECTOR_RECEIVER_API } from 'src/modules/app/variables';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 
 interface RunningTransferProcess {
   processId: string;
@@ -51,6 +51,7 @@ export class ContractViewerComponent implements OnInit {
   private pollingHandleTransfer?: any;
   private contractNegotiationData?: ContractNegotiation[]
   private pollingStartTime?: number;
+  private downloadHttpClient: HttpClient;
 
   constructor(private contractAgreementService: ContractAgreementService,
               private assetService: AssetService,
@@ -63,7 +64,9 @@ export class ContractViewerComponent implements OnInit {
               private notificationService: NotificationService,
               private contractNegotiationService : ContractNegotiationService,
               private appConfig: AppConfigService,
-              private httpClient: HttpClient) {
+              private httpClient: HttpClient,
+              private httpBackend: HttpBackend) {
+                this.downloadHttpClient = new HttpClient(httpBackend); // Need a client that doesn't auto-inject Keycloak credentials for download to work.
   }
 
   /**
@@ -293,7 +296,7 @@ export class ContractViewerComponent implements OnInit {
 
     this.httpClient.get<PullTransferMetadata>(url).pipe(
       retry({count: 10, delay: 1000}),
-      switchMap(meta => this.httpClient.get(meta.endpoint, {headers: {[meta.authKey]: meta.authCode}, responseType: "blob"}))
+      switchMap(meta => this.downloadHttpClient.get(meta.endpoint, {headers: {[meta.authKey]: meta.authCode}, responseType: "blob"}))
     ).subscribe(blob => {
       const objectUrl = URL.createObjectURL(blob)
       
