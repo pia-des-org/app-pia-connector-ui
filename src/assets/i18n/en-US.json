@@ -179,6 +179,8 @@
     "s3": "S3",
     "azure": "Azure Storage",
     "download": "Direct download",
+    "download.error": "Unable to prepare download",
+    "download.success": "Your download is ready!",
     "cancel": "Cancel",
     "start": "Start transfer"
   },

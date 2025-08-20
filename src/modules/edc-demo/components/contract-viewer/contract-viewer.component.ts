@@ -22,6 +22,7 @@ import {TransferRequest} from "./transferRequest";
 import { AppConfigService } from '../../../app/app-config.service';
 import { CONNECTOR_RECEIVER_API } from 'src/modules/app/variables';
 import { HttpBackend, HttpClient } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
 
 interface RunningTransferProcess {
   processId: string;
@@ -65,7 +66,8 @@ export class ContractViewerComponent implements OnInit {
               private contractNegotiationService : ContractNegotiationService,
               private appConfig: AppConfigService,
               private httpClient: HttpClient,
-              private httpBackend: HttpBackend) {
+              private httpBackend: HttpBackend,
+              private translate: TranslateService) {
                 this.downloadHttpClient = new HttpClient(httpBackend); // Need a client that doesn't auto-inject Keycloak credentials for download to work.
   }
 
@@ -290,22 +292,37 @@ export class ContractViewerComponent implements OnInit {
    * Assembles the client-side request of a pull transfer
    * and downloads the data for the user to then save locally
    */
-  private downloadPullTransfer(transferId: IdResponse, contractAgreement: ContractAgreement) {
-    const id = transferId.id;
+  private downloadPullTransfer(transferProcess: IdResponse, contractAgreement: ContractAgreement) {
+    this.runningTransfers.push({
+      processId: transferProcess.id!,
+      state: TransferProcessStates.REQUESTED,
+      contractId: contractAgreement['@id']
+    });
+    
+    const id = transferProcess.id;
     const url = this.receiverUrl + "/" + id
 
     this.httpClient.get<PullTransferMetadata>(url).pipe(
-      retry({count: 10, delay: 1000}),
-      switchMap(meta => this.downloadHttpClient.get(meta.endpoint, {headers: {[meta.authKey]: meta.authCode}, responseType: "blob"}))
-    ).subscribe(blob => {
-      const objectUrl = URL.createObjectURL(blob)
-      
-      const link: HTMLAnchorElement = document.createElement("a")
-      link.href = objectUrl;
-      link.download = contractAgreement.assetId;
-      link.click();
+      retry({ count: 10, delay: 1000 }),
+      switchMap(meta => this.downloadHttpClient.get(meta.endpoint, { headers: { [meta.authKey]: meta.authCode }, responseType: "blob" }))
+    ).subscribe({
+      next: (blob) => {
+        this.notificationService.showInfo(this.translate.instant('transferDialog.download.success') ?? "Your download is ready!")
+        this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id)
+        const objectUrl = URL.createObjectURL(blob)
 
-      URL.revokeObjectURL(objectUrl)
+        const link: HTMLAnchorElement = document.createElement("a")
+        link.href = objectUrl;
+        link.download = contractAgreement.assetId;
+        link.click();
+
+        URL.revokeObjectURL(objectUrl)
+      },
+      error: (err) => {
+        this.notificationService.showError(this.translate.instant('transferDialog.download.error') ?? "Unable to prepare download")
+        console.error(err)
+        this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id)
+      }
     })
   }
 }
