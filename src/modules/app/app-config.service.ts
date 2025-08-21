@@ -6,6 +6,7 @@ export interface AppConfig {
   apiKey: string;
   managementApiUrl: string;
   catalogUrl: string;
+  receiverUrl: string;
   storageAccount: string;
   storageExplorerLinkTemplate: string;
   theme: string;

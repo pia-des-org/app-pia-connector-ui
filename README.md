@@ -19,6 +19,7 @@ by default contain the following:
 {
   "managementApiUrl": "{{managementApiUrl}}",
   "catalogUrl": "{{catalogUrl}}",
+  "receiverUrl": "{{receiverUrl}}",
   "storageAccount": "{{account}}",
   "storageExplorerLinkTemplate": "storageexplorer://v=1&accountid=/subscriptions/{{subscriptionId}}/resourceGroups/{{resourceGroup}}/providers/Microsoft.Storage/storageAccounts/{{account}}&subscriptionid={{subscriptionId}}&resourcetype=Azure.BlobContainer&resourcename={{container}}",
 }
@@ -27,6 +28,7 @@ Substitute the values as necessary:
 - `apiKey`: enter here what your EDC instance expects in th `x-api-key` header
 - `catalogUrl`: prepend your connector URL, e.g. `http://localhost`, assuming your catalog endpoint is exposed at port 8181, which is the default
 - `managementApiUrl`:  prepend your connector URL, e.g. `http://localhost`, assuming your IDS endpoint is exposed at port 9191
+- `receiverUrl`: prepend your connector URL, e.g. `http://localhost`, in the path where the pull transfer receiver controller is exposed. 
 - `storageAccount`: insert the name of an Azure Blob Storage account to which the connector has access, otherwise data transfers won't work.
 
 **Be extra careful NOT to commit those changes, as they might leak potentially sensitive information!!!**

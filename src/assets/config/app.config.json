@@ -1,11 +1,11 @@
 {
   "apiKey": "",
-  "managementApiUrl": "https://edc-provider-dev-espd.spaincentral.cloudapp.azure.com/data",
-  "catalogUrl": "",
+  "managementApiUrl": "https://patrim-905a50db-es.espaciodedatos.segittur.es/data",
+  "catalogUrl": "https://patrim-905a50db-es.espaciodedatos.segittur.es/data",
+  "receiverUrl": "https://patrim-905a50db-es.espaciodedatos.segittur.es/receiver",
   "storageAccount": "company2assets",
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
-  "theme": "theme-2",
-  "keycloakUrl": "https://centralidp-dev-espd.spaincentral.cloudapp.azure.com/auth",
+  "keycloakUrl": "https://centralidp.espaciodedatos.segittur.es/auth",
   "keycloakRealm": "CX-Central",
   "keycloakClientId": "connector-ui",
   "transferPollingTimeoutMs": 60000
