@@ -17,7 +17,7 @@ import {EdcDemoModule} from '../edc-demo/edc-demo.module';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import {AppConfigService} from "./app-config.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API} from "./variables";
+import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API, CONNECTOR_RECEIVER_API} from "./variables";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
 import {MatMenuModule} from "@angular/material/menu";
 import { KeycloakAngularModule, KeycloakService, KeycloakBearerInterceptor } from 'keycloak-angular';
@@ -78,6 +78,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: CONNECTOR_CATALOG_API,
       useFactory:  (s: AppConfigService) => s.getConfig()?.catalogUrl,
+      deps: [AppConfigService]
+    },
+    {
+      provide: CONNECTOR_RECEIVER_API,
+      useFactory:  (s: AppConfigService) => s.getConfig()?.receiverUrl,
       deps: [AppConfigService]
     },
     {

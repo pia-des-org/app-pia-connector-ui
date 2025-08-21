@@ -179,6 +179,9 @@
     "rest": "Punto Final REST-API",
     "s3": "S3",
     "azure": "Almacenamiento Azure",
+    "download": "Descarga directa",
+    "download.error": "No se ha podido preparar la descarga",
+    "download.success": "¡Tu descarga está lista!",
     "cancel": "Cancelar",
     "start": "Iniciar transferencia"
   },
