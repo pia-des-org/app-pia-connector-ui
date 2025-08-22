@@ -1,0 +1,168 @@
+name: Continuous Integration and Deployment Pipeline for Segittur Frontend
+
+on:
+  push:
+    branches:
+      - main           # run when code is pushed/merged into main
+  pull_request:
+    branches:
+      - main          # run on any PR targeting main
+  workflow_dispatch:   # still allow manual trigger
+    inputs:
+      tag:
+        description: 'Tag name'
+        required: true
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - pru 
+
+permissions:
+  id-token: write    # required for OIDC
+  contents: write    # required for tag-update
+
+jobs:
+  dockerBuildAndPush-dev:
+    environment: ${{ github.event.inputs.environment || github.ref_name }}
+    runs-on:
+      group: 'PIA-Runners-AzureVNet'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get commit id
+        run: |
+          COMMIT_ID="${GITHUB_SHA}"
+          echo "COMMIT_ID=${COMMIT_ID}" >> $GITHUB_ENV
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: ACR Login
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            token=$(az acr login --name ${{ vars.ACR_SERVER }} --expose-token --output tsv --query accessToken)
+            echo "ACR_TOKEN=$token" >> $GITHUB_ENV
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.ACR_SERVER }}
+          username: 00000000-0000-0000-0000-000000000000
+          password: ${{ env.ACR_TOKEN }}
+      - name: Docker build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          build-args: |
+            ENV_FILE=.env
+          tags: ${{ vars.ACR_SERVER }}/app-pia-connector-ui:${{ env.COMMIT_ID }}
+          no-cache: true
+
+  dockerBuildAndPush-pru:
+    environment: ${{ github.event.inputs.environment || github.ref_name }}
+    runs-on:
+      group: 'PIA-Runners-AzureVNet'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'pru'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get commit id
+        run: |
+          COMMIT_ID="${GITHUB_SHA}"
+          echo "COMMIT_ID=${COMMIT_ID}" >> $GITHUB_ENV
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID_PRU }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID_PRU }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_PRU }}
+      - name: ACR Login
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            token=$(az acr login --name ${{ vars.ACR_SERVER_PRU }} --expose-token --output tsv --query accessToken)
+            echo "ACR_TOKEN=$token" >> $GITHUB_ENV
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.ACR_SERVER_PRU }}
+          username: 00000000-0000-0000-0000-000000000000
+          password: ${{ env.ACR_TOKEN }}
+      - name: Docker build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          build-args: |
+            ENV_FILE=.env
+          tags: ${{ vars.ACR_SERVER_PRU }}/app-pia-connector-ui:${{ env.COMMIT_ID }}
+          no-cache: true
+
+  deploy-dev:
+    needs: dockerBuildAndPush-dev
+    runs-on:
+      group: PIA-Runners-AzureVNet
+    environment: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sed the version
+        run: |
+          COMMIT_ID="${GITHUB_SHA}"
+          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
+          sed -i "s|^\([[:space:]]*tag:\).*|\1 \"${COMMIT_ID}\"|" charts/app-pia-connector-ui/dev/values-dev.yaml
+          sed -i "s|^appVersion:.*|appVersion: \"${COMMIT_ID}\"|" charts/app-pia-connector-ui/Chart.yaml
+          echo "Updated image.tag in values.yaml:"
+          grep "tag:" charts/app-pia-connector-ui/values.yaml
+          echo "Updated appVersion in Chart.yaml:"
+          grep "appVersion:" charts/app-pia-connector-ui/Chart.yaml
+
+      - name: Commit the changes
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git checkout -B main
+          git add .
+          git commit -m "Update the image tag to ${{ env.COMMIT_ID }}" || echo "No changes to commit"
+          git push origin main
+
+  deploy-pru:
+    needs: dockerBuildAndPush-pru
+    runs-on:
+      group: PIA-Runners-AzureVNet
+    environment: ${{ github.ref_name }}
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'pru'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sed the version
+        run: |
+          COMMIT_ID="${GITHUB_SHA}"
+          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
+          sed -i "s|^\([[:space:]]*tag:\).*|\1 \"${COMMIT_ID}\"|" charts/app-pia-connector-ui/pru/values-pru.yaml
+          echo "Updated image.tag in values.yaml:"
+          grep "tag:" charts/app-pia-connector-ui/values.yaml
+          echo "Updated appVersion in Chart.yaml:"
+          grep "appVersion:" charts/app-pia-connector-ui/Chart.yaml
+
+      - name: Commit the changes
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git checkout -B main
+          git add .
+          git commit -m "Update the image tag to ${{ env.COMMIT_ID }}" || echo "No changes to commit"
+          git push origin main
