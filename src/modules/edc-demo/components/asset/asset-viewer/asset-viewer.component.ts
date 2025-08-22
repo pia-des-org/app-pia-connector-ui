@@ -40,7 +40,7 @@ export class AssetViewerComponent implements OnInit {
   private fetch$ = new BehaviorSubject(null);
 
   // Identity verification state
-  identityVerified = false;
+  identityVerified = true;
   verificationInProgress = false;
   verificationError: string | null = null;
   certificateDN: string | null = null;

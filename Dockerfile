@@ -15,7 +15,6 @@ COPY --from=build /app/dist/edc-demo-client /usr/share/nginx/html
 COPY --from=build /app/src/assets /usr/share/nginx/html/assets
 # Copy FNMT certificates for mTLS
 COPY --from=build /app/certs/mtls/fnmt-root.pem /etc/nginx/ssl/fnmt-root.pem
-# Removed intermediate certificate (company certificates) as per requirements
 COPY --from=build /app/certs/mtls/fnmt-usuarios.pem /etc/nginx/ssl/fnmt-usuarios.pem
 # Copy server SSL certificates
 COPY --from=build /app/certs/mtls/server.crt /etc/nginx/ssl/server.crt
@@ -24,13 +23,13 @@ COPY --from=build /app/certs/mtls/server.pfx /etc/nginx/ssl/server.pfx
 # Create directory and set permissions
 RUN mkdir -p /etc/nginx/ssl && chmod -R 600 /etc/nginx/ssl
 # Create combined certificate file for client verification
-# Removed intermediate certificate from combined file as per requirements
 RUN cat /etc/nginx/ssl/fnmt-root.pem /etc/nginx/ssl/fnmt-usuarios.pem > /etc/nginx/ssl/fnmt-combined.pem
 RUN chown -R nginx:nginx /usr/share/nginx/
+
 EXPOSE 80 443
 
 # Install curl for health checks
 RUN apk add --no-cache curl
 
 HEALTHCHECK --interval=2s --timeout=5s --retries=10 \
-  CMD curl -kfsS https://localhost/ || exit 1
+  CMD curl -fsS http://localhost/ || exit 1
