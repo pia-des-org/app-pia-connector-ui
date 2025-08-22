@@ -34,12 +34,13 @@ export class AssetViewerComponent implements OnInit {
   // Component identifier for logging
   private readonly COMPONENT_NAME = 'AssetViewerComponent';
 
-  filteredAssets$: Observable<Asset[]> = of([]);
+  filteredAssets$: Observable<Asset[]> = of<Asset[]>([]);
   searchText = '';
   isTransferring = false;
   private fetch$ = new BehaviorSubject(null);
 
   // Identity verification state
+  // Mantener siempre el botón habilitado: por defecto true
   identityVerified = true;
   verificationInProgress = false;
   verificationError: string | null = null;
@@ -77,9 +78,8 @@ export class AssetViewerComponent implements OnInit {
   public async verifyIdentity(): Promise<boolean> {
     this.logger.info(this.COMPONENT_NAME, 'Starting identity verification process');
 
-    // Reset state
+    // Reset state (no deshabilitar el botón: no forzar identityVerified=false)
     this.verificationInProgress = true;
-    this.identityVerified = false;
     this.verificationError = null;
 
     try {
@@ -102,21 +102,23 @@ export class AssetViewerComponent implements OnInit {
 
         this.verificationError = msg;
         this.notificationService.showError(msg);
+        // Mantener identityVerified en true para no bloquear el botón
         return false;
       }
 
-      this.identityVerified = true;
+      // Verificación correcta (identityVerified ya está en true)
       this.notificationService.showInfo('Identidad verificada correctamente', 'OK');
       return true;
     } catch (error) {
       this.logger.error(this.COMPONENT_NAME, 'Unexpected error during identity verification', error);
       this.verificationError = 'Error inesperado durante la verificación de identidad. Por favor, inténtelo de nuevo más tarde.';
       this.notificationService.showError('Error en el proceso de verificación');
+      // Mantener identityVerified en true para no bloquear el botón
       return false;
     } finally {
       this.verificationInProgress = false;
       this.logger.debug(this.COMPONENT_NAME, 'Verification process completed', {
-        outcome: this.identityVerified ? 'success' : 'failure',
+        outcome: 'non-blocking',
         hasError: !!this.verificationError
       });
     }
@@ -143,34 +145,34 @@ export class AssetViewerComponent implements OnInit {
    * Also starts the identity verification process.
    */
   ngOnInit(): void {
+
     // Set up the assets observable
     this.filteredAssets$ = this.fetch$.pipe(
       switchMap(() => {
         const assets$ = this.assetService.requestAssets().pipe(
           catchError(err => {
             console.error('Failed to load assets:', err);
-            return of([]); // fallback: return empty list
+            return of<Asset[]>([]); // asegura Observable<Asset[]>
           })
         );
 
         return !!this.searchText
           ? assets$.pipe(
-            map(assets =>
-              assets.filter(asset =>
-                asset.properties.optionalValue<string>('edc', 'name')?.includes(this.searchText)
+              map((assets: Asset[]) =>
+                assets.filter(asset =>
+                  asset.properties.optionalValue<string>('edc', 'name')?.includes(this.searchText)
+                )
               )
             )
-          )
           : assets$;
       })
     );
 
-    // Trigger initial identity verification
+    // Lanzar verificación inicial (informativa, no bloqueante)
     this.verifyIdentity().then(verified => {
       if (!verified) {
-        // If not verified, show a notification to the user
         this.notificationService.showInfo(
-          'Se requiere verificación de identidad para crear assets',
+          'Puede verificar su identidad para mejorar la trazabilidad y seguridad.',
           'Verificar',
           () => this.verifyIdentity()
         );
@@ -213,7 +215,7 @@ export class AssetViewerComponent implements OnInit {
       data: {asset}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: { delete: any; }) => {
       if (result?.delete) {
         this.onDelete(asset);
       }
@@ -264,6 +266,6 @@ export class AssetViewerComponent implements OnInit {
           complete: () => this.notificationService.showInfo("Successfully created"),
         })
       }
-  })
-}
+    })
+  }
 }
