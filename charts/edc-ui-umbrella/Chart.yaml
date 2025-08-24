@@ -2,12 +2,12 @@ apiVersion: v2
 name: edc-ui-umbrella
 description: A Helm chart for EDC and EDC UI.
 type: application
-version: 0.5.4-patch.3
+version: 0.5.4-patch.4
 appVersion: "0.5.4-alpha"
 
 dependencies:
   - name:  tractusx-connector
-    version: 0.5.4-patch.3
+    version: 0.5.4-patch.4
     repository: file://../tractusx-connector
   - name:  app-pia-connector-ui
     version: 0.1.0

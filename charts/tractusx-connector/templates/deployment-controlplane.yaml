@@ -230,6 +230,14 @@ spec:
               value: {{ .Values.controlplane.endpoints.protocol.port | quote }}
             - name: "WEB_HTTP_PROTOCOL_PATH"
               value: {{ .Values.controlplane.endpoints.protocol.path | quote }}
+            - name: "WEB_HTTP_PUBLIC_PORT"
+              value: {{ .Values.controlplane.endpoints.public.port | quote }}
+            - name: "WEB_HTTP_PUBLIC_PATH"
+              value: {{ .Values.controlplane.endpoints.public.path | quote }}
+            - name: "WEB_HTTP_METRICS_PORT"
+              value: {{ .Values.controlplane.endpoints.metrics.port | quote }}
+            - name: "WEB_HTTP_METRICS_PATH"
+              value: {{ .Values.controlplane.endpoints.metrics.path | quote }}
 
             #########
             ## DSP ##
