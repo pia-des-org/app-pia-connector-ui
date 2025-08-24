@@ -137,6 +137,12 @@ controlplane:
       port: 9090
       # -- path for incoming api calls
       path: /metrics
+    # -- public api, used for public endpoints, e.g. service discovery, must be internet facing
+    public:
+      # -- port for incoming api calls
+      port: 7185
+      # -- path for incoming api calls
+      path: /public
 
   businessPartnerValidation:
     log:
@@ -201,6 +207,8 @@ controlplane:
     TRANSACTION_OBSERVER_TOKEN_URL: http://keycloak
     TRANSACTION_OBSERVER_CLIENT_ID: YOUR_CLIENT_ID
     TRANSACTION_OBSERVER_CLIENT_SECRET_KEY: YOUR_CLIENT_SECRET_KEY_NAME_IN_VAULT
+    EDC_DATAPLANE_TOKEN_VALIDATION_ENDPOINT: https://edc-control.intranet/control/token
+    EDC_RECEIVER_HTTP_ENDPOINT: https://edc-control.intranet/api/receiver
   #  ENV_NAME: value
 
   # "valueFrom" environment variable references that will be added to deployment pods. Name is templated.
@@ -259,6 +267,10 @@ controlplane:
       endpoints:
         - management
         - control
+        - protocol
+        - metrics
+        - public
+        - default
       # -- Defines the [ingress class](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class)  to use
       className: ""
       # -- TLS [tls class](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) applied to the ingress resource
