@@ -10,5 +10,5 @@ dependencies:
     version: 0.5.4-patch.4
     repository: file://../tractusx-connector
   - name:  app-pia-connector-ui
-    version: 0.1.0
+    version: 0.2.0
     repository: file://../app-pia-connector-ui
