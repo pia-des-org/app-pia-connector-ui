@@ -12,6 +12,9 @@ config:
     storageAccount: "company2assets"
     storageExplorerLinkTemplate: "storageexplorer://v=1"
     theme: "theme-2"
+    receiverUrl: "EDC_RECEIVER_URL"
+    transferPollingTimeoutMs: "EDC_TRANSFER_POLLING_CONFIG"
+
   keycloak:
     authUrl: "CENTRALIDP_AUTH_URL"
     realm: "CX-Central"

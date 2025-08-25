@@ -7,5 +7,7 @@
     "theme": "{{ .Values.config.edc.theme }}",
     "keycloakUrl": "{{ .Values.config.keycloak.authUrl }}",
     "keycloakRealm": "{{ .Values.config.keycloak.realm }}",
-    "keycloakClientId": "{{ .Values.config.keycloak.clientId }}"
+    "keycloakClientId": "{{ .Values.config.keycloak.clientId }}",
+    "receiverUrl": "{{ .Values.config.edc.receiverUrl }}",
+    "transferPollingTimeoutMs": "{{ .Values.config.edc.transferPollingTimeoutMs }}"
 }
